@@ -1,0 +1,427 @@
+[gd_scene load_steps=27 format=2]
+
+[ext_resource path="res://Scenes/Menus/Elements/Elements.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/Menus/Elements/battery_icon.png" type="Texture" id=2]
+[ext_resource path="res://Scenes/Menus/Elements/switch_icon.png" type="Texture" id=3]
+[ext_resource path="res://Scenes/Menus/Elements/lamp_icon.png" type="Texture" id=4]
+[ext_resource path="res://Scenes/Menus/Elements/inverter_icon.png" type="Texture" id=5]
+[ext_resource path="res://Scenes/Menus/Elements/and_icon.png" type="Texture" id=6]
+[ext_resource path="res://Scenes/Menus/Elements/relay_icon.png" type="Texture" id=7]
+[ext_resource path="res://Scenes/Menus/Elements/display_icon.png" type="Texture" id=8]
+[ext_resource path="res://Scenes/Menus/Elements/wire_icon.png" type="Texture" id=9]
+[ext_resource path="res://Scenes/Menus/Elements/power_inverter_icon.png" type="Texture" id=10]
+[ext_resource path="res://Scenes/Menus/Elements/power_relay_icon.png" type="Texture" id=11]
+[ext_resource path="res://Scenes/Menus/Elements/or_icon.png" type="Texture" id=12]
+[ext_resource path="res://Scenes/Menus/Elements/not_or_icon.png" type="Texture" id=13]
+[ext_resource path="res://Scenes/Menus/Elements/not_and_icon.png" type="Texture" id=14]
+[ext_resource path="res://Scenes/Menus/Elements/ex_and_icon.png" type="Texture" id=15]
+[ext_resource path="res://Scenes/Menus/Elements/ex_or_icon.png" type="Texture" id=16]
+[ext_resource path="res://Scenes/Menus/Elements/half_adder_icon.png" type="Texture" id=17]
+[ext_resource path="res://Scenes/Menus/Elements/full_adder_icon.png" type="Texture" id=18]
+
+[sub_resource type="InputEventKey" id=1]
+control = true
+pressed = true
+scancode = 87
+
+[sub_resource type="ShortCut" id=2]
+shortcut = SubResource( 1 )
+
+[sub_resource type="InputEventKey" id=3]
+control = true
+pressed = true
+scancode = 66
+
+[sub_resource type="ShortCut" id=4]
+shortcut = SubResource( 3 )
+
+[sub_resource type="InputEventKey" id=5]
+control = true
+pressed = true
+scancode = 76
+
+[sub_resource type="ShortCut" id=6]
+shortcut = SubResource( 5 )
+
+[sub_resource type="InputEventKey" id=7]
+control = true
+pressed = true
+scancode = 68
+
+[sub_resource type="ShortCut" id=8]
+shortcut = SubResource( 7 )
+
+[node name="Elements" type="VBoxContainer"]
+margin_right = 176.0
+margin_bottom = 152.0
+rect_min_size = Vector2( 84, 40 )
+script = ExtResource( 1 )
+
+[node name="Label" type="Label" parent="."]
+margin_right = 196.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 84, 20 )
+text = "Elements"
+align = 1
+valign = 1
+uppercase = true
+
+[node name="ColorRect" type="ColorRect" parent="Label"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0.2, 0.2, 0.2, 1 )
+
+[node name="GridContainer" type="GridContainer" parent="."]
+margin_top = 24.0
+margin_right = 196.0
+margin_bottom = 180.0
+columns = 5
+
+[node name="Wire" type="TextureButton" parent="GridContainer"]
+margin_right = 36.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 36, 36 )
+hint_tooltip = "Wire"
+mouse_filter = 1
+toggle_mode = true
+shortcut = SubResource( 2 )
+texture_normal = ExtResource( 9 )
+expand = true
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Wire"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 32, 0 )
+mouse_filter = 2
+color = Color( 0.333333, 0.333333, 0.333333, 1 )
+
+[node name="Battery" type="TextureButton" parent="GridContainer"]
+margin_left = 40.0
+margin_right = 76.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 36, 36 )
+hint_tooltip = "Battery"
+mouse_filter = 1
+toggle_mode = true
+shortcut = SubResource( 4 )
+texture_normal = ExtResource( 2 )
+expand = true
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Battery"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0.333333, 0.333333, 0.333333, 1 )
+
+[node name="Lamp" type="TextureButton" parent="GridContainer"]
+margin_left = 80.0
+margin_right = 116.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 36, 36 )
+hint_tooltip = "Lamp"
+mouse_filter = 1
+toggle_mode = true
+shortcut = SubResource( 6 )
+texture_normal = ExtResource( 4 )
+expand = true
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Lamp"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0.333333, 0.333333, 0.333333, 1 )
+
+[node name="Display" type="TextureButton" parent="GridContainer"]
+margin_left = 120.0
+margin_right = 156.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 32, 32 )
+hint_tooltip = "Display"
+mouse_filter = 1
+toggle_mode = true
+shortcut = SubResource( 8 )
+texture_normal = ExtResource( 8 )
+expand = true
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Display"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0.333333, 0.333333, 0.333333, 1 )
+
+[node name="Switch" type="TextureButton" parent="GridContainer"]
+margin_left = 160.0
+margin_right = 196.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 36, 36 )
+hint_tooltip = "Switch"
+mouse_filter = 1
+size_flags_stretch_ratio = 0.5
+toggle_mode = true
+texture_normal = ExtResource( 3 )
+expand = true
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Switch"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0.333333, 0.333333, 0.333333, 1 )
+
+[node name="Relay" type="TextureButton" parent="GridContainer"]
+margin_top = 40.0
+margin_right = 36.0
+margin_bottom = 76.0
+rect_min_size = Vector2( 36, 36 )
+hint_tooltip = "Relay"
+mouse_filter = 1
+size_flags_stretch_ratio = 0.5
+toggle_mode = true
+texture_normal = ExtResource( 7 )
+expand = true
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Relay"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 32, 32 )
+mouse_filter = 2
+color = Color( 0.333333, 0.333333, 0.333333, 1 )
+
+[node name="Power Relay" type="TextureButton" parent="GridContainer"]
+margin_left = 40.0
+margin_top = 40.0
+margin_right = 76.0
+margin_bottom = 76.0
+rect_min_size = Vector2( 36, 36 )
+hint_tooltip = "Power Relay"
+mouse_filter = 1
+size_flags_stretch_ratio = 0.5
+toggle_mode = true
+texture_normal = ExtResource( 11 )
+expand = true
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Power Relay"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0.333333, 0.333333, 0.333333, 1 )
+
+[node name="Inverter" type="TextureButton" parent="GridContainer"]
+margin_left = 80.0
+margin_top = 40.0
+margin_right = 116.0
+margin_bottom = 76.0
+rect_min_size = Vector2( 36, 36 )
+hint_tooltip = "Inverter"
+mouse_filter = 1
+size_flags_stretch_ratio = 0.5
+toggle_mode = true
+texture_normal = ExtResource( 5 )
+expand = true
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Inverter"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0.333333, 0.333333, 0.333333, 1 )
+
+[node name="Power Inverter" type="TextureButton" parent="GridContainer"]
+margin_left = 120.0
+margin_top = 40.0
+margin_right = 156.0
+margin_bottom = 76.0
+rect_min_size = Vector2( 36, 36 )
+hint_tooltip = "Power Inverter"
+mouse_filter = 1
+size_flags_horizontal = 4
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.5
+toggle_mode = true
+texture_normal = ExtResource( 10 )
+expand = true
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Power Inverter"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0.333333, 0.333333, 0.333333, 1 )
+
+[node name="And" type="TextureButton" parent="GridContainer"]
+margin_left = 160.0
+margin_top = 40.0
+margin_right = 196.0
+margin_bottom = 76.0
+rect_min_size = Vector2( 36, 36 )
+hint_tooltip = "And"
+mouse_filter = 1
+size_flags_stretch_ratio = 0.5
+toggle_mode = true
+texture_normal = ExtResource( 6 )
+expand = true
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/And"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0.333333, 0.333333, 0.333333, 1 )
+
+[node name="Or" type="TextureButton" parent="GridContainer"]
+margin_top = 80.0
+margin_right = 36.0
+margin_bottom = 116.0
+rect_min_size = Vector2( 36, 36 )
+hint_tooltip = "Or"
+mouse_filter = 1
+size_flags_stretch_ratio = 0.5
+toggle_mode = true
+texture_normal = ExtResource( 12 )
+expand = true
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Or"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0.333333, 0.333333, 0.333333, 1 )
+
+[node name="Not And" type="TextureButton" parent="GridContainer"]
+margin_left = 40.0
+margin_top = 80.0
+margin_right = 76.0
+margin_bottom = 116.0
+rect_min_size = Vector2( 36, 36 )
+hint_tooltip = "Not And"
+mouse_filter = 1
+size_flags_stretch_ratio = 0.5
+toggle_mode = true
+texture_normal = ExtResource( 14 )
+expand = true
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Not And"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0.333333, 0.333333, 0.333333, 1 )
+
+[node name="Not Or" type="TextureButton" parent="GridContainer"]
+margin_left = 80.0
+margin_top = 80.0
+margin_right = 116.0
+margin_bottom = 116.0
+rect_min_size = Vector2( 36, 36 )
+hint_tooltip = "Not Or"
+mouse_filter = 1
+size_flags_stretch_ratio = 0.5
+toggle_mode = true
+texture_normal = ExtResource( 13 )
+expand = true
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Not Or"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0.333333, 0.333333, 0.333333, 1 )
+
+[node name="Ex And" type="TextureButton" parent="GridContainer"]
+margin_left = 120.0
+margin_top = 80.0
+margin_right = 156.0
+margin_bottom = 116.0
+rect_min_size = Vector2( 36, 36 )
+hint_tooltip = "Ex And"
+mouse_filter = 1
+size_flags_stretch_ratio = 0.5
+toggle_mode = true
+texture_normal = ExtResource( 15 )
+expand = true
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Ex And"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0.333333, 0.333333, 0.333333, 1 )
+
+[node name="Ex Or" type="TextureButton" parent="GridContainer"]
+margin_left = 160.0
+margin_top = 80.0
+margin_right = 196.0
+margin_bottom = 116.0
+rect_min_size = Vector2( 36, 36 )
+hint_tooltip = "Ex Or"
+mouse_filter = 1
+size_flags_stretch_ratio = 0.5
+toggle_mode = true
+texture_normal = ExtResource( 16 )
+expand = true
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Ex Or"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0.333333, 0.333333, 0.333333, 1 )
+
+[node name="Half Adder" type="TextureButton" parent="GridContainer"]
+margin_top = 120.0
+margin_right = 36.0
+margin_bottom = 156.0
+rect_min_size = Vector2( 36, 36 )
+hint_tooltip = "Half Adder"
+mouse_filter = 1
+size_flags_stretch_ratio = 0.5
+toggle_mode = true
+texture_normal = ExtResource( 17 )
+expand = true
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Half Adder"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0.333333, 0.333333, 0.333333, 1 )
+
+[node name="Full Adder" type="TextureButton" parent="GridContainer"]
+margin_left = 40.0
+margin_top = 120.0
+margin_right = 76.0
+margin_bottom = 156.0
+rect_min_size = Vector2( 36, 36 )
+hint_tooltip = "Half Adder"
+mouse_filter = 1
+size_flags_stretch_ratio = 0.5
+toggle_mode = true
+texture_normal = ExtResource( 18 )
+expand = true
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Full Adder"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0.333333, 0.333333, 0.333333, 1 )
+
+[node name="HideButton" type="Button" parent="."]
+margin_top = 184.0
+margin_right = 196.0
+margin_bottom = 204.0
+focus_mode = 0
+mouse_filter = 1
+text = "^"
+
+[connection signal="mouse_entered" from="." to="." method="_on_Elements_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_Elements_mouse_exited"]
+[connection signal="pressed" from="HideButton" to="." method="_on_HideButton_pressed"]

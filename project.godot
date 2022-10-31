@@ -1,0 +1,156 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Area2D",
+"class": "Connector",
+"language": "GDScript",
+"path": "res://Scenes/Base/Connector/Connector.gd"
+}, {
+"base": "Sprite",
+"class": "Cursor",
+"language": "GDScript",
+"path": "res://Scenes/Base/Cursor/Cursor.gd"
+}, {
+"base": "Node2D",
+"class": "Element",
+"language": "GDScript",
+"path": "res://Scenes/Base/Element/Element.gd"
+}, {
+"base": "VBoxContainer",
+"class": "Elements",
+"language": "GDScript",
+"path": "res://Scenes/Menus/Elements/Elements.gd"
+}, {
+"base": "Reference",
+"class": "FileUtil",
+"language": "GDScript",
+"path": "res://Scenes/Utils/FileUtil.gd"
+}, {
+"base": "Node",
+"class": "Level",
+"language": "GDScript",
+"path": "res://Levels/Base/Level.gd"
+}, {
+"base": "PanelContainer",
+"class": "LogContainer",
+"language": "GDScript",
+"path": "res://addons/hyperlog/log_container.gd"
+}, {
+"base": "PopupMenu",
+"class": "PopupTools",
+"language": "GDScript",
+"path": "res://Scenes/Menus/PopupTools/PopupTools.gd"
+}, {
+"base": "Resource",
+"class": "RelayDelayUtil",
+"language": "GDScript",
+"path": "res://Scenes/Utils/RelayDelayUtil.gd"
+}, {
+"base": "Control",
+"class": "Tracker",
+"language": "GDScript",
+"path": "res://addons/hyperlog/trackers/tracker.gd"
+}, {
+"base": "Tracker",
+"class": "TrackerAngle",
+"language": "GDScript",
+"path": "res://addons/hyperlog/trackers/tracker_angle.gd"
+}, {
+"base": "Tracker",
+"class": "TrackerBar",
+"language": "GDScript",
+"path": "res://addons/hyperlog/trackers/tracker_bar.gd"
+}, {
+"base": "Tracker",
+"class": "TrackerColor",
+"language": "GDScript",
+"path": "res://addons/hyperlog/trackers/tracker_color.gd"
+}, {
+"base": "Tracker",
+"class": "TrackerGraph",
+"language": "GDScript",
+"path": "res://addons/hyperlog/trackers/tracker_graph.gd"
+}, {
+"base": "Tracker",
+"class": "TrackerText",
+"language": "GDScript",
+"path": "res://addons/hyperlog/trackers/tracker_text.gd"
+}, {
+"base": "Resource",
+"class": "ValueTracker",
+"language": "GDScript",
+"path": "res://addons/hyperlog/value_tracker.gd"
+} ]
+_global_script_class_icons={
+"Connector": "",
+"Cursor": "",
+"Element": "",
+"Elements": "",
+"FileUtil": "",
+"Level": "",
+"LogContainer": "",
+"PopupTools": "",
+"RelayDelayUtil": "",
+"Tracker": "",
+"TrackerAngle": "",
+"TrackerBar": "",
+"TrackerColor": "",
+"TrackerGraph": "",
+"TrackerText": "",
+"ValueTracker": ""
+}
+
+[application]
+
+config/name="Machine"
+run/main_scene="res://Main/Main.tscn"
+config/icon="res://icon.png"
+
+[autoload]
+
+Globals="*res://Main/GLOBALS.gd"
+
+[debug]
+
+settings/fps/force_fps=60
+gdscript/warnings/unused_class_variable=true
+gdscript/warnings/unsafe_cast=true
+gdscript/warnings/unsafe_call_argument=true
+
+[display]
+
+window/size/width=800
+window/stretch/mode="2d"
+window/stretch/aspect="keep"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/SelEx/plugin.cfg" )
+
+[global]
+
+Layer=false
+target=false
+log=false
+
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
+
+[layer_names]
+
+2d_physics/layer_1="All"
+2d_physics/layer_2="In"
+2d_physics/layer_3="Out"
+
+[rendering]
+
+environment/default_clear_color=Color( 0.12549, 0.12549, 0.12549, 1 )

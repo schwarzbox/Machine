@@ -1,0 +1,42 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Scenes/Elements/Inverter/Inverter.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/Elements/Inverter/inverter_off.png" type="Texture" id=2]
+[ext_resource path="res://Scenes/Base/Element/Element.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/Base/Connector/In.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Scenes/Base/Connector/Out.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Scenes/Base/Element/ElementShader.gdshader" type="Shader" id=6]
+[ext_resource path="res://Scenes/Base/Element/DissolveTexture.tres" type="Texture" id=7]
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 58.0
+
+[sub_resource type="ShaderMaterial" id=1]
+resource_local_to_scene = true
+shader = ExtResource( 6 )
+shader_param/is_dissolve = false
+shader_param/outline_width = 1.0
+shader_param/outline_color = null
+shader_param/is_outlined = false
+shader_param/dissolveNoise = ExtResource( 7 )
+
+[node name="Inverter" instance=ExtResource( 3 )]
+script = ExtResource( 1 )
+type = 3
+
+[node name="CollisionShape2D" parent="FirstArea" index="0"]
+position = Vector2( 0, 6 )
+shape = SubResource( 2 )
+
+[node name="Sprite" parent="." index="1"]
+material = SubResource( 1 )
+texture = ExtResource( 2 )
+
+[node name="In" parent="Connectors" index="0" instance=ExtResource( 4 )]
+position = Vector2( -46, 31 )
+
+[node name="In2" parent="Connectors" index="1" instance=ExtResource( 4 )]
+position = Vector2( -8, 50 )
+
+[node name="Out" parent="Connectors" index="2" instance=ExtResource( 5 )]
+position = Vector2( 46, 31 )

@@ -70,6 +70,10 @@ var _elements_scenes = {
 	"Full Adder": [
 		load("res://Scenes/Elements/FullAdder/FullAdder.tscn"),
 		preload("res://Scenes/Elements/FullAdder/full_adder_off.png")
+	],
+	"Adder 8 Bit": [
+		load("res://Scenes/Elements/Adder8Bit/Adder8Bit.tscn"),
+		preload("res://Scenes/Elements/Adder8Bit/adder_8_bit_off.png")
 	]
 }
 
@@ -147,9 +151,4 @@ func _on_Objects_clone_pressed(element: Element) -> void:
 	)
 	var clone = scene.instance()
 	self.emit_signal("element_added", clone)
-	clone.position = element.position
-	clone.scale = element.scale
-	if clone.type == Globals.ELEMENTS.WIRE:
-		clone.set_points(element.get_points())
-		clone.switch_connections()
-		clone.call_deferred("show_sprites")
+

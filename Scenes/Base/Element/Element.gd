@@ -12,19 +12,23 @@ var _off_texture: Texture = null
 var _first_area_mouse_entered: bool = false
 
 var _is_objects_scene_selected: bool = false
+var _is_objects_has_dragged_elements: bool = false
 var _is_objects_is_selecting: bool = false
 var _dragged: bool = false
+# weird var for correctly clone group of elements
+var _cloned: bool = false
 
 var _temporary_wires: Array = []
 
 var checked: bool = false
+
 signal connector_mouse_entered
 signal connector_mouse_exited
 signal connector_wire_added
 signal connector_area_entered_received
 signal delete_processed
 
-signal objects_has_selected_scene_received
+signal element_mouse_entered_received
 signal objects_is_selecting_received
 signal child_moved_on_top
 signal selected_elements_added
@@ -185,6 +189,12 @@ func is_mouse_entered() -> bool:
 func is_dragged() -> bool:
 	return self._dragged
 
+func is_cloned() -> bool:
+	return self._cloned
+
+func set_cloned(value: bool) -> void:
+	self._cloned = value
+
 func _move_connected_wires() -> void:
 	for child in self._connectors_children:
 		var child_connected = child.get_connected()
@@ -196,25 +206,27 @@ func _move_connected_wires() -> void:
 		):
 			child_connected.switch_connections()
 
+func move_wires_on_top():
+	for child in self._connectors_children:
+		var child_connected = child.get_connected()
+		var child_connected_area = child.get_connected_area()
+		if (
+			child_connected
+			and child_connected_area
+			and child_connected.type == Globals.ELEMENTS.WIRE
+		):
+			self.emit_signal("child_moved_on_top", child_connected)
+
 func _drag_and_drop(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
 		if event.pressed:
 			# move on top when pressed
 			self.emit_signal("child_moved_on_top", self)
-			for child in self._connectors_children:
-				var child_connected = child.get_connected()
-				var child_connected_area = child.get_connected_area()
-				if (
-					child_connected
-					and child_connected_area
-					and child_connected.type == Globals.ELEMENTS.WIRE
-				):
-					self.emit_signal("child_moved_on_top", child_connected)
+			self.move_wires_on_top()
 
 			self.emit_signal("selected_elements_added", self)
 
 			self.get_tree().set_input_as_handled()
-
 		else:
 			self.emit_signal("temporary_wires_cleared", self)
 			self._dragged = false
@@ -222,16 +234,22 @@ func _drag_and_drop(event: InputEvent) -> void:
 	self.emit_signal("objects_is_selecting_received", self)
 	if event is InputEventScreenDrag && not self._is_objects_is_selecting:
 		self.emit_signal("selected_elements_moved", event)
+
+		self._move_connected_wires()
 		self.remove_temporary_wires()
 		self._dragged = true
 
 		self.get_tree().set_input_as_handled()
 
 func _unhandled_input(event: InputEvent) -> void:
-	self.emit_signal("objects_has_selected_scene_received", self)
-	if self.is_mouse_entered() and not self._is_objects_scene_selected:
-#		self.emit_signal("")
-		self._drag_and_drop(event)
+	if self.is_mouse_entered():
+
+		self.emit_signal("element_mouse_entered_received", self)
+		if self._is_objects_scene_selected:
+			return
+
+		if not self._is_objects_has_dragged_elements || self._dragged:
+			self._drag_and_drop(event)
 
 func _on_FirstArea_mouse_entered() -> void:
 	self._first_area_mouse_entered = true

@@ -8,8 +8,8 @@
 [ext_resource path="res://Scenes/Base/Element/ElementShader.gdshader" type="Shader" id=6]
 [ext_resource path="res://Scenes/Elements/FullAdder/full_adder_off.png" type="Texture" id=7]
 
-[sub_resource type="CircleShape2D" id=1]
-radius = 95.0
+[sub_resource type="CircleShape2D" id=3]
+radius = 100.0
 
 [sub_resource type="ShaderMaterial" id=2]
 resource_local_to_scene = true
@@ -27,23 +27,23 @@ type = 17
 [node name="CollisionShape2D" parent="FirstArea" index="0"]
 position = Vector2( -6, 6 )
 scale = Vector2( 1, 0.8 )
-shape = SubResource( 1 )
+shape = SubResource( 3 )
 
 [node name="Sprite" parent="." index="1"]
 material = SubResource( 2 )
 texture = ExtResource( 7 )
 
 [node name="In" parent="Connectors" index="0" instance=ExtResource( 2 )]
-position = Vector2( -62, 27 )
+position = Vector2( -55, 24 )
 
 [node name="In2" parent="Connectors" index="1" instance=ExtResource( 2 )]
-position = Vector2( -66, 52 )
+position = Vector2( -79, 49 )
 
 [node name="In3" parent="Connectors" index="2" instance=ExtResource( 2 )]
-position = Vector2( -39, 65 )
+position = Vector2( -42, 69 )
 
 [node name="Out" parent="Connectors" index="3" instance=ExtResource( 4 )]
-position = Vector2( 77, 17 )
+position = Vector2( 83, 19 )
 
 [node name="Out2" parent="Connectors" index="4" instance=ExtResource( 4 )]
-position = Vector2( 48, 33 )
+position = Vector2( 42, 39 )

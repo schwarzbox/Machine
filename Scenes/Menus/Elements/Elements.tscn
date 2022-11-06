@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://Scenes/Menus/Elements/Elements.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/Menus/Elements/battery_icon.png" type="Texture" id=2]
@@ -18,6 +18,7 @@
 [ext_resource path="res://Scenes/Menus/Elements/ex_or_icon.png" type="Texture" id=16]
 [ext_resource path="res://Scenes/Menus/Elements/half_adder_icon.png" type="Texture" id=17]
 [ext_resource path="res://Scenes/Menus/Elements/full_adder_icon.png" type="Texture" id=18]
+[ext_resource path="res://Scenes/Menus/Elements/adder_8_bit_icon.png" type="Texture" id=19]
 
 [sub_resource type="InputEventKey" id=1]
 control = true
@@ -408,6 +409,26 @@ texture_normal = ExtResource( 18 )
 expand = true
 
 [node name="ColorRect" type="ColorRect" parent="GridContainer/Full Adder"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0.333333, 0.333333, 0.333333, 1 )
+
+[node name="Adder 8 Bit" type="TextureButton" parent="GridContainer"]
+margin_left = 80.0
+margin_top = 120.0
+margin_right = 116.0
+margin_bottom = 156.0
+rect_min_size = Vector2( 36, 36 )
+hint_tooltip = "Half Adder"
+mouse_filter = 1
+size_flags_stretch_ratio = 0.5
+toggle_mode = true
+texture_normal = ExtResource( 19 )
+expand = true
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Adder 8 Bit"]
 show_behind_parent = true
 anchor_right = 1.0
 anchor_bottom = 1.0

@@ -91,11 +91,17 @@ func _on_Connector_area_entered(other: Connector) -> void:
 
 	self.emit_signal("connector_area_entered_received", self)
 	if (
+		not self.owner.is_cloned()
+		and self.objects_selected_elements_size > 1
+	):
+		# to correctly reconect wires after cloning
+		self.owner.set_cloned(false)
+		return
+
+	if (
 		self.owner.type == Globals.ELEMENTS.WIRE
 		&& other.owner.type == Globals.ELEMENTS.WIRE
 	):
-		if self.objects_selected_elements_size > 1:
-			return
 		if not self.owner.can_connect_to_wire(self, other):
 			return
 		self.setup_connection(self, self.owner, other, other.owner)
@@ -105,7 +111,7 @@ func _on_Connector_area_entered(other: Connector) -> void:
 			|| other.owner.type == Globals.ELEMENTS.WIRE
 		)
 	):
-		if self.objects_has_dragged_elements || self.objects_selected_elements_size > 1:
+		if self.objects_has_dragged_elements:
 			return
 		self.setup_connection(self, self.owner, other, other.owner)
 	else:

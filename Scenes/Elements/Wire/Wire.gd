@@ -89,13 +89,17 @@ func _drag_and_drop(event:  InputEvent) -> void:
 		self.get_tree().set_input_as_handled()
 
 func _unhandled_input(event: InputEvent) -> void:
-	self.emit_signal("objects_has_selected_scene_received", self)
-	if self.is_mouse_entered() && not self._is_objects_scene_selected:
+	if self.is_mouse_entered():
 		if (
 			event is InputEventMouseButton && event.pressed && event.is_doubleclick()
 		):
 			self._unlink_wire()
-		else:
+
+		self.emit_signal("element_mouse_entered_received", self)
+		if self._is_objects_scene_selected:
+			return
+
+		if not self._is_objects_has_dragged_elements:
 			self._drag_and_drop(event)
 
 func is_mouse_entered():
@@ -117,6 +121,10 @@ func is_in_first_points(connector: Connector):
 func is_in_second_points(connector: Connector):
 	return connector in [$Connectors/In2, $Connectors/Out2]
 
+func _sync_node_position(nodes: Array, position: Vector2) -> void:
+	for node in nodes:
+		node.position = position
+
 func unlink_points(is_first: bool = false, is_second: bool = false):
 	if is_first:
 		var dir = $Line2D.points[0].direction_to($Line2D.points[len($Line2D.points)-1])
@@ -133,11 +141,6 @@ func unlink_points(is_first: bool = false, is_second: bool = false):
 	self._sync_node_position(
 		[$Connectors/In2, $Connectors/Out2, $SecondArea, $Sprite2], $Line2D.points[len($Line2D.points)-1]
 	)
-
-func _sync_node_position(nodes: Array, position: Vector2) -> void:
-	for node in nodes:
-		node.position = position
-
 
 func _switch_first_points() -> void:
 	var in_connected = $Connectors/In.get_connected()

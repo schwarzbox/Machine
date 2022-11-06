@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Scenes/Base/Element/Element.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/Base/Connector/Out.tscn" type="PackedScene" id=2]
@@ -6,6 +6,9 @@
 [ext_resource path="res://Scenes/Elements/Battery/Battery.gd" type="Script" id=4]
 [ext_resource path="res://Scenes/Base/Element/DissolveTexture.tres" type="Texture" id=5]
 [ext_resource path="res://Scenes/Base/Element/ElementShader.gdshader" type="Shader" id=6]
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 64.0
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -19,6 +22,9 @@ shader_param/dissolveNoise = ExtResource( 5 )
 [node name="Battery" groups=["Energy"] instance=ExtResource( 1 )]
 script = ExtResource( 4 )
 type = 1
+
+[node name="CollisionShape2D" parent="FirstArea" index="0"]
+shape = SubResource( 2 )
 
 [node name="Sprite" parent="." index="1"]
 material = SubResource( 1 )

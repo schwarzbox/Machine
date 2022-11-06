@@ -1,43 +1,37 @@
 extends Node
-# tweet about selecting
 
-# move if only wire?
-# shaked wire
-# hided menu hotkeys
+# wire show symbol in wire create when can not be created
 
 # check unlink error
+# not unlink sometimes
 
-# new art
+# add rect colliders show areas where object could created
+
+# move if only wire?
 
 # remove redudant methods?
 # __ two underscores for my private
+# hided menu hotkeys
 
 
 # add pixelate shader or texture for wire
 # notification about and save + save before exit
 
 # move on top all elements
-
-# add rect colliders collision based move
-
 # how move images on top after each iteration
-
-# static
 
 # 1 byte memmory
 
 # avoid elements (optimal path) 2D Pathfinding in under 6 minutes! Godot 3.5 Tutorial
 
-# animate elements create, scale or particles)
+# animate elements create, scale or particles sounds
 
 # InputEventScreenTouch or InputEventMouseButton # input map
 # check class and Packed Scene? names Camel
 # add _private vars # element_draging $Connectors.get_children
 
 # graph nodes?
-
 # read about resourses
-
 
 # menu styles use dialogs popups with names for level menus
 # style timer and anim for labels / remove labels

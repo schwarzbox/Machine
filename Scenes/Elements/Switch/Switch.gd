@@ -32,7 +32,6 @@ func __has_energy() -> bool:
 				var child_connected_area = child.get_connected_area()
 				if child_connected_area and child_connected_area.get_energy():
 					$Connectors/Out.set_energy(true)
-					$Connectors/Out2.set_energy(true)
 					return true
 		return false
 	else:

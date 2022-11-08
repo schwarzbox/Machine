@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Scenes/Base/Connector/In.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/Elements/Wire/Wire.gd" type="Script" id=2]
@@ -7,12 +7,6 @@
 [ext_resource path="res://Scenes/Base/Element/ElementShader.gdshader" type="Shader" id=5]
 [ext_resource path="res://Scenes/Elements/Wire/wire_off.png" type="Texture" id=6]
 [ext_resource path="res://Scenes/Base/Element/DissolveTexture.tres" type="Texture" id=7]
-
-[sub_resource type="CircleShape2D" id=5]
-radius = 8.0
-
-[sub_resource type="CircleShape2D" id=1]
-radius = 8.0
 
 [sub_resource type="ShaderMaterial" id=4]
 resource_local_to_scene = true
@@ -47,12 +41,12 @@ __meta__ = {
 }
 
 [node name="CollisionShape2D" parent="FirstArea" index="0"]
-shape = SubResource( 5 )
+polygon = PoolVector2Array( 0, -5, -7, -2, -7, 5, 0, 8, 7, 5, 7, -2 )
 
 [node name="SecondArea" type="Area2D" parent="." index="2"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="SecondArea" index="0"]
-shape = SubResource( 1 )
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="SecondArea" index="0"]
+polygon = PoolVector2Array( 0, -5, 7, -2, 7, 5, 0, 8, -7, 5, -7, -2 )
 
 [node name="Sprite" parent="." index="3"]
 material = SubResource( 4 )
@@ -61,6 +55,9 @@ texture = ExtResource( 6 )
 [node name="Sprite2" type="Sprite" parent="." index="4"]
 material = SubResource( 3 )
 texture = ExtResource( 6 )
+
+[node name="Connectors" parent="." index="6"]
+visible = false
 
 [node name="In" parent="Connectors" index="0" instance=ExtResource( 1 )]
 

@@ -62,8 +62,8 @@ func _unlink_wire() -> void:
 func _drag_and_drop(event:  InputEvent) -> void:
 	if event is InputEventScreenTouch:
 		if event.pressed:
-			# move on top when entered
-			self.emit_signal("child_moved_on_top", self)
+			# move on top when pressed
+			self.emit_signal("child_moved_to_position", self)
 			self.emit_signal("selected_elements_added", self)
 
 			self.get_tree().set_input_as_handled()

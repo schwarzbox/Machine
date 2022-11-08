@@ -1,24 +1,18 @@
 extends Node
+# add bottom area-polygon colliders show areas where object could created
 
-# wire show symbol in wire create when can not be created
 
-# check unlink error
-# not unlink sometimes
-
-# add rect colliders show areas where object could created
+# not reconect when already connected wire when drag?
+# check unlink error?
 
 # move if only wire?
 
 # remove redudant methods?
 # __ two underscores for my private
-# hided menu hotkeys
-
+# add _private vars # element_draging $Connectors.get_children
 
 # add pixelate shader or texture for wire
 # notification about and save + save before exit
-
-# move on top all elements
-# how move images on top after each iteration
 
 # 1 byte memmory
 
@@ -28,7 +22,6 @@ extends Node
 
 # InputEventScreenTouch or InputEventMouseButton # input map
 # check class and Packed Scene? names Camel
-# add _private vars # element_draging $Connectors.get_children
 
 # graph nodes?
 # read about resourses
@@ -39,9 +32,8 @@ extends Node
 # refactoring
 # use link instead connect
 # info about element
-
-# _elements_scenes Eleements
-# Buffer instead PowerRelay RelayRegular RelayInverted insteadInverter
+# wire show symbol in wire create when can not be created
+# hided menu hotkeys
 
 # Check Project Settings Debug/Settings/ForceFPS and Display/Window/VSYNC
 # Engine.set_target_fps(value)

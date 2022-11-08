@@ -5,6 +5,8 @@ class_name Element
 export (Globals.ELEMENTS) var type
 var _type_name: String = ""
 
+onready var sprite_size: Vector2 = $Sprite.texture.get_size()
+
 var _connectors_children: Array = []
 var _on_texture: Texture = null
 var _off_texture: Texture = null
@@ -30,10 +32,11 @@ signal delete_processed
 
 signal element_mouse_entered_received
 signal objects_is_selecting_received
-signal child_moved_on_top
+signal child_moved_to_position
 signal selected_elements_added
 signal selected_elements_moved
 signal temporary_wires_cleared
+signal elements_sorted
 
 func _ready() -> void:
 	self.add_to_group("Elements")
@@ -206,7 +209,8 @@ func _move_connected_wires() -> void:
 		):
 			child_connected.switch_connections()
 
-func move_wires_on_top():
+
+func move_wires_to_position(pos = null) -> void:
 	for child in self._connectors_children:
 		var child_connected = child.get_connected()
 		var child_connected_area = child.get_connected_area()
@@ -215,14 +219,16 @@ func move_wires_on_top():
 			and child_connected_area
 			and child_connected.type == Globals.ELEMENTS.WIRE
 		):
-			self.emit_signal("child_moved_on_top", child_connected)
+			self.emit_signal("child_moved_to_position", child_connected, pos)
 
 func _drag_and_drop(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
 		if event.pressed:
+			# sort before move on top selected
+			self.emit_signal("elements_sorted")
 			# move on top when pressed
-			self.emit_signal("child_moved_on_top", self)
-			self.move_wires_on_top()
+			self.emit_signal("child_moved_to_position", self)
+			self.move_wires_to_position()
 
 			self.emit_signal("selected_elements_added", self)
 

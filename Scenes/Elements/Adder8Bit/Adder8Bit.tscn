@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Scenes/Elements/Adder8Bit/Adder8Bit.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/Base/Connector/Out.tscn" type="PackedScene" id=2]
@@ -7,9 +7,6 @@
 [ext_resource path="res://Scenes/Base/Element/ElementShader.gdshader" type="Shader" id=5]
 [ext_resource path="res://Scenes/Base/Connector/In.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Scenes/Base/Element/DissolveTexture.tres" type="Texture" id=7]
-
-[sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 384, 64 )
 
 [sub_resource type="ShaderMaterial" id=2]
 resource_local_to_scene = true
@@ -25,88 +22,86 @@ script = ExtResource( 1 )
 type = 18
 
 [node name="CollisionShape2D" parent="FirstArea" index="0"]
-position = Vector2( 0, 30 )
-rotation = 2.67035
-shape = SubResource( 3 )
+polygon = PoolVector2Array( 312, -147, 335, -136, 335, -125, 351, -116, 351, -108, 212, -38, 224, -32, 224, -27, 214, -22, 220, -19, 220, -14, -84, 139, -96, 133, -112, 141, -128, 133, -272, 205, -304, 189, -328, 201, -384, 173, -384, 164, -372, 158, -372, 150, 252, -162, 272, -151, 276, -153, 300, -142 )
 
 [node name="Sprite" parent="." index="1"]
 material = SubResource( 2 )
 texture = ExtResource( 4 )
 
 [node name="Out" parent="Connectors" index="0" instance=ExtResource( 2 )]
-position = Vector2( 207, -12 )
+position = Vector2( 207, -11 )
 
 [node name="Out2" parent="Connectors" index="1" instance=ExtResource( 2 )]
 position = Vector2( 167, 9 )
 
 [node name="Out3" parent="Connectors" index="2" instance=ExtResource( 2 )]
-position = Vector2( 126, 29 )
+position = Vector2( 127, 29 )
 
 [node name="Out4" parent="Connectors" index="3" instance=ExtResource( 2 )]
-position = Vector2( 86, 51 )
+position = Vector2( 87, 49 )
 
 [node name="Out5" parent="Connectors" index="4" instance=ExtResource( 2 )]
-position = Vector2( 44, 69 )
+position = Vector2( 47, 69 )
 
 [node name="Out6" parent="Connectors" index="5" instance=ExtResource( 2 )]
-position = Vector2( 6, 89 )
+position = Vector2( 7, 89 )
 
 [node name="Out7" parent="Connectors" index="6" instance=ExtResource( 2 )]
 position = Vector2( -33, 109 )
 
 [node name="Out8" parent="Connectors" index="7" instance=ExtResource( 2 )]
-position = Vector2( -74, 130 )
+position = Vector2( -73, 129 )
 
 [node name="OutC" parent="Connectors" index="8" instance=ExtResource( 2 )]
-position = Vector2( -337, 191 )
+position = Vector2( -339, 191 )
 
 [node name="In" parent="Connectors" index="9" instance=ExtResource( 6 )]
-position = Vector2( 242, -157 )
+position = Vector2( 241, -156 )
 
 [node name="InC" parent="Connectors" index="10" instance=ExtResource( 6 )]
-position = Vector2( 322, -140 )
+position = Vector2( 322, -142 )
 
 [node name="In2" parent="Connectors" index="11" instance=ExtResource( 6 )]
-position = Vector2( 203, -136 )
+position = Vector2( 201, -136 )
 
 [node name="In3" parent="Connectors" index="12" instance=ExtResource( 6 )]
-position = Vector2( 162, -117 )
+position = Vector2( 161, -116 )
 
 [node name="In4" parent="Connectors" index="13" instance=ExtResource( 6 )]
 position = Vector2( 121, -96 )
 
 [node name="In5" parent="Connectors" index="14" instance=ExtResource( 6 )]
-position = Vector2( 81, -75 )
+position = Vector2( 81, -76 )
 
 [node name="In6" parent="Connectors" index="15" instance=ExtResource( 6 )]
-position = Vector2( 41, -57 )
+position = Vector2( 41, -56 )
 
 [node name="In7" parent="Connectors" index="16" instance=ExtResource( 6 )]
-position = Vector2( 1, -38 )
+position = Vector2( 1, -36 )
 
 [node name="In8" parent="Connectors" index="17" instance=ExtResource( 6 )]
-position = Vector2( -38, -15 )
+position = Vector2( -39, -16 )
 
 [node name="In9" parent="Connectors" index="18" instance=ExtResource( 6 )]
-position = Vector2( -78, 4 )
+position = Vector2( -79, 4 )
 
 [node name="In10" parent="Connectors" index="19" instance=ExtResource( 6 )]
 position = Vector2( -119, 24 )
 
 [node name="In11" parent="Connectors" index="20" instance=ExtResource( 6 )]
-position = Vector2( -158, 44 )
+position = Vector2( -159, 44 )
 
 [node name="In12" parent="Connectors" index="21" instance=ExtResource( 6 )]
-position = Vector2( -198, 64 )
+position = Vector2( -199, 64 )
 
 [node name="In13" parent="Connectors" index="22" instance=ExtResource( 6 )]
-position = Vector2( -238, 84 )
+position = Vector2( -239, 84 )
 
 [node name="In14" parent="Connectors" index="23" instance=ExtResource( 6 )]
-position = Vector2( -277, 105 )
+position = Vector2( -279, 104 )
 
 [node name="In15" parent="Connectors" index="24" instance=ExtResource( 6 )]
-position = Vector2( -318, 124 )
+position = Vector2( -319, 124 )
 
 [node name="In16" parent="Connectors" index="25" instance=ExtResource( 6 )]
-position = Vector2( -359, 145 )
+position = Vector2( -359, 144 )

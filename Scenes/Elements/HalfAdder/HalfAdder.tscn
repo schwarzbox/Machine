@@ -22,21 +22,20 @@ script = ExtResource( 2 )
 type = 16
 
 [node name="CollisionShape2D" parent="FirstArea" index="0"]
-position = Vector2( -6, 6 )
-scale = Vector2( 1, 0.8 )
+polygon = PoolVector2Array( 32, -80, 60, -66, 60, -2, 76, 6, 84, 6, 95, 12, 95, 18, -32, 81, -96, 50, -96, 44, -84, 38, -72, 40, -64, 36, -64, 16, -32, 0, -12, 10, -12, -58 )
 
 [node name="Sprite" parent="." index="1"]
 material = SubResource( 2 )
 texture = ExtResource( 5 )
 
 [node name="In" parent="Connectors" index="0" instance=ExtResource( 7 )]
-position = Vector2( -81, 48 )
+position = Vector2( -83, 51 )
 
 [node name="In2" parent="Connectors" index="1" instance=ExtResource( 7 )]
-position = Vector2( -40, 70 )
+position = Vector2( -43, 71 )
 
 [node name="Out" parent="Connectors" index="2" instance=ExtResource( 6 )]
-position = Vector2( 80, 17 )
+position = Vector2( 83, 19 )
 
 [node name="Out2" parent="Connectors" index="3" instance=ExtResource( 6 )]
-position = Vector2( 41, 39 )
+position = Vector2( 43, 39 )

@@ -2,7 +2,7 @@ extends VBoxContainer
 
 class_name Elements
 
-var _elements_scenes = {
+var __elements_scenes = {
 	"Wire": [
 		load("res://Scenes/Elements/Wire/Wire.tscn"),
 		preload("res://Scenes/Elements/Wire/wire_cursor_off.png")
@@ -91,14 +91,15 @@ func _ready() -> void:
 	for child in $GridContainer.get_children():
 		child.connect(
 			"pressed", self, "_on_Button_pressed",
-			[child, _elements_scenes[child.name][0], _elements_scenes[child.name][1]]
+			[
+				child,
+				__elements_scenes[child.name][0],
+				__elements_scenes[child.name][1]
+			]
 		)
 
 func _update_rect_size():
 	self.rect_size = self.rect_min_size
-
-func get_element_scene(name: String) -> Array:
-	return self._elements_scenes[name]
 
 func toogle(instance = null) -> void:
 	for child in $GridContainer.get_children():
@@ -147,7 +148,7 @@ func _on_Objects_scene_deselected() -> void:
 
 func _on_Objects_clone_pressed(element: Element) -> void:
 	var scene: PackedScene = (
-		self.get_element_scene(element.get_type_name())[0]
+		self.__elements_scenes[(element.get_type_name())[0]]
 	)
 	var clone = scene.instance()
 	self.emit_signal("element_added", clone)

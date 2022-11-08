@@ -20,6 +20,25 @@ signal sprite_texture_saved
 signal sprite_texture_removed
 signal sprite_position_updated
 
+
+class SortUtil:
+	static func __sort_by_position(a: Element, b: Element):
+		if a.position > b.position:
+			return true
+		return false
+
+	static func __sort_by_rect_bottom_side(a: Element, b: Element):
+		var a_sorting_position = Vector2()
+		var b_sorting_position = Vector2()
+		var a_size = a.sprite_size / 2
+		var b_size = b.sprite_size / 2
+		a_sorting_position.y = a.position.y + a_size.y
+		b_sorting_position.y = b.position.y + b_size.y
+#
+		if a_sorting_position.y < b_sorting_position.y:
+			return true
+		return false
+
 func _ready() -> void:
 	prints(self.name, "ready")
 
@@ -43,13 +62,15 @@ func __connect_child_signals(element: Element) -> void:
 	# warning-ignore:return_value_discarded
 	element.connect("objects_is_selecting_received", self, "_on_Element_objects_is_selecting")
 	# warning-ignore:return_value_discarded
-	element.connect("child_moved_on_top", self, "_on_Element_child_moved_on_top")
+	element.connect("child_moved_to_position", self, "_on_Element_child_moved_to_position")
 	# warning-ignore:return_value_discarded
 	element.connect("selected_elements_added", self, "_on_Element_selected_elements_added")
 	# warning-ignore:return_value_discarded
 	element.connect("selected_elements_moved", self, "_on_Element_selected_elements_moved")
 	# warning-ignore:return_value_discarded
 	element.connect("temporary_wires_cleared", self, "_on_Element_temporary_wires_cleared")
+	# warning-ignore:return_value_discarded
+	element.connect("elements_sorted", self, "_on_Element_elements_sorted")
 
 func get_mouse_entered_element() -> Element:
 	# reverse to get top instanse
@@ -146,6 +167,7 @@ func __create_element(mouse_pos: Vector2) -> void:
 	else:
 		instance.position = mouse_pos
 		self.__add_child(instance)
+		self.__sort_objects_for_representation()
 
 func __process_selected_scene(
 	scene: PackedScene = null, texture: Texture = null, is_pressed: bool = false
@@ -213,6 +235,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 		if event is InputEventScreenTouch:
 			if event.pressed:
+				self.__sort_objects_for_representation()
 				self.set_selecting(true)
 				self.__selecting_init(mouse_pos)
 			else:
@@ -233,6 +256,22 @@ func _draw():
 			Color(.5, .5, .5),
 			false
 		)
+
+func __sort_objects_for_representation():
+	var children_top = self.get_children()
+	children_top.sort_custom(SortUtil, "__sort_by_rect_bottom_side")
+	var size = children_top.size()
+	var index = 1
+#	print()
+	for i in range(size):
+		var child_top = children_top[i]
+#		if child_top.type == Globals.ELEMENTS.WIRE:
+#			continue
+
+		self.move_child(child_top, i)
+#		print(child_top, child_top.position)
+#		child_top.move_wires_to_position(0)
+#		index += 1
 
 #func _notification(what):
 #	if what == NOTIFICATION_WM_MOUSE_ENTER:
@@ -309,21 +348,27 @@ func _on_Element_objects_mouse_entered(element: Element) -> void:
 func _on_Element_objects_is_selecting(element: Element) -> void:
 	element._is_objects_is_selecting = self.is_selecting()
 
-func _on_Element_child_moved_on_top(element: Element) -> void:
-	self.move_child(element, self.get_child_count() - 1)
+func _on_Element_child_moved_to_position(element: Element, pos = null) -> void:
+	if pos != null:
+		self.move_child(element, pos)
+	else:
+		self.move_child(element, self.get_child_count() - 1)
 
 func _on_Element_selected_elements_added(element: Element) -> void:
 	if not self.get_selected_elements().has(element):
 		self.remove_selected_elements()
 		self.add_selected_element(element)
 
+func _on_Element_selected_elements_moved(event: InputEvent) -> void:
+	for element in self.get_selected_elements():
+		element.position += event.relative * Globals.ACTUAL_ZOOM
+
 func _on_Element_temporary_wires_cleared(element: Element) -> void:
 	if self.get_selected_elements().has(element):
 		element.clear_temporary_wires()
 
-func _on_Element_selected_elements_moved(event: InputEvent) -> void:
-	for element in self.get_selected_elements():
-		element.position += event.relative * Globals.ACTUAL_ZOOM
+func _on_Element_elements_sorted() -> void:
+	self.__sort_objects_for_representation()
 
 func _on_Objects_connector_wire_added(connector: Connector, other: Connector) -> void:
 	var wire = wire_scene.instance()
@@ -379,3 +424,4 @@ func _on_Objects_connector_sprite_showed(
 
 func _on_Objects_connector_sprite_hided() -> void:
 	self.emit_signal("sprite_showed")
+

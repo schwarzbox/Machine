@@ -33,11 +33,12 @@ enum LEVELS {
 }
 
 const COLORS: Dictionary = {
-	ENERGY_COLOR = Color("#ffff66"),
-	DEFAULT_COLOR = Color("#99ccff"),
-	HIGHLIGHT = Color("#88ff88"),
-	TOOGLE_BUTTON_COLOR = Color("#333333"),
-	DEFAULT_BUTTON_COLOR = Color("#555555")
+	ENERGY_ON = Color("#ffff66"),
+	ENERGY_OFF = Color("#99ccff"),
+	OUTLINE = Color("#88ff88"),
+	TOOGLE_BUTTON = Color("#333333"),
+	DEFAULT_BUTTON = Color("#555555"),
+	SAFE_AREA_ALARM = Color("#c96d3d")
 }
 
 const GAME: Dictionary = {

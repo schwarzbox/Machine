@@ -1,8 +1,7 @@
 extends Node
-# add bottom area-polygon colliders show areas where object could created
+# avoid to create (detect mouse)
 
-
-# not reconect when already connected wire when drag?
+# not reconect when already connected wire when drag???? check lamps
 # check unlink error?
 
 # move if only wire?

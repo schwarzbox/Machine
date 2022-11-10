@@ -11,19 +11,29 @@
 [sub_resource type="ShaderMaterial" id=4]
 resource_local_to_scene = true
 shader = ExtResource( 5 )
-shader_param/is_dissolve = false
 shader_param/outline_width = 1.0
 shader_param/outline_color = null
 shader_param/is_outlined = false
+shader_param/texture_size = Vector2( 128, 128 )
+shader_param/stripe_color = null
+shader_param/stripe_width = 4.0
+shader_param/stripe_bias = 1.5
+shader_param/is_striped = false
+shader_param/is_dissolve = false
 shader_param/dissolveNoise = ExtResource( 7 )
 
 [sub_resource type="ShaderMaterial" id=3]
 resource_local_to_scene = true
 shader = ExtResource( 5 )
-shader_param/is_dissolve = false
 shader_param/outline_width = 1.0
 shader_param/outline_color = null
 shader_param/is_outlined = false
+shader_param/texture_size = Vector2( 128, 128 )
+shader_param/stripe_color = null
+shader_param/stripe_width = 4.0
+shader_param/stripe_bias = 1.5
+shader_param/is_striped = false
+shader_param/is_dissolve = false
 shader_param/dissolveNoise = ExtResource( 7 )
 
 [node name="Wire" instance=ExtResource( 3 )]
@@ -56,8 +66,8 @@ texture = ExtResource( 6 )
 material = SubResource( 3 )
 texture = ExtResource( 6 )
 
-[node name="Connectors" parent="." index="6"]
-visible = false
+[node name="CollisionShape2D" parent="SafeArea" index="0"]
+polygon = PoolVector2Array( -7, 4, 0, 7, 7, 4, 0, 1 )
 
 [node name="In" parent="Connectors" index="0" instance=ExtResource( 1 )]
 

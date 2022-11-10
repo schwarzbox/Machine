@@ -11,10 +11,15 @@
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
 shader = ExtResource( 3 )
-shader_param/is_dissolve = false
 shader_param/outline_width = 1.0
 shader_param/outline_color = null
 shader_param/is_outlined = false
+shader_param/texture_size = Vector2( 128, 128 )
+shader_param/stripe_color = null
+shader_param/stripe_width = 4.0
+shader_param/stripe_bias = 1.5
+shader_param/is_striped = false
+shader_param/is_dissolve = false
 shader_param/dissolveNoise = ExtResource( 7 )
 
 [node name="PowerInverter" groups=["Energy"] instance=ExtResource( 1 )]
@@ -27,6 +32,9 @@ polygon = PoolVector2Array( 0, -60, 15, -52, 15, -48, 8, -44, 8, -40, 28, -30, 2
 [node name="Sprite" parent="." index="1"]
 material = SubResource( 1 )
 texture = ExtResource( 4 )
+
+[node name="CollisionShape2D" parent="SafeArea" index="0"]
+polygon = PoolVector2Array( -70, 30, 0, 65, 65, 32, -1, -1 )
 
 [node name="In" parent="Connectors" index="0" instance=ExtResource( 6 )]
 position = Vector2( -51, 35 )

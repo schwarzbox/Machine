@@ -105,14 +105,14 @@ func toogle(instance = null) -> void:
 	for child in $GridContainer.get_children():
 		if child != instance:
 			child.pressed = false
-			child.get_node("ColorRect").color = Globals.COLORS.DEFAULT_BUTTON_COLOR
+			child.get_node("ColorRect").color = Globals.COLORS.DEFAULT_BUTTON
 
 	if instance:
 		var bg: ColorRect = instance.get_node("ColorRect")
 		if instance.pressed:
-			bg.color = Globals.COLORS.TOOGLE_BUTTON_COLOR
+			bg.color = Globals.COLORS.TOOGLE_BUTTON
 		else:
-			bg.color = Globals.COLORS.DEFAULT_BUTTON_COLOR
+			bg.color = Globals.COLORS.DEFAULT_BUTTON
 
 func _on_Button_pressed(
 	instance: TextureButton, scene: PackedScene, icon: Texture
@@ -148,7 +148,7 @@ func _on_Objects_scene_deselected() -> void:
 
 func _on_Objects_clone_pressed(element: Element) -> void:
 	var scene: PackedScene = (
-		self.__elements_scenes[(element.get_type_name())[0]]
+		self.__elements_scenes[element.get_type_name()][0]
 	)
 	var clone = scene.instance()
 	self.emit_signal("element_added", clone)

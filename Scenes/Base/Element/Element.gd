@@ -5,23 +5,25 @@ class_name Element
 export (Globals.ELEMENTS) var type
 var _type_name: String = ""
 
-onready var sprite_size: Vector2 = $Sprite.texture.get_size()
-
 var _connectors_children: Array = []
 var _on_texture: Texture = null
 var _off_texture: Texture = null
 
 var _first_area_mouse_entered: bool = false
+var _safe_areas_element_entered: Dictionary = {}
 
 var _is_objects_scene_selected: bool = false
 var _is_objects_has_dragged_elements: bool = false
 var _is_objects_is_selecting: bool = false
 var _dragged: bool = false
+
 # weird var for correctly clone group of elements
 var _cloned: bool = false
 
 var _temporary_wires: Array = []
 
+var sprite_size: Vector2 = Vector2()
+var last_valid_position: Vector2 = Vector2()
 var checked: bool = false
 
 signal connector_mouse_entered
@@ -33,15 +35,28 @@ signal delete_processed
 signal element_mouse_entered_received
 signal objects_is_selecting_received
 signal child_moved_to_position
-signal selected_elements_added
+signal selected_element_added
 signal selected_elements_moved
 signal temporary_wires_cleared
+signal drag_finished
 signal elements_sorted
 
 func _ready() -> void:
 	self.add_to_group("Elements")
 
-	$Sprite.material.set_shader_param("outline_color",  Globals.COLORS.HIGHLIGHT)
+	self.sprite_size = $Sprite.texture.get_size()
+
+	$Sprite.material.set_shader_param(
+		"outline_color",  Globals.COLORS.OUTLINE
+	)
+
+	$Sprite.material.set_shader_param(
+		"stripe_color",  Globals.COLORS.SAFE_AREA_ALARM
+	)
+
+	$Sprite.material.set_shader_param(
+		"texture_size",  self.sprite_size
+	)
 
 	self._set_on_texture()
 	self._set_off_texture()
@@ -51,9 +66,13 @@ func _ready() -> void:
 	self.__connect_connectors_signals()
 
 	self._type_name = Globals.ELEMENTS.keys()[self.type].capitalize()
+	self.last_valid_position = self.position
 
 func get_type_name() -> String:
 	return self._type_name
+
+func safe_area_alarm(value: bool) -> void:
+	$Sprite.material.set_shader_param("is_striped",  value)
 
 func outline(value: bool) -> void:
 	$Sprite.material.set_shader_param("is_outlined", value)
@@ -189,6 +208,9 @@ func clear_temporary_wires() -> void:
 func is_mouse_entered() -> bool:
 	return self._first_area_mouse_entered
 
+func is_safe_area_entered() -> bool:
+	return not self._safe_areas_element_entered.empty()
+
 func is_dragged() -> bool:
 	return self._dragged
 
@@ -230,26 +252,25 @@ func _drag_and_drop(event: InputEvent) -> void:
 			self.emit_signal("child_moved_to_position", self)
 			self.move_wires_to_position()
 
-			self.emit_signal("selected_elements_added", self)
+			self.emit_signal("selected_element_added", self)
 
 			self.get_tree().set_input_as_handled()
 		else:
 			self.emit_signal("temporary_wires_cleared", self)
+			self.emit_signal("drag_finished")
 			self._dragged = false
 
 	self.emit_signal("objects_is_selecting_received", self)
 	if event is InputEventScreenDrag && not self._is_objects_is_selecting:
-		self.emit_signal("selected_elements_moved", event)
 
+		self.emit_signal("selected_elements_moved", event)
 		self._move_connected_wires()
 		self.remove_temporary_wires()
 		self._dragged = true
-
 		self.get_tree().set_input_as_handled()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if self.is_mouse_entered():
-
 		self.emit_signal("element_mouse_entered_received", self)
 		if self._is_objects_scene_selected:
 			return
@@ -272,4 +293,16 @@ func _on_AnimationPlayer_animation_finished(anim_name: String) -> void:
 #	if entered_element:
 #		entered_element.call_deferred("outline", true)
 
+func _on_SafeArea_area_entered(area: Area2D) -> void:
+	if (self.type == Globals.ELEMENTS.WIRE || area.owner.type == Globals.ELEMENTS.WIRE):
+		return
 
+	self._safe_areas_element_entered[area] = area
+	area.owner.safe_area_alarm(true)
+
+func _on_SafeArea_area_exited(area: Area2D) -> void:
+	if (self.type == Globals.ELEMENTS.WIRE || area.owner.type == Globals.ELEMENTS.WIRE):
+		return
+
+	self._safe_areas_element_entered.erase(area)
+	area.owner.safe_area_alarm(false)

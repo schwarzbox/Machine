@@ -64,11 +64,13 @@ func __connect_child_signals(element: Element) -> void:
 	# warning-ignore:return_value_discarded
 	element.connect("child_moved_to_position", self, "_on_Element_child_moved_to_position")
 	# warning-ignore:return_value_discarded
-	element.connect("selected_elements_added", self, "_on_Element_selected_elements_added")
+	element.connect("selected_element_added", self, "_on_Element_selected_element_added")
 	# warning-ignore:return_value_discarded
 	element.connect("selected_elements_moved", self, "_on_Element_selected_elements_moved")
 	# warning-ignore:return_value_discarded
 	element.connect("temporary_wires_cleared", self, "_on_Element_temporary_wires_cleared")
+	# warning-ignore:return_value_discarded
+	element.connect("drag_finished", self, "_on_Element_drag_finished")
 	# warning-ignore:return_value_discarded
 	element.connect("elements_sorted", self, "_on_Element_elements_sorted")
 
@@ -104,9 +106,10 @@ func set_selected_elements_from_areas(selected_areas: Array) -> void:
 	self._selected_elements = []
 	for area in selected_areas:
 		var element = area.collider.owner
+		# to protect from wrong placement
+		element.last_valid_position = element.position
 		if not self._selected_elements.has(element):
-			self._selected_elements.append(element)
-		element.call_deferred("outline", true)
+			self.add_selected_element(element)
 
 func remove_selected_elements() -> void:
 	self.get_tree().call_group_flags(
@@ -231,7 +234,7 @@ func _unhandled_input(event: InputEvent) -> void:
 					self.emit_signal(
 						"menu_poped", element, len(self.get_selected_elements()) > 1
 					)
-					self._on_Element_selected_elements_added(element)
+					self._on_Element_selected_element_added(element)
 
 		if event is InputEventScreenTouch:
 			if event.pressed:
@@ -260,18 +263,10 @@ func _draw():
 func __sort_objects_for_representation():
 	var children_top = self.get_children()
 	children_top.sort_custom(SortUtil, "__sort_by_rect_bottom_side")
-	var size = children_top.size()
-	var index = 1
-#	print()
-	for i in range(size):
+	for i in range(children_top.size()):
 		var child_top = children_top[i]
-#		if child_top.type == Globals.ELEMENTS.WIRE:
-#			continue
-
 		self.move_child(child_top, i)
-#		print(child_top, child_top.position)
-#		child_top.move_wires_to_position(0)
-#		index += 1
+
 
 #func _notification(what):
 #	if what == NOTIFICATION_WM_MOUSE_ENTER:
@@ -284,6 +279,8 @@ func _on_Elements_button_pressed(scene, icon, pressed) -> void:
 
 func _on_Elements_element_added(element: Element) -> void:
 	self.__add_child(element)
+	# to protect from wrong placement
+	element.last_valid_position = element.position
 	self.add_selected_element(element)
 
 func _on_FileMenu_elements_deleted() -> void:
@@ -319,7 +316,7 @@ func _on_PopupTools_clone_pressed() -> void:
 			clone.switch_connections()
 			clone.call_deferred("show_sprites")
 		else:
-			clone.move_wires_on_top()
+			clone.move_wires_to_position()
 
 func _on_PopupTools_unlink_pressed() -> void:
 	for element in self.get_selected_elements():
@@ -354,7 +351,9 @@ func _on_Element_child_moved_to_position(element: Element, pos = null) -> void:
 	else:
 		self.move_child(element, self.get_child_count() - 1)
 
-func _on_Element_selected_elements_added(element: Element) -> void:
+func _on_Element_selected_element_added(element: Element) -> void:
+	# to protect from wrong placement
+	element.last_valid_position = element.position
 	if not self.get_selected_elements().has(element):
 		self.remove_selected_elements()
 		self.add_selected_element(element)
@@ -362,6 +361,12 @@ func _on_Element_selected_elements_added(element: Element) -> void:
 func _on_Element_selected_elements_moved(event: InputEvent) -> void:
 	for element in self.get_selected_elements():
 		element.position += event.relative * Globals.ACTUAL_ZOOM
+
+func _on_Element_drag_finished() -> void:
+	for element in self.get_selected_elements():
+		if element.is_safe_area_entered():
+			element.position = element.last_valid_position
+			element._move_connected_wires()
 
 func _on_Element_temporary_wires_cleared(element: Element) -> void:
 	if self.get_selected_elements().has(element):

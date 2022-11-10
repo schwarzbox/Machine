@@ -9,7 +9,7 @@ func _ready() -> void:
 	self.type = Globals.ELEMENTS.WIRE
 
 	self.hide_sprites()
-	$Sprite2.material.set_shader_param("outline_color",  Globals.COLORS.HIGHLIGHT)
+	$Sprite2.material.set_shader_param("outline_color",  Globals.COLORS.OUTLINE)
 
 func outline(value: bool) -> void:
 	$Sprite.material.set_shader_param("is_outlined", value)
@@ -20,12 +20,12 @@ func outline(value: bool) -> void:
 func _set_on() -> void:
 	$Sprite.texture = self._on_texture
 	$Sprite2.texture =self._on_texture
-	$Line2D.default_color = Globals.COLORS.ENERGY_COLOR
+	$Line2D.default_color = Globals.COLORS.ENERGY_ON
 
 func _set_off() -> void:
 	$Sprite.texture = self._off_texture
 	$Sprite2.texture = self._off_texture
-	$Line2D.default_color = Globals.COLORS.DEFAULT_COLOR
+	$Line2D.default_color = Globals.COLORS.ENERGY_OFF
 
 func __has_energy() -> bool:
 	for child in self._connectors_children:
@@ -64,7 +64,7 @@ func _drag_and_drop(event:  InputEvent) -> void:
 		if event.pressed:
 			# move on top when pressed
 			self.emit_signal("child_moved_to_position", self)
-			self.emit_signal("selected_elements_added", self)
+			self.emit_signal("selected_element_added", self)
 
 			self.get_tree().set_input_as_handled()
 		else:
@@ -338,4 +338,3 @@ func _on_SecondArea_mouse_exited() -> void:
 #		):
 #			if child_connected == self.objects.get_mouse_entered_element():
 #				child_connected.call_deferred('outline', true)
-

@@ -1,11 +1,20 @@
 shader_type canvas_item;
 
-uniform sampler2D dissolveNoise;
-uniform bool is_dissolve = false;
-
+// outline
 uniform float outline_width = 1.0;
 uniform vec4 outline_color: hint_color;
 uniform bool is_outlined = false;
+
+// stripe
+uniform vec2 texture_size = vec2(128, 128);
+uniform vec4 stripe_color : hint_color;
+uniform float stripe_width = 4.0;
+uniform float stripe_bias = 1.5;
+uniform bool is_striped = false;
+
+// dissolve
+uniform sampler2D dissolveNoise;
+uniform bool is_dissolve = false;
 
 void fragment() {
 	vec4 col = texture(TEXTURE, UV);
@@ -31,13 +40,25 @@ void fragment() {
 	maxa = max(a, maxa);
 	mina = min(a, mina);
 
+	if (is_outlined && !is_dissolve) {
+		COLOR = mix(col, outline_color, maxa - mina);
+	} 
+	else {
+		if (is_striped) {
+			float divisions = texture_size.x / stripe_width;
+			if (floor(mod(UV.x * divisions, stripe_bias)) < 0.0001) {
+				COLOR = col;
+			} else {
+				COLOR = mix(col, stripe_color, col.a); 
+			}
+		} 
+		else  {
+			COLOR = col;
+		}
+	}
+	
 	if (is_dissolve) {
 		float noise = texture(dissolveNoise, UV).r;
 		col.a *= step(MODULATE.a, noise);
 	} 
-	if (is_outlined && !is_dissolve) {
-		COLOR = mix(col, outline_color, maxa - mina);
-	} else {
-		COLOR = col;
-	}
 }

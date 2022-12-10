@@ -1,14 +1,11 @@
 extends Node
 
 # shift straight lines
-
 # less weird signals
 
 # need to move wires together
 # ?sorted wires?
 # move if only wire?
-
-# git merge collisions
 
 # hertz forever ossci when start
 

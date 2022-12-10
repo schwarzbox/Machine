@@ -3,10 +3,10 @@
 [ext_resource path="res://scenes/menus/file_menu/file_menu.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/menus/popup_tools/popup_tools.tscn" type="PackedScene" id=2]
 [ext_resource path="res://levels/sandbox/sandbox.gd" type="Script" id=3]
-[ext_resource path="res://Levels/Base/Level.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Scenes/Menus/Elements/Elements.tscn" type="PackedScene" id=5]
+[ext_resource path="res://levels/base/level.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/menus/elements/elements.tscn" type="PackedScene" id=5]
 [ext_resource path="res://levels/sandbox/objects.gd" type="Script" id=6]
-[ext_resource path="res://Scenes/Base/Camera/camera_2d.tscn" type="PackedScene" id=7]
+[ext_resource path="res://scenes/base/camera/camera_2d.tscn" type="PackedScene" id=7]
 
 [node name="Sandbox" instance=ExtResource( 4 )]
 script = ExtResource( 3 )

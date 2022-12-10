@@ -83,18 +83,17 @@ func _drag_and_drop(event:  InputEvent) -> void:
 	# wires never set as draged element
 	self.emit_signal("objects_is_selecting_received", self)
 	if event is InputEventScreenDrag && not self._is_objects_is_selecting:
-		self.emit_signal("selected_elements_moved", event)
-#		if self._first_area_mouse_entered:
-#			self.outline(true)
-#			self.move_first_point(self.get_global_mouse_position())
-#			self.switch_connections(true)
-#
-#		elif self._second_area_mouse_entered:
-#			self.outline(true)
-#			self.move_last_point(self.get_global_mouse_position())
-#			self.switch_connections(true)
-#
-#		self._move_connected_wires()
+		if self._first_area_mouse_entered:
+			self.outline(true)
+			self.move_first_point(self.get_global_mouse_position())
+			self.switch_connections(true)
+
+		elif self._second_area_mouse_entered:
+			self.outline(true)
+			self.move_last_point(self.get_global_mouse_position())
+			self.switch_connections(true)
+
+		self._move_connected_wires()
 		self.delete_if_less()
 
 		self.get_tree().set_input_as_handled()

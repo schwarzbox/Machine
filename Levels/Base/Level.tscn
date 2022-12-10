@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://levels/base/level.gd" type="Script" id=1]
-[ext_resource path="res://Scenes/Base/Cursor/Cursor.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Levels/Base/level_menu.gd" type="Script" id=3]
+[ext_resource path="res://scenes/base/cursor/cursor.tscn" type="PackedScene" id=2]
+[ext_resource path="res://levels/base/level_menu.gd" type="Script" id=3]
 
 [node name="Level" type="Node"]
 script = ExtResource( 1 )

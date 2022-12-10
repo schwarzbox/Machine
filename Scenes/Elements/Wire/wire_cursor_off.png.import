@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/wire_cursor_off.png-ad23bf7672de91e8fa364c42984958a9.stex"
+path="res://.import/wire_cursor_off.png-935fe4be5539b993a28a10b71ee2cf93.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Elements/Wire/wire_cursor_off.png"
-dest_files=[ "res://.import/wire_cursor_off.png-ad23bf7672de91e8fa364c42984958a9.stex" ]
+source_file="res://scenes/elements/wire/wire_cursor_off.png"
+dest_files=[ "res://.import/wire_cursor_off.png-935fe4be5539b993a28a10b71ee2cf93.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=true
+flags/filter=false
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
@@ -31,5 +31,5 @@ process/invert_color=false
 process/normal_map_invert_y=false
 stream=false
 size_limit=0
-detect_3d=true
+detect_3d=false
 svg/scale=1.0

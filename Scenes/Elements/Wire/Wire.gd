@@ -1,31 +1,41 @@
 extends Element
 
-var _on: Texture = preload("res://Scenes/Elements/Wire/wire_on.png")
-var _off: Texture = preload("res://Scenes/Elements/Wire/wire_off.png")
+var _on: Texture = preload("res://scenes/elements/wire/wire_on.png")
+var _off: Texture = preload("res://scenes/elements/wire/wire_off.png")
 
 var _second_area_mouse_entered = false
 
 func _ready() -> void:
-	self.type = Globals.ELEMENTS.WIRE
+	self.type = Globals.Elements.WIRE
 
 	self.hide_sprites()
-	$Sprite2.material.set_shader_param("outline_color",  Globals.COLORS.HIGHLIGHT)
+
+	$Sprite2.material.set_shader_param("texture_size",  self.sprite_size)
+	$Sprite2.material.set_shader_param(
+		"stripe_color",  Globals.COLORS.SAFE_AREA_ALARM
+	)
+	$Sprite2.material.set_shader_param("outline_color",  Globals.COLORS.OUTLINE)
 
 func outline(value: bool) -> void:
 	$Sprite.material.set_shader_param("is_outlined", value)
 	$Sprite2.material.set_shader_param("is_outlined", value)
+
+func set_alpha(value) -> void:
+	$Line2D.modulate.a = value
+	$Sprite.modulate.a = 1.0
+	$Sprite2.modulate.a = 1.0
 
 # energy loop
 
 func _set_on() -> void:
 	$Sprite.texture = self._on_texture
 	$Sprite2.texture =self._on_texture
-	$Line2D.default_color = Globals.COLORS.ENERGY_COLOR
+	$Line2D.default_color = Globals.COLORS.ENERGY_ON
 
 func _set_off() -> void:
 	$Sprite.texture = self._off_texture
 	$Sprite2.texture = self._off_texture
-	$Line2D.default_color = Globals.COLORS.DEFAULT_COLOR
+	$Line2D.default_color = Globals.COLORS.ENERGY_OFF
 
 func __has_energy() -> bool:
 	for child in self._connectors_children:
@@ -62,9 +72,9 @@ func _unlink_wire() -> void:
 func _drag_and_drop(event:  InputEvent) -> void:
 	if event is InputEventScreenTouch:
 		if event.pressed:
-			# move on top when entered
+			# move on top when pressed
 			self.emit_signal("child_moved_on_top", self)
-			self.emit_signal("selected_elements_added", self)
+			self.emit_signal("selected_element_added", self)
 
 			self.get_tree().set_input_as_handled()
 		else:
@@ -114,6 +124,7 @@ func show_sprites():
 func hide_sprites():
 	$Sprite.hide()
 	$Sprite2.hide()
+
 
 func is_in_first_points(connector: Connector):
 	return connector in [$Connectors/In, $Connectors/Out]
@@ -284,6 +295,14 @@ static func can_connect_to_wire(self_connector: Connector, other_connector: Conn
 
 	return true
 
+func check_connect_to_object() -> bool:
+	if (
+		($Connectors/In.has_connection() || $Connectors/Out.has_connection())
+		&& ($Connectors/In2.has_connection() || $Connectors/Out2.has_connection())
+	):
+		return false
+	return true
+
 func check_connect_to_wire(connector: Connector, with_connection: bool = true) -> bool:
 	var self_connected: Array = []
 	for self_child in self.get_connectors_children():
@@ -295,9 +314,9 @@ func check_connect_to_wire(connector: Connector, with_connection: bool = true) -
 			self_connected.append(null)
 
 	if connector in [$Connectors/In, $Connectors/Out]:
-		if self_connected[0] && self_connected[0].type != Globals.ELEMENTS.WIRE:
+		if self_connected[0] && self_connected[0].type != Globals.Elements.WIRE:
 			return false
-		if self_connected[2] && self_connected[2].type != Globals.ELEMENTS.WIRE:
+		if self_connected[2] && self_connected[2].type != Globals.Elements.WIRE:
 			return false
 
 		if (
@@ -308,9 +327,9 @@ func check_connect_to_wire(connector: Connector, with_connection: bool = true) -
 			return false
 
 	elif connector in [$Connectors/In2, $Connectors/Out2]:
-		if self_connected[1] && self_connected[1].type != Globals.ELEMENTS.WIRE:
+		if self_connected[1] && self_connected[1].type != Globals.Elements.WIRE:
 			return false
-		if self_connected[3] && self_connected[3].type != Globals.ELEMENTS.WIRE:
+		if self_connected[3] && self_connected[3].type != Globals.Elements.WIRE:
 			return false
 		if (
 			with_connection
@@ -326,16 +345,3 @@ func _on_SecondArea_mouse_entered() -> void:
 
 func _on_SecondArea_mouse_exited() -> void:
 	self._second_area_mouse_entered = false
-
-#func _outline_connected() -> void:
-#	for child in self._connectors_children:
-#		var child_connected = child.get_connected()
-#		var child_connected_area = child.get_connected_area()
-#		if (
-#			child_connected
-#			and child_connected_area
-#			and child_connected.type != Globals.ELEMENTS.WIRE
-#		):
-#			if child_connected == self.objects.get_mouse_entered_element():
-#				child_connected.call_deferred('outline', true)
-

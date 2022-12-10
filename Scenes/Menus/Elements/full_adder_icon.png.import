@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/full_adder_icon.png-7118a013f3c5da222a3fb4fbf6f06940.stex"
+path="res://.import/full_adder_icon.png-4d349babc8fcbc5832f22047a189f389.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Menus/Elements/full_adder_icon.png"
-dest_files=[ "res://.import/full_adder_icon.png-7118a013f3c5da222a3fb4fbf6f06940.stex" ]
+source_file="res://scenes/menus/elements/full_adder_icon.png"
+dest_files=[ "res://.import/full_adder_icon.png-4d349babc8fcbc5832f22047a189f389.stex" ]
 
 [params]
 

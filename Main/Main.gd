@@ -1,34 +1,39 @@
 extends Node
 
-# wire show symbol in wire create when can not be created
+# shift straight lines
+# less weird signals
 
-# check unlink error
-# not unlink sometimes
-
-# add rect colliders show areas where object could created
-
+# need to move wires together
+# ?sorted wires?
 # move if only wire?
+
+# hertz forever ossci when start
+
+# new A O !A !O# new battery
+
+# show minimap?
+
+# add text notes?
+
+# highlight correct connector
+
+# increase areas (how to highlight them)?
+
+# add pixelate shader or texture for wire
 
 # remove redudant methods?
 # __ two underscores for my private
-# hided menu hotkeys
+# add _private vars # element_draging $Connectors.get_children
+# len or size?
 
-
-# add pixelate shader or texture for wire
 # notification about and save + save before exit
 
-# move on top all elements
-# how move images on top after each iteration
-
 # 1 byte memmory
-
-# avoid elements (optimal path) 2D Pathfinding in under 6 minutes! Godot 3.5 Tutorial
 
 # animate elements create, scale or particles sounds
 
 # InputEventScreenTouch or InputEventMouseButton # input map
 # check class and Packed Scene? names Camel
-# add _private vars # element_draging $Connectors.get_children
 
 # graph nodes?
 # read about resourses
@@ -39,9 +44,8 @@ extends Node
 # refactoring
 # use link instead connect
 # info about element
-
-# _elements_scenes Eleements
-# Buffer instead PowerRelay RelayRegular RelayInverted insteadInverter
+# wire show symbol in wire create when can not be created
+# hided menu hotkeys
 
 # Check Project Settings Debug/Settings/ForceFPS and Display/Window/VSYNC
 # Engine.set_target_fps(value)
@@ -51,9 +55,9 @@ extends Node
 #self.get_global_transform_with_canvas().get_origin()
 
 var level_scenes := [
-	preload("res://Levels/Campaign/Campaign.tscn"),
-	preload("res://Levels/Sandbox/Sandbox.tscn"),
-	preload("res://Levels/Settings/Settings.tscn"),
+	preload("res://levels/campaign/campaign.tscn"),
+	preload("res://levels/sandbox/sandbox.tscn"),
+	preload("res://levels/settings/settings.tscn"),
 ]
 var levels: Array = []
 
@@ -86,7 +90,7 @@ func start(level) -> void:
 
 func _set_transition(call: String, level: Node = null) -> void:
 	var makeref = funcref(self, call)
-	$Transition.fade(makeref, level)
+	Transition.fade(makeref, level)
 
 func _on_Button1_pressed() -> void:
 	self._set_transition("start", self.levels[0])

@@ -1,19 +1,21 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://Scenes/Base/Element/Element.gd" type="Script" id=1]
-[ext_resource path="res://Scenes/Base/Element/DissolveTexture.tres" type="Texture" id=2]
-[ext_resource path="res://Scenes/Base/Element/ElementShader.gdshader" type="Shader" id=4]
-
-[sub_resource type="CircleShape2D" id=6]
-radius = 64.0
+[ext_resource path="res://scenes/base/element/element.gd" type="Script" id=1]
+[ext_resource path="res://scenes/base/element/dissolve_texture.tres" type="Texture" id=2]
+[ext_resource path="res://scenes/base/element/element_shader.gdshader" type="Shader" id=3]
 
 [sub_resource type="ShaderMaterial" id=5]
-resource_local_to_scene = true
-shader = ExtResource( 4 )
-shader_param/is_dissolve = false
+shader = ExtResource( 3 )
 shader_param/outline_width = 1.0
 shader_param/outline_color = null
 shader_param/is_outlined = false
+shader_param/is_dissolve = false
+shader_param/texture_size = Vector2( 137, 137 )
+shader_param/stripe_color = null
+shader_param/stripe_width = 4.0
+shader_param/stripe_bias = 2.0
+shader_param/is_striped = false
+shader_param/is_created = false
 shader_param/dissolveNoise = ExtResource( 2 )
 
 [sub_resource type="Animation" id=3]
@@ -49,14 +51,14 @@ tracks/0/keys = {
 
 [node name="Element" type="Node2D" groups=["Elements"]]
 script = ExtResource( 1 )
+type = null
 
 [node name="FirstArea" type="Area2D" parent="."]
 collision_mask = 0
 monitoring = false
 monitorable = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="FirstArea"]
-shape = SubResource( 6 )
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="FirstArea"]
 __meta__ = {
 "_edit_lock_": true
 }
@@ -64,6 +66,12 @@ __meta__ = {
 [node name="Sprite" type="Sprite" parent="."]
 modulate = Color( 1, 1, 1, 0.833333 )
 material = SubResource( 5 )
+
+[node name="SafeArea" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="SafeArea"]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/Delete = SubResource( 3 )
@@ -73,4 +81,6 @@ anims/RESET = SubResource( 4 )
 
 [connection signal="mouse_entered" from="FirstArea" to="." method="_on_FirstArea_mouse_entered"]
 [connection signal="mouse_exited" from="FirstArea" to="." method="_on_FirstArea_mouse_exited"]
+[connection signal="area_entered" from="SafeArea" to="." method="_on_SafeArea_area_entered"]
+[connection signal="area_exited" from="SafeArea" to="." method="_on_SafeArea_area_exited"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]

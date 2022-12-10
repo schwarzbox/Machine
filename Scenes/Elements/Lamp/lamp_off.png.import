@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/lamp_off.png-b006672fdbb8294bceed36f658cba541.stex"
+path="res://.import/lamp_off.png-4170925f85ad573a45b87a3de54c24be.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Elements/Lamp/lamp_off.png"
-dest_files=[ "res://.import/lamp_off.png-b006672fdbb8294bceed36f658cba541.stex" ]
+source_file="res://scenes/elements/lamp/lamp_off.png"
+dest_files=[ "res://.import/lamp_off.png-4170925f85ad573a45b87a3de54c24be.stex" ]
 
 [params]
 

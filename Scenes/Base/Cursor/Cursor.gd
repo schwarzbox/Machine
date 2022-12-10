@@ -2,13 +2,11 @@ extends Sprite
 
 class_name Cursor
 
+# maybe exists better solution
+# to check when cursor in safe area
+var type: int = -1
+
 var _cursor_texture: Texture = null
-
-func _ready() -> void:
-	self.set_alpha()
-
-func set_alpha(value: float = 0.8) -> void:
-	self.modulate.a = value
 
 func save_texture(texture: Texture) -> void:
 	self._cursor_texture = texture
@@ -58,11 +56,15 @@ func _on_Objects_sprite_showed(texture: Texture = null) -> void:
 func _on_Objects_sprite_hided() -> void:
 	self.hide_sprite()
 
-func _on_Objects_sprite_texture_saved(texture: Texture) -> void:
+func _on_Objects_sprite_texture_saved(texture: Texture, polygon: PoolVector2Array) -> void:
+	$Area2D/CollisionPolygon2D.polygon = polygon
 	self.save_texture(texture)
 
 func _on_Objects_sprite_texture_removed() -> void:
+	$Area2D/CollisionPolygon2D.polygon = []
 	self.remove_texture()
 
 func _on_Objects_sprite_position_updated(pos: Vector2) -> void:
 	self.set_position(pos)
+
+

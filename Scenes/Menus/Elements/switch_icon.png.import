@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/switch_icon.png-281955e68394bf4f4f21f7e7badb1f87.stex"
+path="res://.import/switch_icon.png-ab090999710685dbbf97ff3434f21a16.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Menus/Elements/switch_icon.png"
-dest_files=[ "res://.import/switch_icon.png-281955e68394bf4f4f21f7e7badb1f87.stex" ]
+source_file="res://scenes/menus/elements/switch_icon.png"
+dest_files=[ "res://.import/switch_icon.png-ab090999710685dbbf97ff3434f21a16.stex" ]
 
 [params]
 

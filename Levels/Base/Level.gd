@@ -2,7 +2,7 @@ extends Node
 
 class_name Level
 
-export (Globals.LEVELS) var type
+export (Globals.Levels) var type
 
 signal back_pressed
 

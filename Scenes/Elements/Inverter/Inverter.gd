@@ -1,14 +1,14 @@
 extends Element
 
-const _on: Texture = preload("res://Scenes/Elements/Inverter/inverter_on.png")
-const _off: Texture = preload("res://Scenes/Elements/Inverter/inverter_off.png")
-const _on_off: Texture = preload("res://Scenes/Elements/Inverter/inverter_on_off.png")
-const _off_on: Texture = preload("res://Scenes/Elements/Inverter/inverter_off_on.png")
+const _on: Texture = preload("res://scenes/elements/inverter/inverter_on.png")
+const _off: Texture = preload("res://scenes/elements/inverter/inverter_off.png")
+const _on_off: Texture = preload("res://scenes/elements/inverter/inverter_on_off.png")
+const _off_on: Texture = preload("res://scenes/elements/inverter/inverter_off_on.png")
 
-var relay_util: RelayDelayUtil = preload("res://Scenes/Utils/RelayDelayUtil.gd").new()
+var relay_util: RelayDelayUtil = preload("res://scenes/utils/relay_delay_util.gd").new()
 
 func _ready() -> void:
-	self.type = Globals.ELEMENTS.INVERTER
+	self.type = Globals.Elements.INVERTER
 
 func reset_energy():
 	self.relay_util.reset()

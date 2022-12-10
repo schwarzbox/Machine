@@ -1,21 +1,37 @@
 extends Node
-# avoid to create (detect mouse)
 
-# not reconect when already connected wire when drag???? check lamps
-# check unlink error?
+# shift straight lines
 
+# less weird signals
+
+# need to move wires together
+# ?sorted wires?
 # move if only wire?
+
+# git merge collisions
+
+# hertz forever ossci when start
+
+# new A O !A !O# new battery
+
+# show minimap?
+
+# add text notes?
+
+# highlight correct connector
+
+# increase areas (how to highlight them)?
+
+# add pixelate shader or texture for wire
 
 # remove redudant methods?
 # __ two underscores for my private
 # add _private vars # element_draging $Connectors.get_children
+# len or size?
 
-# add pixelate shader or texture for wire
 # notification about and save + save before exit
 
 # 1 byte memmory
-
-# avoid elements (optimal path) 2D Pathfinding in under 6 minutes! Godot 3.5 Tutorial
 
 # animate elements create, scale or particles sounds
 
@@ -42,9 +58,9 @@ extends Node
 #self.get_global_transform_with_canvas().get_origin()
 
 var level_scenes := [
-	preload("res://Levels/Campaign/Campaign.tscn"),
-	preload("res://Levels/Sandbox/Sandbox.tscn"),
-	preload("res://Levels/Settings/Settings.tscn"),
+	preload("res://levels/campaign/campaign.tscn"),
+	preload("res://levels/sandbox/sandbox.tscn"),
+	preload("res://levels/settings/settings.tscn"),
 ]
 var levels: Array = []
 
@@ -77,7 +93,7 @@ func start(level) -> void:
 
 func _set_transition(call: String, level: Node = null) -> void:
 	var makeref = funcref(self, call)
-	$Transition.fade(makeref, level)
+	Transition.fade(makeref, level)
 
 func _on_Button1_pressed() -> void:
 	self._set_transition("start", self.levels[0])

@@ -1,8 +1,23 @@
-extends Node2D
-
 class_name Element
 
-export (Globals.ELEMENTS) var type
+extends Node2D
+
+signal connector_mouse_entered
+signal connector_mouse_exited
+signal connector_wire_added
+signal connector_area_received
+signal delete_processed
+
+signal element_mouse_entered_received
+signal objects_is_selecting_received
+signal child_moved_on_top
+signal selected_element_added
+signal selected_elements_moved
+signal temporary_wires_cleared
+signal drag_finished
+signal elements_sorted
+
+export (Globals.Elements) var type
 var _type_name: String = ""
 
 var _connectors_children: Array = []
@@ -26,36 +41,17 @@ var sprite_size: Vector2 = Vector2()
 var last_valid_position: Vector2 = Vector2()
 var checked: bool = false
 
-signal connector_mouse_entered
-signal connector_mouse_exited
-signal connector_wire_added
-signal connector_area_entered_received
-signal delete_processed
-
-signal element_mouse_entered_received
-signal objects_is_selecting_received
-signal child_moved_to_position
-signal selected_element_added
-signal selected_elements_moved
-signal temporary_wires_cleared
-signal drag_finished
-signal elements_sorted
-
 func _ready() -> void:
 	self.add_to_group("Elements")
 
 	self.sprite_size = $Sprite.texture.get_size()
 
-	$Sprite.material.set_shader_param(
-		"outline_color",  Globals.COLORS.OUTLINE
-	)
-
+	$Sprite.material.set_shader_param("texture_size",  self.sprite_size)
 	$Sprite.material.set_shader_param(
 		"stripe_color",  Globals.COLORS.SAFE_AREA_ALARM
 	)
-
 	$Sprite.material.set_shader_param(
-		"texture_size",  self.sprite_size
+		"outline_color",  Globals.COLORS.OUTLINE
 	)
 
 	self._set_on_texture()
@@ -65,8 +61,10 @@ func _ready() -> void:
 	self._connectors_children = $Connectors.get_children()
 	self.__connect_connectors_signals()
 
-	self._type_name = Globals.ELEMENTS.keys()[self.type].capitalize()
+	self._type_name = Globals.Elements.keys()[self.type].capitalize()
 	self.last_valid_position = self.position
+
+	self.set_alpha(1.0)
 
 func get_type_name() -> String:
 	return self._type_name
@@ -76,6 +74,9 @@ func safe_area_alarm(value: bool) -> void:
 
 func outline(value: bool) -> void:
 	$Sprite.material.set_shader_param("is_outlined", value)
+
+func set_alpha(value) -> void:
+	$Sprite.modulate.a = value
 
 # connectors
 
@@ -93,10 +94,10 @@ func __connect_connectors_signals() -> void:
 		connector.connect("connector_mouse_entered", self, "_on_Connector_mouse_entered")
 		connector.connect("connector_mouse_exited", self, "_on_Connector_mouse_exited")
 		connector.connect("connector_wire_added", self, "_on_Connector_wire_added")
-		connector.connect("connector_area_entered_received", self, "_on_Connector_connector_area_entered")
+		connector.connect("connector_area_received", self, "_on_Connector_connector_area_entered")
 
-func _on_Connector_mouse_entered(has_connection: bool) -> void:
-	self.emit_signal("connector_mouse_entered", self, has_connection)
+func _on_Connector_mouse_entered(connector) -> void:
+	self.emit_signal("connector_mouse_entered", self, connector)
 
 func _on_Connector_mouse_exited() -> void:
 	self.emit_signal("connector_mouse_exited")
@@ -105,7 +106,7 @@ func _on_Connector_wire_added(connector, other) -> void:
 	self.emit_signal("connector_wire_added", connector, other)
 
 func _on_Connector_connector_area_entered(connector) -> void:
-	self.emit_signal("connector_area_entered_received", connector)
+	self.emit_signal("connector_area_received", connector)
 
 # energy loop
 
@@ -144,8 +145,8 @@ func transfer_energy(instance: Element) -> void:
 			var child_connected_area = child.get_connected_area()
 			if (
 				(
-					child.type == Globals.CONNECTORS.OUT
-					|| self.type == Globals.ELEMENTS.WIRE
+					child.type == Globals.Connectors.OUT
+					|| self.type == Globals.Elements.WIRE
 				)
 				&& child_connected
 				&& child_connected_area
@@ -160,7 +161,7 @@ func transfer_energy(instance: Element) -> void:
 # management
 
 func flip() -> void:
-	if self.type == Globals.ELEMENTS.WIRE:
+	if self.type == Globals.Elements.WIRE:
 		return
 
 	self.scale = Vector2(self.scale.x * -1, 1)
@@ -174,7 +175,7 @@ func unlink() -> void:
 		if (
 			child_connected
 			and child_connected_area
-			and child_connected.type == Globals.ELEMENTS.WIRE
+			and child_connected.type == Globals.Elements.WIRE
 		):
 			child_connected.unlink_points(
 				child_connected.is_in_first_points(child_connected_area),
@@ -186,7 +187,7 @@ func delete(is_animate: bool = true) -> void:
 	if not is_animate:
 		self.emit_signal("delete_processed", self)
 
-	if self.type != Globals.ELEMENTS.WIRE:
+	if self.type != Globals.Elements.WIRE:
 		# delete calls in AnimationPlayer
 		$Sprite.material.set_shader_param("is_dissolve", true)
 		# In AnimationPlayer alpha changed and shader made a trick
@@ -227,21 +228,31 @@ func _move_connected_wires() -> void:
 		if (
 			child_connected
 			and child_connected_area
-			and child_connected.type == Globals.ELEMENTS.WIRE
+			and child_connected.type == Globals.Elements.WIRE
 		):
 			child_connected.switch_connections()
 
-
-func move_wires_to_position(pos = null) -> void:
+func _restore_connected_wires() -> void:
 	for child in self._connectors_children:
 		var child_connected = child.get_connected()
 		var child_connected_area = child.get_connected_area()
 		if (
 			child_connected
 			and child_connected_area
-			and child_connected.type == Globals.ELEMENTS.WIRE
+			and child_connected.type == Globals.Elements.WIRE
 		):
-			self.emit_signal("child_moved_to_position", child_connected, pos)
+			child_connected.position = child_connected.last_valid_position
+
+func move_wires_on_top() -> void:
+	for child in self._connectors_children:
+		var child_connected = child.get_connected()
+		var child_connected_area = child.get_connected_area()
+		if (
+			child_connected
+			and child_connected_area
+			and child_connected.type == Globals.Elements.WIRE
+		):
+			self.emit_signal("child_moved_on_top", child_connected)
 
 func _drag_and_drop(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
@@ -249,8 +260,8 @@ func _drag_and_drop(event: InputEvent) -> void:
 			# sort before move on top selected
 			self.emit_signal("elements_sorted")
 			# move on top when pressed
-			self.emit_signal("child_moved_to_position", self)
-			self.move_wires_to_position()
+			self.emit_signal("child_moved_on_top", self)
+			self.move_wires_on_top()
 
 			self.emit_signal("selected_element_added", self)
 
@@ -262,10 +273,10 @@ func _drag_and_drop(event: InputEvent) -> void:
 
 	self.emit_signal("objects_is_selecting_received", self)
 	if event is InputEventScreenDrag && not self._is_objects_is_selecting:
-
 		self.emit_signal("selected_elements_moved", event)
-		self._move_connected_wires()
+
 		self.remove_temporary_wires()
+
 		self._dragged = true
 		self.get_tree().set_input_as_handled()
 
@@ -288,21 +299,22 @@ func _on_AnimationPlayer_animation_finished(anim_name: String) -> void:
 	if anim_name == "Delete":
 		self.emit_signal("delete_processed", self)
 
-#func _outline_connected() -> void:
-#	var entered_element = self.objects.get_mouse_entered_element()
-#	if entered_element:
-#		entered_element.call_deferred("outline", true)
-
 func _on_SafeArea_area_entered(area: Area2D) -> void:
-	if (self.type == Globals.ELEMENTS.WIRE || area.owner.type == Globals.ELEMENTS.WIRE):
+	if (
+		self.type == Globals.Elements.WIRE
+		|| area.owner.type == Globals.Elements.WIRE
+	):
 		return
 
 	self._safe_areas_element_entered[area] = area
-	area.owner.safe_area_alarm(true)
+	self.safe_area_alarm(true)
 
 func _on_SafeArea_area_exited(area: Area2D) -> void:
-	if (self.type == Globals.ELEMENTS.WIRE || area.owner.type == Globals.ELEMENTS.WIRE):
+	if (
+		self.type == Globals.Elements.WIRE
+		|| area.owner.type == Globals.Elements.WIRE
+	):
 		return
 
 	self._safe_areas_element_entered.erase(area)
-	area.owner.safe_area_alarm(false)
+	self.safe_area_alarm(false)

@@ -1,14 +1,14 @@
 extends Element
 
-const _on: Texture = preload("res://Scenes/Elements/Relay/relay_on.png")
-const _off: Texture = preload("res://Scenes/Elements/Relay/relay_off.png")
-const _on_off: Texture = preload("res://Scenes/Elements/Relay/relay_on_off.png")
-const _off_on: Texture = preload("res://Scenes/Elements/Relay/relay_off_on.png")
+const _on: Texture = preload("res://scenes/elements/relay/relay_on.png")
+const _off: Texture = preload("res://scenes/elements/relay/relay_off.png")
+const _on_off: Texture = preload("res://scenes/elements/relay/relay_on_off.png")
+const _off_on: Texture = preload("res://scenes/elements/relay/relay_off_on.png")
 
-var relay_util: RelayDelayUtil = preload("res://Scenes/Utils/RelayDelayUtil.gd").new()
+var relay_util: RelayDelayUtil = preload("res://scenes/utils/relay_delay_util.gd").new()
 
 func _ready() -> void:
-	self.type = Globals.ELEMENTS.RELAY
+	self.type = Globals.Elements.RELAY
 
 func reset_energy():
 	self.relay_util.reset()

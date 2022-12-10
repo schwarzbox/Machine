@@ -1,13 +1,13 @@
 extends Element
 
-var _on: Texture = preload("res://Scenes/Elements/Switch/switch_on.png")
-var _on_off: Texture = preload("res://Scenes/Elements/Switch/switch_on_off.png")
-var _off: Texture = preload("res://Scenes/Elements/Switch/switch_off.png")
+var _on: Texture = preload("res://scenes/elements/switch/switch_on.png")
+var _on_off: Texture = preload("res://scenes/elements/switch/switch_on_off.png")
+var _off: Texture = preload("res://scenes/elements/switch/switch_off.png")
 
 var switched: bool = false
 
 func _ready() -> void:
-	self.type = Globals.ELEMENTS.SWITCH
+	self.type = Globals.Elements.SWITCH
 
 func _unhandled_input(event: InputEvent) -> void:
 	if (
@@ -28,7 +28,7 @@ func __has_energy() -> bool:
 		self._off_texture = self._on_off
 
 		for child in self._connectors_children:
-			if child.type == Globals.CONNECTORS.IN:
+			if child.type == Globals.Connectors.IN:
 				var child_connected_area = child.get_connected_area()
 				if child_connected_area and child_connected_area.get_energy():
 					$Connectors/Out.set_energy(true)

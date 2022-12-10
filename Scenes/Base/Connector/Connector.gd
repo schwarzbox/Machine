@@ -2,7 +2,7 @@ extends Area2D
 
 class_name Connector
 
-export (Globals.CONNECTORS) var type
+export (Globals.Connectors) var type
 
 var _connected: Element = null
 var _connected_area: Connector = null
@@ -16,7 +16,7 @@ var objects_has_dragged_elements: bool = false
 signal connector_mouse_entered
 signal connector_mouse_exited
 signal connector_wire_added
-signal connector_area_entered_received
+signal connector_area_received
 
 func _ready() -> void:
 	self.set_collision_layer_bit(0, false)
@@ -82,6 +82,7 @@ func remove_connections_with_self() -> void:
 
 func _on_Connector_area_entered(other: Connector) -> void:
 	# use collision Layer Connector [3] and collide only with Mask In [2]
+
 	if (
 		other.owner == self.owner
 		|| self.has_connection()
@@ -89,42 +90,52 @@ func _on_Connector_area_entered(other: Connector) -> void:
 	):
 		return
 
-	self.emit_signal("connector_area_entered_received", self)
-	if (
-		not self.owner.is_cloned()
-		and self.objects_selected_elements_size > 1
-	):
+	if self.owner.is_cloned() != other.owner.is_cloned():
 		# to correctly reconect wires after cloning
-		self.owner.set_cloned(false)
 		return
 
+	self.emit_signal("connector_area_received", self)
 	if (
-		self.owner.type == Globals.ELEMENTS.WIRE
-		&& other.owner.type == Globals.ELEMENTS.WIRE
+		self.owner.type == Globals.Elements.WIRE
+		&& other.owner.type == Globals.Elements.WIRE
 	):
-		if not self.owner.can_connect_to_wire(self, other):
+		if self.objects_has_dragged_elements:
 			return
+
+		if !self.owner.can_connect_to_wire(self, other):
+			return
+
 		self.setup_connection(self, self.owner, other, other.owner)
 	elif (
 		(
-			self.owner.type == Globals.ELEMENTS.WIRE
-			|| other.owner.type == Globals.ELEMENTS.WIRE
+			self.owner.type == Globals.Elements.WIRE
+			|| other.owner.type == Globals.Elements.WIRE
 		)
 	):
 		if self.objects_has_dragged_elements:
 			return
+
+		if self.owner.type == Globals.Elements.WIRE:
+			if !self.owner.check_connect_to_object():
+				return
+
+		if other.owner.type == Globals.Elements.WIRE:
+			if !other.owner.check_connect_to_object():
+				return
+
 		self.setup_connection(self, self.owner, other, other.owner)
 	else:
 		# auto connection
 		if (
-			self.owner.type != Globals.ELEMENTS.WIRE
-			&& other.owner.type != Globals.ELEMENTS.WIRE
+			self.owner.type != Globals.Elements.WIRE
+			&& other.owner.type != Globals.Elements.WIRE
 			&& self.objects_selected_elements_size == 1
 		):
 			self.emit_signal("connector_wire_added", self, other)
 
 func _on_Connector_area_exited(other: Connector) -> void:
 	# use collision Layer Connector [3] and collide only with Mask In [2]
+
 	if (
 		other.owner == self.get_connected()
 		&& self.has_connection()
@@ -138,7 +149,7 @@ func is_mouse_entered():
 
 func _on_Connector_mouse_entered() -> void:
 	self._on_mouse_entered = true
-	self.emit_signal("connector_mouse_entered", self.has_connection())
+	self.emit_signal("connector_mouse_entered", self)
 
 func _on_Connector_mouse_exited() -> void:
 	self._on_mouse_entered = false

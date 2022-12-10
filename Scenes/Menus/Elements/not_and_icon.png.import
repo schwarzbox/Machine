@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/not_and_icon.png-b58cd2f0604069d7dfe8ff223755deed.stex"
+path="res://.import/not_and_icon.png-19d9c814ebd0181585e87bb4a51481e8.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Menus/Elements/not_and_icon.png"
-dest_files=[ "res://.import/not_and_icon.png-b58cd2f0604069d7dfe8ff223755deed.stex" ]
+source_file="res://scenes/menus/elements/not_and_icon.png"
+dest_files=[ "res://.import/not_and_icon.png-19d9c814ebd0181585e87bb4a51481e8.stex" ]
 
 [params]
 

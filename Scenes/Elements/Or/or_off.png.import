@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/or_off.png-f352214fe5f301eaf298c8ca6081ae16.stex"
+path="res://.import/or_off.png-000f02c50052e317ba4f43e089bf7111.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Elements/Or/or_off.png"
-dest_files=[ "res://.import/or_off.png-f352214fe5f301eaf298c8ca6081ae16.stex" ]
+source_file="res://scenes/elements/or/or_off.png"
+dest_files=[ "res://.import/or_off.png-000f02c50052e317ba4f43e089bf7111.stex" ]
 
 [params]
 

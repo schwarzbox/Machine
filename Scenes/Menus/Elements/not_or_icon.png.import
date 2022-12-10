@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/not_or_icon.png-ca2608ac61f70ab6691d7e32e6549826.stex"
+path="res://.import/not_or_icon.png-014241c3df7f84109e547b601f858eec.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Menus/Elements/not_or_icon.png"
-dest_files=[ "res://.import/not_or_icon.png-ca2608ac61f70ab6691d7e32e6549826.stex" ]
+source_file="res://scenes/menus/elements/not_or_icon.png"
+dest_files=[ "res://.import/not_or_icon.png-014241c3df7f84109e547b601f858eec.stex" ]
 
 [params]
 

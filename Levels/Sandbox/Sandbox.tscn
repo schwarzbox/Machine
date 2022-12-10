@@ -1,12 +1,12 @@
 [gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://Scenes/Menus/FileMenu/FileMenu.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Scenes/Menus/PopupTools/PopupTools.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Levels/Sandbox/Sandbox.gd" type="Script" id=3]
+[ext_resource path="res://scenes/menus/file_menu/file_menu.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/menus/popup_tools/popup_tools.tscn" type="PackedScene" id=2]
+[ext_resource path="res://levels/sandbox/sandbox.gd" type="Script" id=3]
 [ext_resource path="res://Levels/Base/Level.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Scenes/Menus/Elements/Elements.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Scenes/Base/Camera/Camera2D.tscn" type="PackedScene" id=7]
-[ext_resource path="res://Levels/Sandbox/Objects.gd" type="Script" id=12]
+[ext_resource path="res://levels/sandbox/objects.gd" type="Script" id=6]
+[ext_resource path="res://Scenes/Base/Camera/camera_2d.tscn" type="PackedScene" id=7]
 
 [node name="Sandbox" instance=ExtResource( 4 )]
 script = ExtResource( 3 )
@@ -49,7 +49,7 @@ margin_right = 245.0
 margin_bottom = 116.0
 
 [node name="Objects" parent="." index="1"]
-script = ExtResource( 12 )
+script = ExtResource( 6 )
 
 [node name="Camera2D" parent="." index="2" instance=ExtResource( 7 )]
 
@@ -78,3 +78,4 @@ script = ExtResource( 12 )
 [connection signal="sprite_showed" from="Objects" to="Cursor" method="_on_Objects_sprite_showed"]
 [connection signal="sprite_texture_removed" from="Objects" to="Cursor" method="_on_Objects_sprite_texture_removed"]
 [connection signal="sprite_texture_saved" from="Objects" to="Cursor" method="_on_Objects_sprite_texture_saved"]
+[connection signal="zoom_changed" from="Camera2D" to="Objects" method="_on_Camera2D_zoom_changed"]

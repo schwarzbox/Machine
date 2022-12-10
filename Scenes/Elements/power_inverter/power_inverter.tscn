@@ -1,0 +1,43 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://scenes/base/element/element.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/elements/power_inverter/power_inverter_off.png" type="Texture" id=2]
+[ext_resource path="res://scenes/base/element/element_shader.gdshader" type="Shader" id=3]
+[ext_resource path="res://scenes/elements/power_inverter/power_inverter.gd" type="Script" id=4]
+[ext_resource path="res://scenes/base/connector/out.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/base/connector/in.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scenes/base/element/dissolve_texture.tres" type="Texture" id=7]
+
+[sub_resource type="ShaderMaterial" id=1]
+resource_local_to_scene = true
+shader = ExtResource( 3 )
+shader_param/outline_width = 1.0
+shader_param/outline_color = null
+shader_param/is_outlined = false
+shader_param/is_dissolve = false
+shader_param/texture_size = Vector2( 137, 137 )
+shader_param/stripe_color = null
+shader_param/stripe_width = 4.0
+shader_param/stripe_bias = 2.0
+shader_param/is_striped = false
+shader_param/dissolveNoise = ExtResource( 7 )
+
+[node name="PowerInverter" groups=["Energy"] instance=ExtResource( 1 )]
+script = ExtResource( 4 )
+type = 5
+
+[node name="CollisionShape2D" parent="FirstArea" index="0"]
+polygon = PoolVector2Array( 0, -60, 15, -52, 15, -48, 8, -44, 8, -40, 28, -30, 28, -26, 24, -24, 24, 12, 47, 24, 52, 22, 63, 28, 63, 34, 12, 59, -8, 61, -63, 34, -63, 27, -53, 22, -39, 24, -23, 16, -23, 5, -32, 0, -32, -4, -24, -8, -24, -36, -32, -40, -32, -44 )
+
+[node name="Sprite" parent="." index="1"]
+material = SubResource( 1 )
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" parent="SafeArea" index="0"]
+polygon = PoolVector2Array( -70, 35, 0, 70, 70, 35, 3, 1 )
+
+[node name="In" parent="Connectors" index="0" instance=ExtResource( 6 )]
+position = Vector2( -51, 35 )
+
+[node name="Out" parent="Connectors" index="1" instance=ExtResource( 5 )]
+position = Vector2( 51, 35 )

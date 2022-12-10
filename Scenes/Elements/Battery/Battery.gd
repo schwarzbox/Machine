@@ -1,10 +1,10 @@
 extends Element
 
-const _on: Texture = preload("res://Scenes/Elements/Battery/battery.png")
-const _off: Texture = preload("res://Scenes/Elements/Battery/battery.png")
+const _on: Texture = preload("res://scenes/elements/battery/battery.png")
+const _off: Texture = preload("res://scenes/elements/battery/battery.png")
 
 func _ready() -> void:
-	self.type = Globals.ELEMENTS.BATTERY
+	self.type = Globals.Elements.BATTERY
 
 	self.add_to_group("Energy")
 

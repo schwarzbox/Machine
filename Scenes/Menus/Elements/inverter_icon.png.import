@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/inverter_icon.png-95fa4bef86aa8af1fe24cd7c1551726c.stex"
+path="res://.import/inverter_icon.png-35f5cc7cd5267bea5583fe0530ef7858.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Menus/Elements/inverter_icon.png"
-dest_files=[ "res://.import/inverter_icon.png-95fa4bef86aa8af1fe24cd7c1551726c.stex" ]
+source_file="res://scenes/menus/elements/inverter_icon.png"
+dest_files=[ "res://.import/inverter_icon.png-35f5cc7cd5267bea5583fe0530ef7858.stex" ]
 
 [params]
 

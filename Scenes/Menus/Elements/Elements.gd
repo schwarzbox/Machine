@@ -4,76 +4,76 @@ class_name Elements
 
 var __elements_scenes = {
 	"Wire": [
-		load("res://Scenes/Elements/Wire/Wire.tscn"),
-		preload("res://Scenes/Elements/Wire/wire_cursor_off.png")
+		load("res://scenes/elements/wire/wire.tscn"),
+		preload("res://scenes/elements/wire/wire_cursor_off.png")
 	],
 	"Battery": [
-		load("res://Scenes/Elements/Battery/Battery.tscn"),
-		preload("res://Scenes/Elements/Battery/battery.png")
+		load("res://scenes/elements/battery/battery.tscn"),
+		preload("res://scenes/elements/battery/battery.png")
 	],
 	"Lamp": [
-		load("res://Scenes/Elements/Lamp/Lamp.tscn"),
-		preload("res://Scenes/Elements/Lamp/lamp_off.png")
+		load("res://scenes/elements/lamp/lamp.tscn"),
+		preload("res://scenes/elements/lamp/lamp_off.png")
 	],
 	"Display": [
-		load("res://Scenes/Elements/Display/Display.tscn"),
-		preload("res://Scenes/Elements/Display/display_off.png")
+		load("res://scenes/elements/display/display.tscn"),
+		preload("res://scenes/elements/display/display_off.png")
 	],
 	"Switch": [
-		load("res://Scenes/Elements/Switch/Switch.tscn"),
-		preload("res://Scenes/Elements/Switch/switch_off.png")
+		load("res://scenes/elements/switch/switch.tscn"),
+		preload("res://scenes/elements/switch/switch_off.png")
 	],
 	"Relay": [
-		load("res://Scenes/Elements/Relay/Relay.tscn"),
-		preload("res://Scenes/Elements/Relay/relay_off.png")
+		load("res://scenes/elements/relay/relay.tscn"),
+		preload("res://scenes/elements/relay/relay_off.png")
 	],
 	"Power Relay": [
-		load("res://Scenes/Elements/PowerRelay/PowerRelay.tscn"),
-		preload("res://Scenes/Elements/PowerRelay/power_relay_off.png")
+		load("res://scenes/elements/power_relay/power_relay.tscn"),
+		preload("res://scenes/elements/power_relay/power_relay_off.png")
 	],
 	"Inverter": [
-		load("res://Scenes/Elements/Inverter/Inverter.tscn"),
-		preload("res://Scenes/Elements/Inverter/inverter_off.png")
+		load("res://scenes/elements/inverter/inverter.tscn"),
+		preload("res://scenes/elements/inverter/inverter_off.png")
 	],
 	"Power Inverter": [
-		load("res://Scenes/Elements/PowerInverter/PowerInverter.tscn"),
-		preload("res://Scenes/Elements/PowerInverter/power_inverter_off.png")
+		load("res://scenes/elements/power_inverter/power_inverter.tscn"),
+		preload("res://scenes/elements/power_inverter/power_inverter_off.png")
 	],
 	"And": [
-		load("res://Scenes/Elements/And/And.tscn"),
-		preload("res://Scenes/Elements/And/and_off.png")
+		load("res://scenes/elements/and/and.tscn"),
+		preload("res://scenes/elements/and/and_off.png")
 	],
 	"Or": [
-		load("res://Scenes/Elements/Or/Or.tscn"),
-		preload("res://Scenes/Elements/Or/or_off.png")
+		load("res://scenes/elements/or/or.tscn"),
+		preload("res://scenes/elements/or/or_off.png")
 	],
 	"Not And": [
-		load("res://Scenes/Elements/NotAnd/NotAnd.tscn"),
-		preload("res://Scenes/Elements/NotAnd/not_and_off.png")
+		load("res://scenes/elements/not_and/not_and.tscn"),
+		preload("res://scenes/elements/not_and/not_and_off.png")
 	],
 	"Not Or": [
-		load("res://Scenes/Elements/NotOr/NotOr.tscn"),
-		preload("res://Scenes/Elements/NotOr/not_or_off.png")
+		load("res://scenes/elements/not_or/not_or.tscn"),
+		preload("res://scenes/elements/not_or/not_or_off.png")
 	],
 	"Ex And": [
-		load("res://Scenes/Elements/ExAnd/ExAnd.tscn"),
-		preload("res://Scenes/Elements/ExAnd/ex_and_off.png")
+		load("res://scenes/elements/ex_and/ex_and.tscn"),
+		preload("res://scenes/elements/ex_and/ex_and_off.png")
 	],
 	"Ex Or": [
-		load("res://Scenes/Elements/ExOr/ExOr.tscn"),
-		preload("res://Scenes/Elements/ExOr/ex_or_off.png")
+		load("res://scenes/elements/ex_or/ex_or.tscn"),
+		preload("res://scenes/elements/ex_or/ex_or_off.png")
 	],
 	"Half Adder": [
-		load("res://Scenes/Elements/HalfAdder/HalfAdder.tscn"),
-		preload("res://Scenes/Elements/HalfAdder/half_adder_off.png")
+		load("res://scenes/elements/half_adder/half_adder.tscn"),
+		preload("res://scenes/elements/half_adder/half_adder_off.png")
 	],
 	"Full Adder": [
-		load("res://Scenes/Elements/FullAdder/FullAdder.tscn"),
-		preload("res://Scenes/Elements/FullAdder/full_adder_off.png")
+		load("res://scenes/elements/full_adder/full_adder.tscn"),
+		preload("res://scenes/elements/full_adder/full_adder_off.png")
 	],
 	"Adder 8 Bit": [
-		load("res://Scenes/Elements/Adder8Bit/Adder8Bit.tscn"),
-		preload("res://Scenes/Elements/Adder8Bit/adder_8_bit_off.png")
+		load("res://scenes/elements/adder_8_bit/adder_8_bit.tscn"),
+		preload("res://scenes/elements/adder_8_bit/adder_8_bit_off.png")
 	]
 }
 

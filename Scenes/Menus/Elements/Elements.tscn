@@ -1,6 +1,6 @@
 [gd_scene load_steps=28 format=2]
 
-[ext_resource path="res://Scenes/Menus/Elements/Elements.gd" type="Script" id=1]
+[ext_resource path="res://scenes/menus/elements/elements.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/Menus/Elements/battery_icon.png" type="Texture" id=2]
 [ext_resource path="res://Scenes/Menus/Elements/switch_icon.png" type="Texture" id=3]
 [ext_resource path="res://Scenes/Menus/Elements/lamp_icon.png" type="Texture" id=4]

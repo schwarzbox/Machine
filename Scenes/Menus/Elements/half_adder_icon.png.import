@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/half_adder_icon.png-b32daba4cd0b24cd8470530127079185.stex"
+path="res://.import/half_adder_icon.png-67d84a229c07dda377835dde1dd6006a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Menus/Elements/half_adder_icon.png"
-dest_files=[ "res://.import/half_adder_icon.png-b32daba4cd0b24cd8470530127079185.stex" ]
+source_file="res://scenes/menus/elements/half_adder_icon.png"
+dest_files=[ "res://.import/half_adder_icon.png-67d84a229c07dda377835dde1dd6006a.stex" ]
 
 [params]
 

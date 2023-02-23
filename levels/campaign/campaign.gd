@@ -1,4 +1,4 @@
 extends Level
 
 func _ready() -> void:
-	self.type = Globals.Levels.CAMPAIGN
+	type = Globals.Levels.CAMPAIGN

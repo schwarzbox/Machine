@@ -6,17 +6,17 @@ signal button3_pressed
 signal button4_pressed
 
 func _ready() -> void:
-	prints(self.name, "ready")
+	prints(name, "ready")
 
 func _on_Button1_pressed() -> void:
-	self.emit_signal("button1_pressed")
+	emit_signal("button1_pressed")
 
 func _on_Button2_pressed() -> void:
-	self.emit_signal("button2_pressed")
+	emit_signal("button2_pressed")
 
 func _on_Button3_pressed() -> void:
-	self.emit_signal("button3_pressed")
+	emit_signal("button3_pressed")
 
 func _on_Button4_pressed() -> void:
-	self.emit_signal("button4_pressed")
+	emit_signal("button4_pressed")
 

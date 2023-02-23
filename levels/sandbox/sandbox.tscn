@@ -71,6 +71,7 @@ script = ExtResource( 6 )
 [connection signal="sprite_hided" from="CanvasLayer/LevelMenu/Info/FileMenu" to="Cursor" method="_on_FileMenu_sprite_hided"]
 [connection signal="sprite_showed" from="CanvasLayer/LevelMenu/Info/FileMenu" to="Cursor" method="_on_FileMenu_sprite_showed"]
 [connection signal="clone_pressed" from="Objects" to="CanvasLayer/Elements" method="_on_Objects_clone_pressed"]
+[connection signal="cursor_shape_updated" from="Objects" to="Cursor" method="_on_Objects_cursor_shape_updated"]
 [connection signal="menu_poped" from="Objects" to="CanvasLayer/PopupTools" method="_on_Objects_menu_poped"]
 [connection signal="scene_deselected" from="Objects" to="CanvasLayer/Elements" method="_on_Objects_scene_deselected"]
 [connection signal="sprite_hided" from="Objects" to="Cursor" method="_on_Objects_sprite_hided"]

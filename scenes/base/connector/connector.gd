@@ -1,118 +1,102 @@
-extends Area2D
-
 class_name Connector
 
-export (Globals.Connectors) var type
-
-var _connected: Element = null
-var _connected_area: Connector = null
-
-var _energy = false
-var _on_mouse_entered: bool = false
+extends Area2D
 
 signal connector_mouse_entered
 signal connector_mouse_exited
 signal connector_area_entered
 
+export (Globals.Connectors) var type
+
+var connected_element: Element = null
+var connected_area: Connector = null
+
+var _is_mouse_entered: bool = false
+
+var _energy: bool = false
+
 func _ready() -> void:
-	self.set_collision_layer_bit(0, false)
-	self.set_collision_mask_bit(0, false)
+	set_collision_layer_bit(0, false)
+	set_collision_mask_bit(0, false)
 
 func get_energy() -> bool:
-	return self._energy
+	return _energy
 
-func set_energy(value: bool):
-	self._energy = value
-
-func get_connected() -> Element:
-	return self._connected
-
-func set_connected(element: Element) -> void:
-	self._connected = element
-
-func get_connected_area() -> Connector:
-	return self._connected_area
-
-func set_connected_area(area: Connector) -> void:
-	self._connected_area = area
-
-func reset_connection():
-	self._connected = null
-	self._connected_area = null
+func set_energy(value: bool) -> void:
+	_energy = value
 
 func has_connection() -> bool:
-	return self._connected && self._connected_area
+	return connected_element && connected_area
 
 func connected_has_energy() -> bool:
-	return self._connected_area && self._connected_area.get_energy()
+	return connected_area && connected_area.get_energy()
 
-static func setup_connection(
-	self_: Connector,
-	self_element: Element,
-	other: Connector,
-	other_element: Element
-) -> void:
-	self_.set_connected(other_element)
-	self_.set_connected_area(other)
-	other.set_connected(self_element)
-	other.set_connected_area(self_)
+func is_mouse_entered_connector() -> bool:
+	return _is_mouse_entered
 
 # for flip and unlink
 func remove_connections_with_elements() -> void:
-	var self_connected_area = self.get_connected_area()
+	var self_connected_area: Connector = connected_area
 	if self_connected_area:
-		self.reset_connection()
-		self_connected_area.reset_connection()
+		_reset_connection()
+		self_connected_area._reset_connection()
 
 # for delete
 func remove_connections_with_self() -> void:
-	var self_connected = self.get_connected()
-	var self_connected_area = self.get_connected_area()
+	var self_connected: Element = connected_element
+	var self_connected_area: Connector = connected_area
 	if self_connected && self_connected_area:
 		for connected_child in self_connected.get_connectors_children():
-			if connected_child.get_connected_area() == self:
-				connected_child.set_connected_area(null)
-			if connected_child.get_connected() == self.owner:
-				connected_child.set_connected_area(null)
-	self.reset_connection()
+			if connected_child.connected_area == self:
+				connected_child.connected_area = null
+			if connected_child.connected_element == owner:
+				connected_child.connected_area = null
+	_reset_connection()
+
+func _reset_connection() -> void:
+	connected_element = null
+	connected_area = null
 
 func _on_Connector_area_entered(other: Connector) -> void:
 	# use collision Layer Connector [3] and collide only with Mask In [2]
-
 	if (
-		other.owner == self.owner
-		|| self.has_connection()
+		other.owner == owner
+		|| has_connection()
 		|| other.has_connection()
 	):
 		return
 
-	if self.owner.is_cloned() != other.owner.is_cloned():
+	if owner.is_cloned() != other.owner.is_cloned():
 		# to correctly reconect wires after cloning
 		return
 
-	self.emit_signal("connector_area_entered", self, other)
-
+	emit_signal("connector_area_entered", self, other)
 
 func _on_Connector_area_exited(other: Connector) -> void:
 	# use collision Layer Connector [3] and collide only with Mask In [2]
-
 	if (
-		other.owner == self.get_connected()
-		&& self.has_connection()
+		other.owner == connected_element
+		&& has_connection()
 		&& other.has_connection()
 	):
-		self.reset_connection()
-		other.reset_connection()
-
-func is_mouse_entered():
-	return self._on_mouse_entered
+		_reset_connection()
+		other._reset_connection()
 
 func _on_Connector_mouse_entered() -> void:
-	self._on_mouse_entered = true
-	self.emit_signal("connector_mouse_entered", self)
+	_is_mouse_entered = true
+	emit_signal("connector_mouse_entered", self)
 
 func _on_Connector_mouse_exited() -> void:
-	self._on_mouse_entered = false
-	self.emit_signal("connector_mouse_exited")
+	_is_mouse_entered = false
+	emit_signal("connector_mouse_exited")
 
-
+static func setup_connection(
+	self_connector: Connector,
+	self_element: Element,
+	other_connector: Connector,
+	other_element: Element
+) -> void:
+	self_connector.connected_element = other_element
+	self_connector.connected_area = other_connector
+	other_connector.connected_element = self_element
+	other_connector.connected_area = self_connector

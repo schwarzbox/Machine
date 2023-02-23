@@ -4,21 +4,16 @@ signal sprite_showed
 signal sprite_hided
 
 func _ready() -> void:
-	self.hide_menu()
-	self._update_rect_size()
-
-func _update_rect_size():
-	self.rect_size = self.rect_min_size
-	self.margin_left = 0
-	self.margin_right = 0
+	hide_menu()
+	_update_rect_size()
 
 func _unhandled_input(event) -> void:
 	if event is InputEventKey:
-		if event.pressed and event.scancode == KEY_ESCAPE:
+		if event.pressed && event.scancode == KEY_ESCAPE:
 			if $Info.visible:
-				self.hide_menu()
+				hide_menu()
 			else:
-				self.show_menu()
+				show_menu()
 
 func show_menu():
 	$Info.show()
@@ -26,22 +21,26 @@ func show_menu():
 func hide_menu():
 	$Info.hide()
 
+func _update_rect_size():
+	rect_size = rect_min_size
+	margin_left = 0
+	margin_right = 0
+
 func _on_LevelMenu_mouse_entered() -> void:
-	self.emit_signal("sprite_hided")
+	emit_signal("sprite_hided")
 
 func _on_LevelMenu_mouse_exited() -> void:
-	self.emit_signal("sprite_showed")
+	emit_signal("sprite_showed")
 
 func _on_HideButton_pressed() -> void:
 	if $Info.visible:
-		self.hide_menu()
+		hide_menu()
 	else:
-		self.show_menu()
-
-	self._update_rect_size()
+		show_menu()
+	_update_rect_size()
 
 func _on_FileMenu_menu_hided() -> void:
-	self.hide_menu()
+	hide_menu()
 
 func _on_FileMenu_file_name_changed(txt: String) -> void:
 	$Info/Label.text = txt

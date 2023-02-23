@@ -24,11 +24,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scenes/base/element/element.gd"
 }, {
-"base": "VBoxContainer",
-"class": "Elements",
-"language": "GDScript",
-"path": "res://scenes/menus/elements/elements.gd"
-}, {
 "base": "Reference",
 "class": "FileUtil",
 "language": "GDScript",
@@ -103,7 +98,6 @@ _global_script_class_icons={
 "Connector": "",
 "Cursor": "",
 "Element": "",
-"Elements": "",
 "FileUtil": "",
 "Level": "",
 "LogContainer": "",

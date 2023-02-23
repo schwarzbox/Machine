@@ -1,8 +1,11 @@
 extends VBoxContainer
 
-class_name Elements
+signal button_pressed
+signal sprite_showed
+signal sprite_hided
+signal element_added
 
-var __elements_scenes = {
+var _elements_scenes: Dictionary = {
 	"Wire": [
 		load("res://scenes/elements/wire/wire.tscn"),
 		preload("res://scenes/elements/wire/wire_cursor_off.png")
@@ -77,31 +80,22 @@ var __elements_scenes = {
 	]
 }
 
-var _on_mouse_entered: bool = false
-
-signal button_pressed
-signal sprite_showed
-signal sprite_hided
-signal element_added
+var _is_mouse_entered: bool = false
 
 func _ready() -> void:
-	self._update_rect_size()
-
+	_update_rect_size()
 	# connect buttons
 	for child in $GridContainer.get_children():
 		child.connect(
 			"pressed", self, "_on_Button_pressed",
 			[
 				child,
-				__elements_scenes[child.name][0],
-				__elements_scenes[child.name][1]
+				_elements_scenes[child.name][0],
+				_elements_scenes[child.name][1]
 			]
 		)
 
-func _update_rect_size():
-	self.rect_size = self.rect_min_size
-
-func toogle(instance = null) -> void:
+func _toogle(instance = null) -> void:
 	for child in $GridContainer.get_children():
 		if child != instance:
 			child.pressed = false
@@ -114,42 +108,39 @@ func toogle(instance = null) -> void:
 		else:
 			bg.color = Globals.COLORS.DEFAULT_BUTTON
 
+func _update_rect_size():
+	rect_size = rect_min_size
+
 func _on_Button_pressed(
 	instance: TextureButton, scene: PackedScene, icon: Texture
 ) -> void:
 
-	self.toogle(instance)
-	self.emit_signal("button_pressed", scene, icon, instance.pressed)
+	_toogle(instance)
+	emit_signal("button_pressed", scene, icon, instance.pressed)
 
-	if not self.is_mouse_entered():
-		self.emit_signal("sprite_showed")
+	if !_is_mouse_entered:
+		emit_signal("sprite_showed")
 
 func _on_HideButton_pressed() -> void:
 	if $GridContainer.visible:
 		$GridContainer.hide()
 	else:
 		$GridContainer.show()
-
-	self._update_rect_size()
-
-func is_mouse_entered():
-	return self._on_mouse_entered
+	_update_rect_size()
 
 func _on_Elements_mouse_entered() -> void:
-	self._on_mouse_entered = true
-	self.emit_signal("sprite_hided")
+	_is_mouse_entered = true
+	emit_signal("sprite_hided")
 
 func _on_Elements_mouse_exited() -> void:
-	self._on_mouse_entered = false
-	self.emit_signal("sprite_showed")
+	_is_mouse_entered = false
+	emit_signal("sprite_showed")
 
 func _on_Objects_scene_deselected() -> void:
-	self.toogle()
+	_toogle()
 
 func _on_Objects_clone_pressed(element: Element) -> void:
-	var scene: PackedScene = (
-		self.__elements_scenes[element.get_type_name()][0]
-	)
-	var clone = scene.instance()
-	self.emit_signal("element_added", clone)
+	var scene: PackedScene = (_elements_scenes[element.type_name][0])
+	var clone: Element = scene.instance()
+	emit_signal("element_added", clone)
 

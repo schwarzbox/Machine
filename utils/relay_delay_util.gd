@@ -1,51 +1,49 @@
-extends Resource
-
 class_name RelayDelayUtil
 
-var time: int = 0
-var switched: bool = false
-var paused: bool = false
-var saved_energy: bool = false
+extends Resource
 
-func _delay() -> bool:
-	if not self.switched:
-		self.time += 1
-		if self.time >= Globals.GAME.FREQUENCY:
-			self.switched = true
-			return false
-		return true
-	else:
-		self.time -= 1
-		if self.time <= 0:
-			self.switched = false
-			return false
-		return true
-
-func _reset_time() -> void:
-	self.time = 0
+var _time: int = 0
+var _is_switched: bool = false
+var _is_paused: bool = false
+var _saved_energy: bool = false
 
 func reset() -> void:
-	self._reset_time()
-	self.switched = false
-	self.paused = false
-	self.saved_energy = false
+	_time = 0
+	_is_switched = false
+	_is_paused = false
+	_saved_energy = false
 
 func run(energy: bool) -> bool:
-	if self.paused:
-		self.paused = self._delay()
-		if self.paused:
-			return not self.saved_energy
+	if _is_paused:
+		_is_paused = _delay()
+		if _is_paused:
+			return !_saved_energy
 		return energy
 
 	if energy:
-		if not self.switched:
-			self.paused = true
-			self.saved_energy = energy
+		if !_is_switched:
+			_is_paused = true
+			_saved_energy = energy
 	else:
-		if self.switched:
-			self.paused = true
-			self.saved_energy = energy
+		if _is_switched:
+			_is_paused = true
+			_saved_energy = energy
 
-	if self.paused:
-		return not self.saved_energy
+	if _is_paused:
+		return !_saved_energy
 	return energy
+
+func _delay() -> bool:
+	if !_is_switched:
+		_time += 1
+		if _time >= Globals.GAME.FREQUENCY:
+			_is_switched = true
+			return false
+		return true
+	else:
+		_time -= 1
+		if _time <= 0:
+			_is_switched = false
+			return false
+		return true
+

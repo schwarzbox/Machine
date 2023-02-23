@@ -20,6 +20,7 @@ shader_param/stripe_color = null
 shader_param/stripe_width = 4.0
 shader_param/stripe_bias = 2.0
 shader_param/is_striped = false
+shader_param/is_created = false
 shader_param/dissolveNoise = ExtResource( 4 )
 
 [node name="NotAnd" groups=["Energy"] instance=ExtResource( 1 )]

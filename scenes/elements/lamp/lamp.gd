@@ -10,6 +10,6 @@ func _has_energy() -> bool:
 	for child in _connectors_children:
 		if child.type == Globals.Connectors.IN:
 			var child_connected_area = child.connected_area
-			if child_connected_area && child_connected_area.get_energy():
+			if child.connected_has_energy():
 				return true
 	return false

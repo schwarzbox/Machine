@@ -1,12 +1,13 @@
 extends Node
-# notification about and save + save before exit
+# move to WFG sceme
+# godot4 (read about graphics)
 
 # new elemnts MV (rozetta?)
 
-# godot4 (read about graphics)
+# notification about and save + save before exit
 
-# tag tool in pop-up menu
-# highlight correct connector
+# tag tool (pop-up menu, main menu
+# highlight correct connector (if new art without color)
 
 # hertz blink
 

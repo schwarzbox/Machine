@@ -209,7 +209,7 @@ func unlink() -> void:
 	.unlink()
 	unlink_points(true, true)
 
-func unlink_points(is_first: bool = false, is_second: bool = false):
+func unlink_points(is_first: bool = false, is_second: bool = false) -> void:
 	if is_first:
 		var dir = $Line2D.points[0].direction_to($Line2D.points[1])
 		move_first_point(position + dir * Globals.GAME.REPULSE_WIRE_LENGTH)
@@ -226,10 +226,10 @@ func unlink_points(is_first: bool = false, is_second: bool = false):
 		[$Connectors/In2, $Connectors/Out2, $SecondArea, $Sprite2], $Line2D.points[1]
 	)
 
-func is_in_first_points(connector: Connector):
+func is_in_first_points(connector: Connector) -> bool:
 	return connector in [$Connectors/In, $Connectors/Out]
 
-func is_in_second_points(connector: Connector):
+func is_in_second_points(connector: Connector) -> bool:
 	return connector in [$Connectors/In2, $Connectors/Out2]
 
 func _switch_first_points() -> void:
@@ -280,15 +280,9 @@ func _set_off() -> void:
 
 func _has_energy() -> bool:
 	for child in _connectors_children:
-		var child_connected_area = child.connected_area
-		if (
-			child_connected_area
-			&& child_connected_area.get_energy()
-		):
-			$Connectors/In.set_energy(true)
-			$Connectors/In2.set_energy(true)
-			$Connectors/Out.set_energy(true)
-			$Connectors/Out2.set_energy(true)
+		if child.connected_has_energy():
+			for connector in _connectors_children:
+				connector.set_energy(true)
 			return true
 	return false
 
@@ -299,8 +293,7 @@ func _on_SecondArea_mouse_exited() -> void:
 	_second_area_mouse_entered = false
 
 static func can_connect_to_wire(
-	self_connector: Connector,
-	other_connector: Connector
+	self_connector: Connector, other_connector: Connector
 ) -> bool:
 	var self_connected: Array = []
 	for self_child in self_connector.owner.get_connectors_children():

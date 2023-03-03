@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://bkgkrn50kx3se"]
+
+[ext_resource type="Script" path="res://scenes/menus/popup_tool/popup_tool.gd" id="1"]
+
+[node name="PopupTool" type="PopupMenu"]
+visible = true
+mouse_passthrough = true
+script = ExtResource("1")
+
+[connection signal="about_to_popup" from="." to="." method="_on_about_to_popup"]
+[connection signal="id_pressed" from="." to="." method="_on_id_pressed"]

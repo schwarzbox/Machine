@@ -1,18 +1,18 @@
 class_name ObjectState
 
-extends Reference
+extends RefCounted
 
 class State:
 	var _machine: Node2D = null
 	var _name: String = "State"
 
-	func _init(machine: Node2D) -> void:
+	func _init(machine: Node2D):
 		_machine = machine
 
 	func process_event(_event: InputEvent, _mouse_pos: Vector2) -> void:
 		_show_warning("process_event")
 
-	func process_set_selected_scene(_scene: PackedScene, _texture: Texture) -> void:
+	func process_set_selected_scene(_scene: PackedScene, _texture: Texture2D) -> void:
 		_show_warning("process_set_selected_scene")
 
 	func process_remove_selected_scene() -> void:
@@ -27,23 +27,30 @@ class State:
 class Idle:
 	extends State
 
-	func _init(machine: Node2D).(machine) -> void:
+	func _init(machine: Node2D):
+		super._init(machine)
 		_name = "Idle"
 
-	func process_set_selected_scene(scene: PackedScene, texture: Texture) -> void:
+	func process_set_selected_scene(scene: PackedScene, texture: Texture2D) -> void:
 		_machine.set_selected_scene(scene, texture)
 
 		_machine.active_state = _machine.create_state
 
 	func process_event(event: InputEvent, mouse_pos: Vector2) -> void:
 		var entered_element = _machine.get_mouse_entered_element()
-		if entered_element:
+
+		# fix popup tool behaviour after hide
+		if (
+			entered_element
+			&& entered_element.is_mouse_intersect_with_shape(mouse_pos)
+		):
+
 			_machine.emit_signal("cursor_shape_updated", Input.CURSOR_CAN_DROP)
 
 			var element_type = entered_element.type
 			if event is InputEventMouseButton:
-				if event.button_index == BUTTON_LEFT:
-					if event.is_doubleclick():
+				if event.button_index == MOUSE_BUTTON_LEFT:
+					if event.is_double_click():
 						if element_type == Globals.Elements.WIRE:
 							entered_element.unlink_wire()
 						if element_type == Globals.Elements.SWITCH:
@@ -52,20 +59,19 @@ class Idle:
 					elif event.pressed:
 						_left_button_pressed(element_type, entered_element)
 
-				elif event.button_index == BUTTON_RIGHT:
+				elif event.button_index == MOUSE_BUTTON_RIGHT:
 					_right_button_clicked(entered_element)
 		else:
 			_machine.emit_signal("cursor_shape_updated", Input.CURSOR_ARROW)
 
 			if event is InputEventMouseButton && event.pressed:
-				_machine.remove_selected_elements()
-				# sort when no entered element
-				_machine.sort_objects_for_representation()
-				_machine.selection_start = mouse_pos
-
-				_machine.emit_signal("cursor_shape_updated", Input.CURSOR_CROSS)
-
-				_machine.active_state = _machine.select_state
+				if event.button_index == MOUSE_BUTTON_LEFT:
+					_machine.emit_signal("cursor_shape_updated", Input.CURSOR_CROSS)
+					_machine.remove_selected_elements()
+					# sort when no entered element
+					_machine.sort_objects_for_representation()
+					_machine.selection_start = mouse_pos
+					_machine.active_state = _machine.select_state
 
 	func draw():
 		# to prevent warning after switch from select_state
@@ -88,6 +94,7 @@ class Idle:
 		_machine.re_add_selected_element(entered_element)
 
 		_machine.emit_signal("cursor_shape_updated", Input.CURSOR_DRAG)
+
 		if _machine.selected_elements.size() == 1:
 			if element_type == Globals.Elements.WIRE:
 				_machine.active_state = _machine.drag_wire_state
@@ -102,6 +109,7 @@ class Idle:
 			entered_element,
 			_machine.selected_elements.size() > 1
 		)
+		_machine.emit_signal("cursor_shape_updated", Input.CURSOR_ARROW)
 
 		_machine.update_selected_elements_last_valid_position()
 		_machine.re_add_selected_element(entered_element)
@@ -109,10 +117,11 @@ class Idle:
 class Create:
 	extends State
 
-	func _init(machine: Node2D).(machine) -> void:
+	func _init(machine: Node2D):
+		super._init(machine)
 		_name = "Create"
 
-	func process_set_selected_scene(scene: PackedScene, texture: Texture) -> void:
+	func process_set_selected_scene(scene: PackedScene, texture: Texture2D) -> void:
 		_machine.set_selected_scene(scene, texture)
 
 	func process_remove_selected_scene() -> void:
@@ -122,12 +131,12 @@ class Create:
 
 	func process_event(event: InputEvent, mouse_pos: Vector2) -> void:
 		if event is InputEventMouseButton && event.pressed:
-			if event.button_index == BUTTON_LEFT:
-				var instance = _machine.selected_scene.instance()
+			if event.button_index == MOUSE_BUTTON_LEFT:
+				var instance = _machine.selected_scene.instantiate()
 				var entered_element = _machine.get_mouse_entered_element()
 
 				if instance.type == Globals.Elements.WIRE:
-					# instance only when mouse hover on the Connector
+					# instance only when mouse hover checked the Connector
 					if (
 						entered_element
 						&& entered_element.get_entered_connector()
@@ -148,13 +157,14 @@ class Create:
 					# sort after create element
 					_machine.sort_objects_for_representation()
 
-			elif event.button_index == BUTTON_RIGHT:
+			elif event.button_index == MOUSE_BUTTON_RIGHT:
 				process_remove_selected_scene()
 
 class DrawWire:
 	extends State
 
-	func _init(machine: Node2D).(machine) -> void:
+	func _init(machine: Node2D):
+		super._init(machine)
 		_name = "DrawWire"
 
 	func process_event(event: InputEvent, mouse_pos: Vector2) -> void:
@@ -163,11 +173,11 @@ class DrawWire:
 				_machine.active_wire.add_points(mouse_pos)
 
 			if event is InputEventScreenDrag:
-				_machine.active_wire.start()
+				_machine.active_wire.start_drawing()
 			elif event is InputEventMouseButton && !event.pressed:
-				_machine.active_wire.delete_if_not_finished()
+				_machine.active_wire.finish_drawing()
 
-				var connector: Area2D =_machine.active_wire.get_entered_connector()
+				var connector: Connector =_machine.active_wire.get_entered_connector()
 				if connector:
 					_machine.show_sprite_icon(_machine.active_wire, connector)
 
@@ -182,19 +192,20 @@ class DrawWire:
 class Select:
 	extends State
 
-	func _init(machine: Node2D).(machine) -> void:
+	func _init(machine: Node2D):
+		super._init(machine)
 		_name = "Select"
 
 	func process_event(event: InputEvent, mouse_pos: Vector2) -> void:
 		if event is InputEventScreenDrag:
-			_machine.selection_rectangle.extents = (
+			_machine.selection_rectangle.extents = abs(
 				mouse_pos - _machine.selection_start
 			) / 2
 
 			var space = _machine.get_world_2d().direct_space_state
 
-			var query = Physics2DShapeQueryParameters.new()
-			query.collision_layer = 1
+			var query = PhysicsShapeQueryParameters2D.new()
+			query.collision_mask = 1
 			query.collide_with_areas = true
 			query.collide_with_bodies = false
 
@@ -210,11 +221,11 @@ class Select:
 				space.intersect_shape(query,
 				Globals.GAME.MAXIMUM_ELEMENTS_TO_SELECT)
 			)
-			_machine.update()
+			_machine.queue_redraw()
 
 		elif event is InputEventMouseButton && !event.pressed:
-			# _machine.update call _machine._draw func
-			_machine.update()
+			# _machine.queue_redraw call _machine._draw func
+			_machine.queue_redraw()
 
 			_machine.emit_signal("cursor_shape_updated", Input.CURSOR_ARROW)
 
@@ -233,13 +244,14 @@ class Select:
 class DragWire:
 	extends State
 
-	func _init(machine: Node2D).(machine) -> void:
+	func _init(machine: Node2D):
+		super._init(machine)
 		_name = "DragWire"
 
 	func process_event(event: InputEvent, mouse_pos: Vector2) -> void:
 		var selected_elements = _machine.selected_elements.values()
 		if event is InputEventScreenDrag:
-			var delta = event.relative * _machine.actual_zoom
+			var delta = event.relative / _machine.actual_zoom
 			_process_drag(selected_elements, delta, mouse_pos)
 
 		elif event is InputEventMouseButton && !event.pressed:
@@ -271,7 +283,8 @@ class DragWire:
 class DragElement:
 	extends DragWire
 
-	func _init(machine: Node2D).(machine) -> void:
+	func _init(machine: Node2D):
+		super._init(machine)
 		_name = "DragElement"
 
 	func _process_drag(elements: Array, delta: Vector2, _mouse_pos: Vector2) -> void:
@@ -281,7 +294,8 @@ class DragElement:
 class DragSelected:
 	extends DragWire
 
-	func _init(machine: Node2D).(machine) -> void:
+	func _init(machine: Node2D):
+		super._init(machine)
 		_name = "DragSelected"
 
 	func _process_drag(elements: Array, delta: Vector2, _mouse_pos: Vector2) -> void:
@@ -291,7 +305,7 @@ class DragSelected:
 	func _process_safe_areas(element: Element):
 		element.restore_connected_wires()
 
-	func _process_drag_end(elements: Array):
+	func _process_drag_end(_elements: Array):
 		_machine.emit_signal("cursor_shape_updated", Input.CURSOR_CAN_DROP)
 
 		_machine.active_state = _machine.idle_state

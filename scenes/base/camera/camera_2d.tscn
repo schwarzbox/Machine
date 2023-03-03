@@ -1,10 +1,8 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://pvd2iu5xx0tn"]
 
-[ext_resource path="res://scenes/base/camera/camera_2d.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://scenes/base/camera/camera_2d.gd" id="1"]
 
 [node name="Camera2D" type="Camera2D"]
-offset = Vector2( 400, 300 )
-current = true
-smoothing_enabled = true
-smoothing_speed = 32.0
-script = ExtResource( 1 )
+offset = Vector2(400, 300)
+position_smoothing_speed = 32.0
+script = ExtResource("1")

@@ -2,8 +2,8 @@ extends Camera2D
 
 signal zoom_changed
 
-var _zoom_in_shortcut: ShortCut = null
-var _zoom_out_shortcut: ShortCut = null
+var _zoom_in_shortcut: Shortcut = null
+var _zoom_out_shortcut: Shortcut = null
 
 var _is_camera_dragged: bool = false
 var _is_zoom_in: bool = false
@@ -29,19 +29,19 @@ func _unhandled_input(event: InputEvent) -> void:
 		offset += event.delta * Globals.CAMERA.PAN_SPEED
 
 	if event is InputEventKey:
-		if _zoom_in_shortcut.is_shortcut(event):
+		if _zoom_in_shortcut.matches_event(event):
 			if event.pressed:
 				_is_zoom_in = true
 			else:
 				_is_zoom_in = false
 
-		if _zoom_out_shortcut.is_shortcut(event):
+		if _zoom_out_shortcut.matches_event(event):
 			if event.pressed:
 				_is_zoom_out = true
 			else:
 				_is_zoom_out = false
 
-		if event.scancode == KEY_SPACE:
+		if event.keycode == KEY_SPACE:
 			if event.pressed:
 				_is_camera_dragged = true
 			else:
@@ -50,20 +50,18 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventScreenDrag && _is_camera_dragged:
 		offset -= event.relative * Globals.CAMERA.DRAG_SPEED
 
-		get_tree().set_input_as_handled()
+		get_viewport().set_input_as_handled()
 
 
-func _add_input_event(key: int) -> ShortCut:
+func _add_input_event(key: int) -> Shortcut:
 	var input_event = InputEventKey.new()
-	input_event.scancode = key
+	input_event.keycode = key
 
-	if OS.get_name() == 'OSX':
-		input_event.command = true
-	else:
-		input_event.control = true
+	input_event.command_or_control_autoremap = true
 
-	var shortcut = ShortCut.new()
-	shortcut.set_shortcut(input_event)
+	var shortcut = Shortcut.new()
+	shortcut.set_events([input_event])
+
 	return shortcut
 
 func _set_camera_in_center() -> void:
@@ -76,5 +74,5 @@ func _camera_zoom(factor: float) -> void:
 	)
 	emit_signal("zoom_changed", zoom.x)
 
-func _on_FileMenu_file_loaded() -> void:
+func _on_file_menu_file_loaded() -> void:
 	_set_camera_in_center()

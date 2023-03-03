@@ -39,6 +39,11 @@ const COLORS: Dictionary = {
 	SAFE_AREA_ALARM = Color("#c96d3d")
 }
 
+const FONTS: Dictionary = {
+	LABEL_FONT_SIZE = 24,
+	MENU_FONT_SIZE = 24,
+}
+
 const GAME: Dictionary = {
 	CURSOR_TYPE = -1,
 	MAXIMUM_ELEMENTS_TO_SELECT = 2048,
@@ -47,6 +52,8 @@ const GAME: Dictionary = {
 	CONNECTED_WIRE_LENGTH = 128,
 	REPULSE_WIRE_LENGTH = 32,
 	UNSELECTED_ALPHA = 0.7,
+	DEFAULT_FILE_NAME = "untitled",
+	FILE_EXTENSION = "machine",
 	SAVE_GAME_DIR = "user://",
 	LAST_FILE = ".last_file"
 }

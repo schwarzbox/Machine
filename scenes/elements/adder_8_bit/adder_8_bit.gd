@@ -1,13 +1,13 @@
 extends Element
 
-const _on: Texture = preload("res://scenes/elements/adder_8_bit/adder_8_bit_on.png")
-const _off: Texture = preload("res://scenes/elements/adder_8_bit/adder_8_bit_off.png")
+const _on: Texture2D = preload("res://scenes/elements/adder_8_bit/adder_8_bit_on.png")
+const _off: Texture2D = preload("res://scenes/elements/adder_8_bit/adder_8_bit_off.png")
 
 const _relay_util_class: Resource = preload("res://utils/relay_delay_util.gd")
 var _relay_utilC: RelayDelayUtil = _relay_util_class.new()
 var _relay_utils: Array = []
 
-onready var _connectors: Array = 	[
+@onready var _connectors: Array = 	[
 	$Connectors/In, $Connectors/In2, $Connectors/In3, $Connectors/In4,
 	$Connectors/In5, $Connectors/In6, $Connectors/In7, $Connectors/In8,
 	$Connectors/In9, $Connectors/In10, $Connectors/In11, $Connectors/In12,
@@ -16,9 +16,10 @@ onready var _connectors: Array = 	[
 
 func _ready() -> void:
 	type = Globals.Elements.ADDER_8_BIT
-
 	for _i in range(_connectors.size()):
 		_relay_utils.append(_relay_util_class.new())
+
+	super._ready()
 
 func reset_energy() -> void:
 	_relay_utilC.reset()
@@ -26,7 +27,7 @@ func reset_energy() -> void:
 		ru.reset()
 
 	_set_off_texture()
-	.reset_energy()
+	super.reset_energy()
 
 func _has_energy() -> bool:
 	var inC: bool = _relay_utilC.run($Connectors/InC.connected_has_energy())

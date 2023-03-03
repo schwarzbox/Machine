@@ -12,9 +12,11 @@ signal delete_processed
 signal safe_area_entered
 signal safe_area_exited
 
-export (Globals.Elements) var type
+@export var type: Globals.Elements
+
 var type_name: String = ""
 var sprite_size: Vector2 = Vector2()
+var sprite_alpha: float = 0.0
 var last_valid_position: Vector2 = Vector2()
 var is_checked: bool = false
 
@@ -25,19 +27,19 @@ var _is_first_area_mouse_entered: bool = false
 var _safe_area_entered_areas: Dictionary = {}
 var _temporary_wires: Array = []
 
-var _on_texture: Texture = null
-var _off_texture: Texture = null
+var _on_texture: Texture2D = null
+var _off_texture: Texture2D = null
 
 func _ready() -> void:
-	self.add_to_group("Elements")
+	add_to_group("Elements")
 
-	sprite_size = $Sprite.texture.get_size()
+	sprite_size = $FirstSprite2D.texture.get_size()
 
-	$Sprite.material.set_shader_param("texture_size", sprite_size)
-	$Sprite.material.set_shader_param(
+	$FirstSprite2D.material.set_shader_parameter("texture_size", sprite_size)
+	$FirstSprite2D.material.set_shader_parameter(
 		"stripe_color",  Globals.COLORS.SAFE_AREA_ALARM
 	)
-	$Sprite.material.set_shader_param(
+	$FirstSprite2D.material.set_shader_parameter(
 		"outline_color",  Globals.COLORS.OUTLINE
 	)
 
@@ -48,33 +50,42 @@ func _ready() -> void:
 	_connectors_children = $Connectors.get_children()
 	for connector in _connectors_children:
 		connector.connect(
-			"connector_mouse_entered", self, "_on_Connector_mouse_entered"
+			"connector_mouse_entered",
+			Callable(self, "_on_connector_mouse_entered")
 		)
 		connector.connect(
-			"connector_mouse_exited", self, "_on_Connector_mouse_exited"
+			"connector_mouse_exited",
+			Callable(self, "_on_connector_mouse_exited")
 		)
 		connector.connect(
-			"connector_area_entered", self, "_on_Connector_area_entered"
+			"connector_area_entered",
+			Callable(self, "_on_connector_area_entered")
 		)
 
 	type_name = Globals.Elements.keys()[type].capitalize()
+
 	last_valid_position = position
 
 	set_alpha(1.0)
 
 func outline(value: bool) -> void:
-	$Sprite.material.set_shader_param("is_outlined", value)
+	$FirstSprite2D.material.set_shader_parameter("is_outlined", value)
 
 func set_alpha(value: float) -> void:
-	$Sprite.modulate.a = value
+	sprite_alpha = value
+	$FirstSprite2D.modulate.a = value
+	$FirstSprite2D.material.set_shader_parameter("texture_alpha", sprite_alpha)
 
 func safe_area_alarm(value: bool) -> void:
-	$Sprite.material.set_shader_param("is_striped",  value)
+	$FirstSprite2D.material.set_shader_parameter("is_striped",  value)
 
 # movement
 
 func is_mouse_entered() -> bool:
 	return _is_first_area_mouse_entered
+
+func is_mouse_intersect_with_shape(mouse_pos: Vector2) -> bool:
+	return $FirstSprite2D.get_rect().has_point($FirstSprite2D.to_local(mouse_pos))
 
 func move_element(pos: Vector2) -> void:
 	position += pos
@@ -130,7 +141,7 @@ func clear_temporary_wires() -> void:
 # safe area
 
 func is_safe_area_entered() -> bool:
-	return !_safe_area_entered_areas.empty()
+	return !_safe_area_entered_areas.is_empty()
 
 func set_safe_area_entered(area: Area2D):
 	_safe_area_entered_areas[area] = area
@@ -146,7 +157,7 @@ func get_connectors_children() -> Array:
 func clear_connectors_children() -> void:
 	_connectors_children = []
 
-func get_entered_connector() -> Area2D:
+func get_entered_connector() -> Connector:
 	for child in _connectors_children:
 		if child.is_mouse_entered_connector():
 			return child
@@ -190,9 +201,9 @@ func delete(is_animate: bool = true) -> void:
 		emit_signal("delete_processed", self)
 
 	if type != Globals.Elements.WIRE:
-		# delete calls in AnimationPlayer
-		$Sprite.material.set_shader_param("is_dissolve", true)
-		# In AnimationPlayer alpha changed and shader made a trick
+		# set is_dissolve in AnimationPlayer
+		# in AnimationPlayer texture_alpha changed and shader made a trick
+		# delete calls with signal when animation finished
 		$AnimationPlayer.play("Delete")
 	else:
 		emit_signal("delete_processed", self)
@@ -242,32 +253,32 @@ func _set_off_texture():
 	_off_texture = self._off
 
 func _set_on():
-	$Sprite.texture =_on_texture
+	$FirstSprite2D.texture =_on_texture
 
 func _set_off():
-	$Sprite.texture =_off_texture
+	$FirstSprite2D.texture =_off_texture
 
-func _on_FirstArea_mouse_entered() -> void:
+func _on_first_area_mouse_entered() -> void:
 	_is_first_area_mouse_entered = true
 
-func _on_FirstArea_mouse_exited() -> void:
+func _on_first_area_mouse_exited() -> void:
 	_is_first_area_mouse_entered = false
 
-func _on_SafeArea_area_entered(area: Area2D) -> void:
+func _on_safe_area_area_entered(area: Area2D) -> void:
 	emit_signal("safe_area_entered", self, area, true)
 
-func _on_SafeArea_area_exited(area: Area2D) -> void:
+func _on_safe_area_area_exited(area: Area2D) -> void:
 	emit_signal("safe_area_exited", self, area, false)
 
-func _on_AnimationPlayer_animation_finished(anim_name: String) -> void:
+func _on_animation_player_animation_finished(anim_name: String) -> void:
 	if anim_name == "Delete":
 		emit_signal("delete_processed", self)
 
-func _on_Connector_mouse_entered(connector) -> void:
+func _on_connector_mouse_entered(connector) -> void:
 	emit_signal("connector_mouse_entered", self, connector)
 
-func _on_Connector_mouse_exited() -> void:
+func _on_connector_mouse_exited() -> void:
 	emit_signal("connector_mouse_exited")
 
-func _on_Connector_area_entered(connector, other) -> void:
+func _on_connector_area_entered(connector: Connector, other: Connector) -> void:
 	emit_signal("connector_area_entered", connector, other)

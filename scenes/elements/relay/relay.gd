@@ -1,19 +1,21 @@
 extends Element
 
-const _on: Texture = preload("res://scenes/elements/relay/relay_on.png")
-const _off: Texture = preload("res://scenes/elements/relay/relay_off.png")
-const _on_off: Texture = preload("res://scenes/elements/relay/relay_on_off.png")
-const _off_on: Texture = preload("res://scenes/elements/relay/relay_off_on.png")
+const _on: Texture2D = preload("res://scenes/elements/relay/relay_on.png")
+const _off: Texture2D = preload("res://scenes/elements/relay/relay_off.png")
+const _on_off: Texture2D = preload("res://scenes/elements/relay/relay_on_off.png")
+const _off_on: Texture2D = preload("res://scenes/elements/relay/relay_off_on.png")
 
 var _relay_util: RelayDelayUtil = preload("res://utils/relay_delay_util.gd").new()
 
 func _ready() -> void:
 	type = Globals.Elements.RELAY
 
+	super._ready()
+
 func reset_energy():
 	_relay_util.reset()
 	_set_off_texture()
-	.reset_energy()
+	super.reset_energy()
 
 func _has_energy() -> bool:
 	var in1: bool = _relay_util.run($Connectors/In.connected_has_energy())

@@ -1,10 +1,10 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://d8gw3yxrt30q"]
 
-[ext_resource path="res://levels/base/level.tscn" type="PackedScene" id=1]
-[ext_resource path="res://levels/campaign/campaign.gd" type="Script" id=2]
+[ext_resource type="PackedScene" uid="uid://qhkn0mu3b130" path="res://levels/base/level.tscn" id="1"]
+[ext_resource type="Script" path="res://levels/campaign/campaign.gd" id="2"]
 
-[node name="Campaign" instance=ExtResource( 1 )]
-script = ExtResource( 2 )
+[node name="Campaign" instance=ExtResource("1")]
+script = ExtResource("2")
 type = 1
 
 [node name="Label" parent="CanvasLayer/LevelMenu" index="0"]

@@ -1,6 +1,6 @@
 shader_type canvas_item;
 
-uniform vec4 stripe_color : hint_color;
+uniform vec4 stripe_color : source_color;
 uniform float divisions = 16;
 uniform float stripe_bias = 2;
 uniform float speed = 0.1;

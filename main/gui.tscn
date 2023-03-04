@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://bgkmwjaa0wvxo"]
+[gd_scene load_steps=3 format=3 uid="uid://sqa0g712xqea"]
 
 [ext_resource type="Script" path="res://main/gui.gd" id="1"]
-[ext_resource type="LabelSettings" uid="uid://cdlj1jofg5kij" path="res://main/title_label_settings.tres" id="2_cthlr"]
+[ext_resource type="LabelSettings" uid="uid://cdlj1jofg5kij" path="res://main/gui_label_settings.tres" id="2_a0u2f"]
 
 [node name="GUI" type="CenterContainer"]
 anchors_preset = 15
@@ -15,7 +15,8 @@ layout_mode = 2
 [node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 text = "+ machine"
-label_settings = ExtResource("2_cthlr")
+label_settings = ExtResource("2_a0u2f")
+horizontal_alignment = 1
 uppercase = true
 
 [node name="Button1" type="Button" parent="VBoxContainer"]

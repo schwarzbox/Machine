@@ -101,3 +101,27 @@ static func setup_connection(
 	self_connector.connected_area = other_connector
 	other_connector.connected_element = self_element
 	other_connector.connected_area = self_connector
+
+static func can_connect_to_wire(
+	self_connector: Connector, other_connector: Connector
+) -> bool:
+	var self_connected: Array = []
+	for self_child in self_connector.owner.get_connectors_children():
+		self_connected.append(self_child.connected_element)
+
+	if !self_connector.owner.check_connect_to_wire(self_connector, false):
+		return false
+
+	var other_connected: Array = []
+	for other_child in other_connector.owner.get_connectors_children():
+		other_connected.append(other_child.connected_element)
+
+	if !other_connector.owner.check_connect_to_wire(other_connector, false):
+		return false
+
+	if (
+		self_connector.owner in other_connected
+		|| other_connector.owner in self_connected
+	):
+		return false
+	return true

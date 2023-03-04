@@ -304,7 +304,7 @@ func _on_objects_connector_area_entered(
 		if _is_drag_element_state():
 			return
 
-		if !connector.owner.can_connect_to_wire(connector, other):
+		if !Connector.can_connect_to_wire(connector, other):
 			return
 
 		Connector.setup_connection(connector, connector.owner, other, other.owner)

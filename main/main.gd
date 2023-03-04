@@ -1,35 +1,33 @@
 extends Node
-# git
-# add label settings for main menu
-# refactor wire
-
+# merge
 # move to WFG scheme
 
 # hertz scheme
 # hertz elem
 
-# notes tool (pop-up menu, main menu)
-# highlight correct connector (if new art without color)
-
 # new elements MV (rozetta?) ex_or ex_and
 # new art A O !A !O battery
+
+# notes tool (pop-up menu, main menu)
+# highlight correct connector (if new art without color)
 
 # 1 byte memmory
 
 # IDEAS
 # show minimap?
 
-# clone outside safe?
+# clone outside safe area?
 # shift straight lines
 # increase areas (how to highlight them)?
 # add pixelate shader or texture for wire
+# remove .owner references for connectors
+# remove help_label
 
-# animate elements create, scale or particles sounds
+# animate elements create, scale or particles + sounds
 
 # graph nodes?
 # read about resourses
 
-# anim for labels / remove labels
 # info about element more (in pop-up or on demand)
 
 # IMPOSSIBLE BACKLOG
@@ -38,7 +36,6 @@ extends Node
 # _on_file_dialog_window_input (reset)
 
 # HACKS
-
 # check FPS
 # debug/settings/fps/force_fps
 # application/run/max_fps

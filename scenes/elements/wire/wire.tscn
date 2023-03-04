@@ -1,83 +1,88 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=3 uid="uid://cfu3mi3pgi4vn"]
 
-[ext_resource path="res://scenes/base/connector/in.tscn" type="PackedScene" id=1]
-[ext_resource path="res://scenes/elements/wire/wire.gd" type="Script" id=2]
-[ext_resource path="res://scenes/base/element/element.tscn" type="PackedScene" id=3]
-[ext_resource path="res://scenes/base/connector/out.tscn" type="PackedScene" id=4]
-[ext_resource path="res://scenes/base/element/element_shader.gdshader" type="Shader" id=5]
-[ext_resource path="res://scenes/elements/wire/wire_off.png" type="Texture" id=6]
-[ext_resource path="res://scenes/base/element/dissolve_texture.tres" type="Texture" id=7]
+[ext_resource type="PackedScene" uid="uid://i3np3a2r6kve" path="res://scenes/base/connector/in.tscn" id="1"]
+[ext_resource type="Script" path="res://scenes/elements/wire/wire.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://bhsk0p4obuir6" path="res://scenes/base/element/element.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://dd47odg8af7i3" path="res://scenes/base/connector/out.tscn" id="4"]
+[ext_resource type="Shader" path="res://scenes/base/element/element_shader.gdshader" id="5"]
+[ext_resource type="Texture2D" uid="uid://bt7tg4qbfb6ox" path="res://scenes/elements/wire/wire_off.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://cr8kjefxskk42" path="res://scenes/base/element/dissolve_texture.tres" id="7"]
 
-[sub_resource type="ShaderMaterial" id=4]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t6ked"]
 resource_local_to_scene = true
-shader = ExtResource( 5 )
-shader_param/outline_width = 1.0
-shader_param/outline_color = null
-shader_param/is_outlined = false
-shader_param/is_dissolve = false
-shader_param/texture_size = Vector2( 137, 137 )
-shader_param/stripe_color = null
-shader_param/stripe_width = 4.0
-shader_param/stripe_bias = 2.0
-shader_param/is_striped = false
-shader_param/is_created = false
-shader_param/dissolveNoise = ExtResource( 7 )
+shader = ExtResource("5")
+shader_parameter/texture_alpha = 1.0
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = null
+shader_parameter/is_outlined = false
+shader_parameter/is_dissolve = false
+shader_parameter/texture_size = Vector2(137, 137)
+shader_parameter/stripe_color = null
+shader_parameter/stripe_width = 4.0
+shader_parameter/stripe_bias = 2.0
+shader_parameter/is_striped = false
+shader_parameter/is_created = false
+shader_parameter/dissolveNoise = ExtResource("7")
 
-[sub_resource type="ShaderMaterial" id=3]
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_45kys"]
+load_path = "res://.godot/imported/wire_off.png-6b0f5d371751436e723471c4d32a463d.ctex"
+
+[sub_resource type="ShaderMaterial" id="3"]
 resource_local_to_scene = true
-shader = ExtResource( 5 )
-shader_param/outline_width = 1.0
-shader_param/outline_color = null
-shader_param/is_outlined = false
-shader_param/is_dissolve = false
-shader_param/texture_size = Vector2( 128, 128 )
-shader_param/stripe_color = null
-shader_param/stripe_width = 4.0
-shader_param/stripe_bias = 1.5
-shader_param/is_striped = false
-shader_param/is_created = false
-shader_param/dissolveNoise = ExtResource( 7 )
+shader = ExtResource("5")
+shader_parameter/texture_alpha = 1.0
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = null
+shader_parameter/is_outlined = false
+shader_parameter/is_dissolve = false
+shader_parameter/texture_size = Vector2(137, 137)
+shader_parameter/stripe_color = null
+shader_parameter/stripe_width = 4.0
+shader_parameter/stripe_bias = 2.0
+shader_parameter/is_striped = false
+shader_parameter/is_created = false
+shader_parameter/dissolveNoise = ExtResource("7")
 
-[node name="Wire" instance=ExtResource( 3 )]
-script = ExtResource( 2 )
+[node name="Wire" instance=ExtResource("3")]
+script = ExtResource("2")
 type = 9
 
 [node name="Line2D" type="Line2D" parent="." index="0"]
 width = 4.0
-default_color = Color( 0.4, 0.501961, 1, 1 )
+default_color = Color(0.4, 0.501961, 1, 1)
 begin_cap_mode = 2
 end_cap_mode = 2
 antialiased = true
-__meta__ = {
-"_edit_lock_": true
-}
 
-[node name="CollisionShape2D" parent="FirstArea" index="0"]
-polygon = PoolVector2Array( 0, -6, -8, -2, -8, 5, 0, 9, 8, 5, 8, -2 )
+[node name="CollisionPolygon2D" parent="FirstArea" index="0"]
+polygon = PackedVector2Array(0, -6, -8, -2, -8, 5, 0, 9, 8, 5, 8, -2)
 
 [node name="SecondArea" type="Area2D" parent="." index="2"]
+collision_mask = 0
+monitoring = false
+monitorable = false
 
-[node name="CollisionShape2D" type="CollisionPolygon2D" parent="SecondArea" index="0"]
-polygon = PoolVector2Array( 0, -6, -8, -2, -8, 5, 0, 9, 8, 5, 8, -2 )
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="SecondArea" index="0"]
+polygon = PackedVector2Array(0, -6, -8, -2, -8, 5, 0, 9, 8, 5, 8, -2)
 
-[node name="Sprite" parent="." index="3"]
-material = SubResource( 4 )
-texture = ExtResource( 6 )
+[node name="FirstSprite2D" parent="." index="3"]
+material = SubResource("ShaderMaterial_t6ked")
+texture = SubResource("CompressedTexture2D_45kys")
 
-[node name="Sprite2" type="Sprite" parent="." index="4"]
-material = SubResource( 3 )
-texture = ExtResource( 6 )
+[node name="SecondSprite2D" type="Sprite2D" parent="." index="4"]
+material = SubResource("3")
+texture = ExtResource("6")
 
-[node name="CollisionShape2D" parent="SafeArea" index="0"]
-polygon = PoolVector2Array( 0, -1, 7, 2, 7, 5, 0, 8, -7, 5, -7, 2 )
+[node name="CollisionPolygon2D" parent="SafeArea" index="0"]
+polygon = PackedVector2Array(0, -1, 7, 2, 7, 5, 0, 8, -7, 5, -7, 2)
 
-[node name="In" parent="Connectors" index="0" instance=ExtResource( 1 )]
+[node name="In" parent="Connectors" index="0" instance=ExtResource("1")]
 
-[node name="In2" parent="Connectors" index="1" instance=ExtResource( 1 )]
+[node name="In2" parent="Connectors" index="1" instance=ExtResource("1")]
 
-[node name="Out" parent="Connectors" index="2" instance=ExtResource( 4 )]
+[node name="Out" parent="Connectors" index="2" instance=ExtResource("4")]
 
-[node name="Out2" parent="Connectors" index="3" instance=ExtResource( 4 )]
+[node name="Out2" parent="Connectors" index="3" instance=ExtResource("4")]
 
-[connection signal="mouse_entered" from="SecondArea" to="." method="_on_SecondArea_mouse_entered"]
-[connection signal="mouse_exited" from="SecondArea" to="." method="_on_SecondArea_mouse_exited"]
+[connection signal="mouse_entered" from="SecondArea" to="." method="_on_second_area_mouse_entered"]
+[connection signal="mouse_exited" from="SecondArea" to="." method="_on_second_area_mouse_exited"]

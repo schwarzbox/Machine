@@ -1,42 +1,54 @@
 extends Element
 
-const _on: Texture = preload("res://scenes/elements/wire/wire_on.png")
-const _off: Texture = preload("res://scenes/elements/wire/wire_off.png")
+const _on: Texture2D = preload("res://scenes/elements/wire/wire_on.png")
+const _off: Texture2D = preload("res://scenes/elements/wire/wire_off.png")
 
-var _second_area_mouse_entered = false
+var _is_second_area_mouse_entered = false
 
 func _ready() -> void:
 	type = Globals.Elements.WIRE
+	super._ready()
 
 	hide_sprites()
 
-	$Sprite2.material.set_shader_param("texture_size", sprite_size)
-	$Sprite2.material.set_shader_param(
+	$SecondSprite2D.material.set_shader_parameter(
+		"texture_size", sprite_size
+	)
+	$SecondSprite2D.material.set_shader_parameter(
 		"stripe_color",  Globals.COLORS.SAFE_AREA_ALARM
 	)
-	$Sprite2.material.set_shader_param("outline_color",  Globals.COLORS.OUTLINE)
+	$SecondSprite2D.material.set_shader_parameter(
+		"outline_color",  Globals.COLORS.OUTLINE
+	)
 
 func outline(value: bool) -> void:
-	$Sprite.material.set_shader_param("is_outlined", value)
-	$Sprite2.material.set_shader_param("is_outlined", value)
+	$FirstSprite2D.material.set_shader_parameter("is_outlined", value)
+	$SecondSprite2D.material.set_shader_parameter("is_outlined", value)
 
 func set_alpha(value) -> void:
+	sprite_alpha = value
 	$Line2D.modulate.a = value
-	$Sprite.modulate.a = 1.0
-	$Sprite2.modulate.a = 1.0
+	$FirstSprite2D.modulate.a = 1.0
+	$SecondSprite2D.modulate.a = 1.0
 
 func show_sprites() -> void:
-	$Sprite.show()
-	$Sprite2.show()
+	$FirstSprite2D.show()
+	$SecondSprite2D.show()
 
 func hide_sprites() -> void:
-	$Sprite.hide()
-	$Sprite2.hide()
+	$FirstSprite2D.hide()
+	$SecondSprite2D.hide()
 
 # create
 
-func start() -> void:
-	move_last_point(get_global_mouse_position())
+func start_drawing() -> void:
+	var mouse_pos = get_global_mouse_position()
+
+	if _is_first_area_mouse_entered:
+		move_first_point(mouse_pos)
+	elif _is_second_area_mouse_entered:
+		move_last_point(mouse_pos)
+
 	outline(true)
 
 	var count = 0
@@ -44,43 +56,38 @@ func start() -> void:
 		if child.has_connection():
 			count += 1
 
-	# stick when start
 	if count > 0:
 		if count > 1:
+			# prevent stick when one point has been connected
 			switch_connections(true)
 		else:
+			# stick when point connected first time
 			switch_connections()
 		show_sprites()
 		return
 	else:
 		switch_connections()
 
-	# delete if still not connected_element
+	# delete if wire still not connected
 	delete_if_more()
 
-func finish() -> bool:
-	if (
-		$Connectors/In.position.distance_to($Connectors/In2.position)
-		< Globals.GAME.MINIMAL_WIRE_LENGTH
-	):
-		return false
+func finish_drawing() -> void:
+	if delete_if_less():
+		return
 
 	for child in _connectors_children:
 		if child.has_connection():
 			switch_connections()
 
-	return true
 
-func delete_if_not_finished() -> void:
-	if !finish():
-		call_deferred("delete")
-
-func delete_if_less(length: int = Globals.GAME.MINIMAL_WIRE_LENGTH) -> void:
+func delete_if_less(length: int = Globals.GAME.MINIMAL_WIRE_LENGTH) -> bool:
 	if (
 		$Connectors/In.position.distance_to($Connectors/In2.position)
 		< length
 	):
 		call_deferred("delete")
+		return true
+	return false
 
 func delete_if_more(length: int = Globals.GAME.MINIMAL_WIRE_LENGTH) -> void:
 	if (
@@ -92,7 +99,7 @@ func delete_if_more(length: int = Globals.GAME.MINIMAL_WIRE_LENGTH) -> void:
 # points
 
 func has_points() -> bool:
-	return !($Line2D.points.empty())
+	return !($Line2D.points.is_empty())
 
 func get_points() -> Array:
 	return $Line2D.points
@@ -102,7 +109,7 @@ func set_points(points: Array) -> void:
 
 func add_points(point: Vector2) -> void:
 	position = point
-	$Line2D.points = PoolVector2Array([Vector2(), Vector2()])
+	$Line2D.points = PackedVector2Array([Vector2(), Vector2()])
 
 func move_first_point(pos: Vector2) -> void:
 	var diff = position - pos
@@ -116,29 +123,43 @@ func move_last_point(pos: Vector2) -> void:
 # movement
 
 func is_mouse_entered() -> bool:
-	return _is_first_area_mouse_entered || _second_area_mouse_entered
+	return _is_first_area_mouse_entered || _is_second_area_mouse_entered
+
+func is_mouse_intersect_with_shape(mouse_pos: Vector2) -> bool:
+	return (
+		$FirstSprite2D.get_rect().has_point(
+			$FirstSprite2D.to_local(mouse_pos)
+		)
+		|| $SecondSprite2D.get_rect().has_point(
+			$SecondSprite2D.to_local(mouse_pos)
+		)
+	)
 
 func move_element(pos: Vector2) -> void:
 	if _is_first_area_mouse_entered:
 		move_first_point(pos)
 		switch_connections(true)
-	elif _second_area_mouse_entered:
+	elif _is_second_area_mouse_entered:
 		move_last_point(pos)
 		switch_connections(true)
 
 	move_connected_wires()
+
 	delete_if_less()
 
-func switch_connections(drag: bool = false) -> void:
-	if !drag:
+func switch_connections(is_drag: bool = false) -> void:
+	if !is_drag:
+		# stick to the connectors
 		_switch_first_points()
 		_switch_second_points()
 
 	_sync_node_position(
-		[$Connectors/In, $Connectors/Out, $FirstArea, $Sprite], $Line2D.points[0]
+		[$Connectors/In, $Connectors/Out, $FirstArea, $FirstSprite2D],
+		$Line2D.points[0]
 	)
 	_sync_node_position(
-		[$Connectors/In2, $Connectors/Out2, $SecondArea, $Sprite2], $Line2D.points[1]
+		[$Connectors/In2, $Connectors/Out2, $SecondArea, $SecondSprite2D],
+		$Line2D.points[1]
 	)
 
 func check_connect_to_object() -> bool:
@@ -206,7 +227,7 @@ func unlink_wire() -> void:
 		unlink_points(false, true)
 
 func unlink() -> void:
-	.unlink()
+	super.unlink()
 	unlink_points(true, true)
 
 func unlink_points(is_first: bool = false, is_second: bool = false) -> void:
@@ -220,10 +241,12 @@ func unlink_points(is_first: bool = false, is_second: bool = false) -> void:
 		move_last_point(last_point - dir * Globals.GAME.REPULSE_WIRE_LENGTH)
 
 	_sync_node_position(
-		[$Connectors/In, $Connectors/Out, $FirstArea, $Sprite], $Line2D.points[0]
+		[$Connectors/In, $Connectors/Out, $FirstArea, $FirstSprite2D],
+		$Line2D.points[0]
 	)
 	_sync_node_position(
-		[$Connectors/In2, $Connectors/Out2, $SecondArea, $Sprite2], $Line2D.points[1]
+		[$Connectors/In2, $Connectors/Out2, $SecondArea, $SecondSprite2D],
+		$Line2D.points[1]
 	)
 
 func is_in_first_points(connector: Connector) -> bool:
@@ -235,12 +258,14 @@ func is_in_second_points(connector: Connector) -> bool:
 func _switch_first_points() -> void:
 	var in_connected = $Connectors/In.connected_element
 	var in_connected_area = $Connectors/In.connected_area
+
 	if in_connected && in_connected_area:
 		move_first_point(
 			in_connected.to_global(in_connected_area.position)
 		)
 	var out_connected = $Connectors/Out.connected_element
 	var out_connected_area = $Connectors/Out.connected_area
+
 	if out_connected && out_connected_area:
 		move_first_point(
 			out_connected.to_global(out_connected_area.position)
@@ -249,33 +274,34 @@ func _switch_first_points() -> void:
 func _switch_second_points() -> void:
 	var in_connected = $Connectors/In2.connected_element
 	var in_connected_area = $Connectors/In2.connected_area
+
 	if in_connected && in_connected_area:
 		move_last_point(
 			in_connected.to_global(in_connected_area.position)
 		)
+
 	var out_connected = $Connectors/Out2.connected_element
 	var out_connected_area = $Connectors/Out2.connected_area
+
 	if out_connected && out_connected_area:
 		move_last_point(
-			out_connected.to_global(
-				out_connected_area.position
-			)
+			out_connected.to_global(out_connected_area.position)
 		)
 
-func _sync_node_position(nodes: Array, position: Vector2) -> void:
+func _sync_node_position(nodes: Array, pos: Vector2) -> void:
 	for node in nodes:
-		node.position = position
+		node.position = pos
 
 # energy loop
 
 func _set_on() -> void:
-	$Sprite.texture = self._on_texture
-	$Sprite2.texture =self._on_texture
+	$FirstSprite2D.texture = self._on_texture
+	$SecondSprite2D.texture =self._on_texture
 	$Line2D.default_color = Globals.COLORS.ENERGY_ON
 
 func _set_off() -> void:
-	$Sprite.texture = self._off_texture
-	$Sprite2.texture = self._off_texture
+	$FirstSprite2D.texture = self._off_texture
+	$SecondSprite2D.texture = self._off_texture
 	$Line2D.default_color = Globals.COLORS.ENERGY_OFF
 
 func _has_energy() -> bool:
@@ -286,32 +312,8 @@ func _has_energy() -> bool:
 			return true
 	return false
 
-func _on_SecondArea_mouse_entered() -> void:
-	_second_area_mouse_entered = true
+func _on_second_area_mouse_entered() -> void:
+	_is_second_area_mouse_entered = true
 
-func _on_SecondArea_mouse_exited() -> void:
-	_second_area_mouse_entered = false
-
-static func can_connect_to_wire(
-	self_connector: Connector, other_connector: Connector
-) -> bool:
-	var self_connected: Array = []
-	for self_child in self_connector.owner.get_connectors_children():
-		self_connected.append(self_child.connected_element)
-
-	if !self_connector.owner.check_connect_to_wire(self_connector, false):
-		return false
-
-	var other_connected: Array = []
-	for other_child in other_connector.owner.get_connectors_children():
-		other_connected.append(other_child.connected_element)
-
-	if !other_connector.owner.check_connect_to_wire(other_connector, false):
-		return false
-
-	if (
-		self_connector.owner in other_connected
-		|| other_connector.owner in self_connected
-	):
-		return false
-	return true
+func _on_second_area_mouse_exited() -> void:
+	_is_second_area_mouse_entered = false

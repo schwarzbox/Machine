@@ -6,6 +6,15 @@ signal button3_pressed
 signal button4_pressed
 
 func _ready() -> void:
+	for button in [
+		$VBoxContainer/Button1,
+		$VBoxContainer/Button2,
+		$VBoxContainer/Button3,
+		$VBoxContainer/Button4
+	]:
+		button.add_theme_font_size_override(
+			"font_size", Globals.FONTS.MENU_FONT_SIZE
+		)
 	prints(name, "ready")
 
 func _on_Button1_pressed() -> void:

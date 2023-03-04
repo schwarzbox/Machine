@@ -8,31 +8,43 @@ signal elements_deleted
 signal sprite_showed
 signal sprite_hided
 
-const _default_file_name: String = "untitled"
+const _default_file_name: String = Globals.GAME.DEFAULT_FILE_NAME
 
 var _file_util: FileUtil = preload("res://utils/file_util.gd").new()
 var _file_path: String = ""
-var _after_save: FuncRef = null
+var _after_save: Callable = Callable()
 
 func _ready() -> void:
-	$FileDialog.current_dir = Globals.GAME.SAVE_GAME_DIR
+	for button in [$New, $Open, $"Save As", $Save, $Load]:
+		button.add_theme_font_size_override(
+			"font_size", Globals.FONTS.MENU_FONT_SIZE
+		)
+	# set ext filter
+	$FileDialog.add_filter("*.machine")
+
 	_load_last_file()
 
+	$FileDialog.current_dir = _file_path.get_base_dir()
+
 func _get_untitled_path(file_name: String) -> String:
-	var list_dir = _list_dir(Globals.GAME.SAVE_GAME_DIR)
+	var list_dir = _get_list_dir($FileDialog.current_dir)
+
 	var count = 1
 	var new_name = file_name
 	while new_name in list_dir:
-		new_name = "{file_name}-{count}".format(
-			{file_name=file_name, count=count}
+		var base_name = file_name.get_basename()
+		new_name = "{base_name}-{count}.{ext}".format(
+			{file_name=base_name, count=count, ext=Globals.GAME.FILE_EXTENSION}
 		)
 		count += 1
-	return Globals.GAME.SAVE_GAME_DIR + new_name
+
+	return $FileDialog.current_dir.path_join(new_name)
 
 func _load_last_file() -> void:
 	var file_path = _file_util.read_file(
-		Globals.GAME.SAVE_GAME_DIR + Globals.GAME.LAST_FILE
+		Globals.GAME.SAVE_GAME_DIR.path_join(Globals.GAME.LAST_FILE)
 	)
+
 	if file_path:
 		_set_file_path(file_path)
 		_load()
@@ -41,7 +53,7 @@ func _load_last_file() -> void:
 
 func _save_last_file_path() -> void:
 	self._file_util.write_file(
-		Globals.GAME.SAVE_GAME_DIR + Globals.GAME.LAST_FILE,
+		Globals.GAME.SAVE_GAME_DIR.path_join(Globals.GAME.LAST_FILE),
 		_file_path
 	)
 
@@ -77,22 +89,25 @@ func _load() -> void:
 
 func _open_dialog() -> void:
 	$FileDialog.popup()
-	$FileDialog.mode = FileDialog.MODE_OPEN_FILE
+	$FileDialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	$FileDialog.current_file = ""
+	$FileDialog.deselect_all()
 
 func _save_dialog() -> void:
 	$FileDialog.popup()
-	$FileDialog.mode = FileDialog.MODE_SAVE_FILE
-	$FileDialog.current_file = _file_path.split('//')[-1]
+	$FileDialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+	$FileDialog.current_file = _file_path.get_slice('//', 1)
 
 func _set_file_path(path: String) -> void:
-	_file_path = path
-	emit_signal("file_name_changed", _file_path.split('//')[-1])
+	_file_path = "{base_name}.{ext}".format(
+		{base_name=path.get_basename(), ext=Globals.GAME.FILE_EXTENSION}
+	)
+	emit_signal("file_name_changed", _file_path.get_file())
 
-func _list_dir(path) -> Array:
-	var dir = Directory.new()
+func _get_list_dir(path) -> Array:
+	var dir = DirAccess.open(path)
 	var list = []
-	if dir.open(path) == OK:
+	if dir:
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		while file_name != "":
@@ -127,48 +142,94 @@ func _has_unsaved_changes() -> bool:
 						return true
 	return false
 
-func _on_New_pressed() -> void:
+func _on_new_pressed() -> void:
 	if _has_unsaved_changes():
-		_save_dialog()
-		_after_save = funcref(self, "_new")
+		# show pop-up
+		$SaveDialog.popup()
+		_after_save = _new
 	else:
 		_new()
 
-func _on_Open_pressed() -> void:
+func _on_open_pressed() -> void:
 	if _has_unsaved_changes():
-		_save_dialog()
-		_after_save = funcref(self, "_open_dialog")
+		$SaveDialog.popup()
+		_after_save = _open_dialog
 	else:
 		_open_dialog()
 
-func _on_Save_As_pressed() -> void:
+func _on_save_as_pressed() -> void:
 	_save_dialog()
 
-func _on_Save_pressed() -> void:
+func _on_save_pressed() -> void:
 	_save()
 	emit_signal("menu_hided")
 
-func _on_Load_pressed() -> void:
+func _on_load_pressed() -> void:
 	_load()
 	emit_signal("menu_hided")
 
-func _on_FileDialog_file_selected(path: String) -> void:
-	if $FileDialog.mode == FileDialog.MODE_OPEN_FILE:
-		_set_file_path(path)
-		_load()
-	elif $FileDialog.mode == FileDialog.MODE_SAVE_FILE:
-		_set_file_path(path)
-		_save()
-
-func _on_FileDialog_popup_hide() -> void:
+func _dialog_closed() -> void:
 	if _after_save:
-		_after_save.call_func()
-		_after_save = null
+		_after_save.call_deferred()
+		_after_save = Callable()
 	else:
 		emit_signal("menu_hided")
 
 	emit_signal("sprite_showed")
 
-func _on_FileDialog_mouse_entered() -> void:
+func _on_file_dialog_about_to_popup() -> void:
+	var pos = (get_viewport().size / 2) - $FileDialog.size / 2
+	$FileDialog.position = Vector2(pos.x, 0)
+#
+func _on_file_dialog_file_selected(path: String) -> void:
+	if $FileDialog.file_mode == FileDialog.FILE_MODE_OPEN_FILE:
+		_set_file_path(path)
+		_load()
+	elif $FileDialog.file_mode == FileDialog.FILE_MODE_SAVE_FILE:
+		_set_file_path(path)
+		_save()
+
+	_dialog_closed()
+
+func _on_file_dialog_canceled() -> void:
+	_dialog_closed()
+
+func _on_file_dialog_mouse_entered() -> void:
 	emit_signal("sprite_hided")
+
+func _on_file_dialog_window_input(event: InputEvent) -> void:
+	if event is InputEventKey:
+		if event.keycode in [
+			KEY_META,
+			KEY_CTRL,
+			KEY_DELETE,
+			KEY_BACKSPACE,
+			KEY_LEFT,
+			KEY_RIGHT
+		]:
+			pass
+		else:
+			var list_dir = _get_list_dir($FileDialog.current_dir)
+			if $FileDialog.current_file in list_dir:
+				$FileDialog.call_deferred('invalidate')
+
+func _on_save_dialog_about_to_popup() -> void:
+	var pos = (get_viewport().size / 2) - $SaveDialog.size / 2
+	$SaveDialog.position = Vector2(pos.x, 0)
+
+func _on_save_dialog_confirmed() -> void:
+	_save_dialog()
+
+func _on_save_dialog_canceled() -> void:
+	_dialog_closed()
+
+func _on_mouse_entered() -> void:
+	emit_signal("sprite_hided")
+
+func _on_mouse_exited() -> void:
+	emit_signal("sprite_showed")
+
+
+
+
 

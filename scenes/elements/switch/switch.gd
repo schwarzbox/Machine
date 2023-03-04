@@ -1,13 +1,15 @@
 extends Element
 
-var _on: Texture = preload("res://scenes/elements/switch/switch_on.png")
-var _on_off: Texture = preload("res://scenes/elements/switch/switch_on_off.png")
-var _off: Texture = preload("res://scenes/elements/switch/switch_off.png")
+var _on: Texture2D = preload("res://scenes/elements/switch/switch_on.png")
+var _on_off: Texture2D = preload("res://scenes/elements/switch/switch_on_off.png")
+var _off: Texture2D = preload("res://scenes/elements/switch/switch_off.png")
 
 var _is_activated: bool = false
 
 func _ready() -> void:
 	type = Globals.Elements.SWITCH
+
+	super._ready()
 
 func switch() -> void:
 	_is_activated = !_is_activated

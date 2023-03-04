@@ -1,46 +1,49 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=9 format=3 uid="uid://d11af0uojsd2b"]
 
-[ext_resource path="res://scenes/base/element/element.tscn" type="PackedScene" id=1]
-[ext_resource path="res://scenes/elements/relay/relay.gd" type="Script" id=2]
-[ext_resource path="res://scenes/base/connector/in.tscn" type="PackedScene" id=3]
-[ext_resource path="res://scenes/base/connector/out.tscn" type="PackedScene" id=4]
-[ext_resource path="res://scenes/elements/relay/relay_off.png" type="Texture" id=5]
-[ext_resource path="res://scenes/base/element/element_shader.gdshader" type="Shader" id=6]
-[ext_resource path="res://scenes/base/element/dissolve_texture.tres" type="Texture" id=7]
+[ext_resource type="PackedScene" uid="uid://bhsk0p4obuir6" path="res://scenes/base/element/element.tscn" id="1"]
+[ext_resource type="Script" path="res://scenes/elements/relay/relay.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://i3np3a2r6kve" path="res://scenes/base/connector/in.tscn" id="3"]
+[ext_resource type="Shader" path="res://scenes/base/element/element_shader.gdshader" id="3_x5cko"]
+[ext_resource type="PackedScene" uid="uid://dd47odg8af7i3" path="res://scenes/base/connector/out.tscn" id="4"]
+[ext_resource type="Texture2D" uid="uid://cr8kjefxskk42" path="res://scenes/base/element/dissolve_texture.tres" id="4_d6sas"]
 
-[sub_resource type="ShaderMaterial" id=1]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dxaku"]
 resource_local_to_scene = true
-shader = ExtResource( 6 )
-shader_param/outline_width = 1.0
-shader_param/outline_color = null
-shader_param/is_outlined = false
-shader_param/is_dissolve = false
-shader_param/texture_size = Vector2( 137, 137 )
-shader_param/stripe_color = null
-shader_param/stripe_width = 4.0
-shader_param/stripe_bias = 2.0
-shader_param/is_striped = false
-shader_param/dissolveNoise = ExtResource( 7 )
+shader = ExtResource("3_x5cko")
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = null
+shader_parameter/is_outlined = false
+shader_parameter/is_dissolve = false
+shader_parameter/texture_size = Vector2(137, 137)
+shader_parameter/stripe_color = null
+shader_parameter/stripe_width = 4.0
+shader_parameter/stripe_bias = 2.0
+shader_parameter/is_striped = false
+shader_parameter/is_created = false
+shader_parameter/dissolveNoise = ExtResource("4_d6sas")
 
-[node name="Relay" instance=ExtResource( 1 )]
-script = ExtResource( 2 )
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_vyfmc"]
+load_path = "res://.godot/imported/relay_off.png-7e18fa8a9e71faa319735e57a6773aa9.ctex"
+
+[node name="Relay" instance=ExtResource("1")]
+script = ExtResource("2")
 type = 7
 
-[node name="CollisionShape2D" parent="FirstArea" index="0"]
-polygon = PoolVector2Array( 12, -54, 28, -46, 36, -33, 36, 6, 28, 10, 28, 14, 44, 22, 51, 22, 63, 28, 63, 34, 0, 65, -63, 34, -63, 28, -52, 22, -40, 24, -16, 12, -16, -20, -20, -22, -20, -26, -4, -34, -4, -46 )
+[node name="CollisionPolygon2D" parent="FirstArea" index="0"]
+polygon = PackedVector2Array(12, -54, 28, -46, 36, -33, 36, 6, 28, 10, 28, 14, 44, 22, 51, 22, 63, 28, 63, 34, 0, 65, -63, 34, -63, 28, -52, 22, -40, 24, -16, 12, -16, -20, -20, -22, -20, -26, -4, -34, -4, -46)
 
-[node name="Sprite" parent="." index="1"]
-material = SubResource( 1 )
-texture = ExtResource( 5 )
+[node name="FirstSprite2D" parent="." index="1"]
+material = SubResource("ShaderMaterial_dxaku")
+texture = SubResource("CompressedTexture2D_vyfmc")
 
-[node name="CollisionShape2D" parent="SafeArea" index="0"]
-polygon = PoolVector2Array( -70, 35, 0, 70, 70, 35, 3, 1 )
+[node name="CollisionPolygon2D" parent="SafeArea" index="0"]
+polygon = PackedVector2Array(-70, 35, 0, 70, 70, 35, 3, 1)
 
-[node name="In" parent="Connectors" index="0" instance=ExtResource( 3 )]
-position = Vector2( -51, 35 )
+[node name="In" parent="Connectors" index="0" instance=ExtResource("3")]
+position = Vector2(-51, 35)
 
-[node name="In2" parent="Connectors" index="1" instance=ExtResource( 3 )]
-position = Vector2( -11, 55 )
+[node name="In2" parent="Connectors" index="1" instance=ExtResource("3")]
+position = Vector2(-11, 55)
 
-[node name="Out" parent="Connectors" index="2" instance=ExtResource( 4 )]
-position = Vector2( 51, 35 )
+[node name="Out" parent="Connectors" index="2" instance=ExtResource("4")]
+position = Vector2(51, 35)

@@ -19,7 +19,15 @@ enum PopupIds {
 var _element: Element = null
 var _is_group: bool = false
 
-func _on_PopupTools_id_pressed(id: int) -> void:
+func _ready() -> void:
+	add_theme_font_size_override(
+		"font_size", Globals.FONTS.MENU_FONT_SIZE
+	)
+	add_theme_font_size_override(
+		"font_separator_size", Globals.FONTS.MENU_FONT_SIZE
+	)
+
+func _on_id_pressed(id: int) -> void:
 	if !_element:
 		return
 
@@ -36,7 +44,7 @@ func _on_PopupTools_id_pressed(id: int) -> void:
 	_is_group = false
 	_element = null
 
-func _on_PopupTools_about_to_show() -> void:
+func _on_about_to_popup() -> void:
 	if _element:
 		add_separator('', PopupIds.HEADER)
 		add_separator('', PopupIds.SEPARATOR)
@@ -54,14 +62,17 @@ func _on_PopupTools_about_to_show() -> void:
 		add_item('Unlink', PopupIds.UNLINK)
 		add_item('Delete', PopupIds.DELETE)
 
-func _on_Objects_menu_poped(element: Element, is_group: bool = false) -> void:
+func _on_objects_menu_poped(
+	element: Element, is_group: bool = false
+) -> void:
 	_is_group = is_group
 	_element = element
 	if _element:
 		clear()
-		rect_size = rect_min_size
-		var mouse_pos = get_global_mouse_position()
-		popup(Rect2(mouse_pos.x, mouse_pos.y, rect_size.x, rect_size.y))
+
+		size = min_size
+		popup(Rect2(0, 0, size.x, size.y))
+		position = get_mouse_position()
 	else:
 		_is_group = false
 		_element = null

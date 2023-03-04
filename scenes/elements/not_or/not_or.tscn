@@ -1,47 +1,49 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=9 format=3 uid="uid://cjut4utrfka0o"]
 
-[ext_resource path="res://scenes/base/element/element.tscn" type="PackedScene" id=1]
-[ext_resource path="res://scenes/elements/not_or/not_or_off.png" type="Texture" id=2]
-[ext_resource path="res://scenes/base/connector/in.tscn" type="PackedScene" id=3]
-[ext_resource path="res://scenes/elements/not_or/not_or.gd" type="Script" id=4]
-[ext_resource path="res://scenes/base/connector/out.tscn" type="PackedScene" id=5]
-[ext_resource path="res://scenes/base/element/element_shader.gdshader" type="Shader" id=6]
-[ext_resource path="res://scenes/base/element/dissolve_texture.tres" type="Texture" id=7]
+[ext_resource type="PackedScene" uid="uid://bhsk0p4obuir6" path="res://scenes/base/element/element.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://i3np3a2r6kve" path="res://scenes/base/connector/in.tscn" id="3"]
+[ext_resource type="Shader" path="res://scenes/base/element/element_shader.gdshader" id="3_bfdb7"]
+[ext_resource type="Script" path="res://scenes/elements/not_or/not_or.gd" id="4"]
+[ext_resource type="Texture2D" uid="uid://cr8kjefxskk42" path="res://scenes/base/element/dissolve_texture.tres" id="4_eglo2"]
+[ext_resource type="PackedScene" uid="uid://dd47odg8af7i3" path="res://scenes/base/connector/out.tscn" id="5"]
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k1ly0"]
 resource_local_to_scene = true
-shader = ExtResource( 6 )
-shader_param/outline_width = 1.0
-shader_param/outline_color = null
-shader_param/is_outlined = false
-shader_param/is_dissolve = false
-shader_param/texture_size = Vector2( 137, 137 )
-shader_param/stripe_color = null
-shader_param/stripe_width = 4.0
-shader_param/stripe_bias = 2.0
-shader_param/is_striped = false
-shader_param/is_created = false
-shader_param/dissolveNoise = ExtResource( 7 )
+shader = ExtResource("3_bfdb7")
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = null
+shader_parameter/is_outlined = false
+shader_parameter/is_dissolve = false
+shader_parameter/texture_size = Vector2(137, 137)
+shader_parameter/stripe_color = null
+shader_parameter/stripe_width = 4.0
+shader_parameter/stripe_bias = 2.0
+shader_parameter/is_striped = false
+shader_parameter/is_created = false
+shader_parameter/dissolveNoise = ExtResource("4_eglo2")
 
-[node name="NotOr" groups=["Energy"] instance=ExtResource( 1 )]
-script = ExtResource( 4 )
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_pmjtc"]
+load_path = "res://.godot/imported/not_or_off.png-02a3407f95f3b96733501470e3ce1622.ctex"
+
+[node name="NotOr" groups=["Energy"] instance=ExtResource("1")]
+script = ExtResource("4")
 type = 13
 
-[node name="CollisionShape2D" parent="FirstArea" index="0"]
-polygon = PoolVector2Array( 32, -76, 64, -60, 64, -56, 56, -52, 56, -24, 64, -20, 64, -16, 52, -10, 52, -6, 56, -4, 56, 0, 71, 8, 84, 6, 96, 12, 96, 17, -32, 80, -96, 49, -96, 44, -68, 30, -68, 18, -60, 14, -60, -14, -68, -18, -68, -22, -52, -30, -36, -22, -16, -32, -8, -28, -8, -24, -12, -22, -12, 2, 8, -8, 8, -40, 4, -42, 4, -46, 24, -56, 24, -60, 16, -64, 16, -68 )
+[node name="CollisionPolygon2D" parent="FirstArea" index="0"]
+polygon = PackedVector2Array(32, -76, 64, -60, 64, -56, 56, -52, 56, -24, 64, -20, 64, -16, 52, -10, 52, -6, 56, -4, 56, 0, 71, 8, 84, 6, 96, 12, 96, 17, -32, 80, -96, 49, -96, 44, -68, 30, -68, 18, -60, 14, -60, -14, -68, -18, -68, -22, -52, -30, -36, -22, -16, -32, -8, -28, -8, -24, -12, -22, -12, 2, 8, -8, 8, -40, 4, -42, 4, -46, 24, -56, 24, -60, 16, -64, 16, -68)
 
-[node name="Sprite" parent="." index="1"]
-material = SubResource( 2 )
-texture = ExtResource( 2 )
+[node name="FirstSprite2D" parent="." index="1"]
+material = SubResource("ShaderMaterial_k1ly0")
+texture = SubResource("CompressedTexture2D_pmjtc")
 
-[node name="CollisionShape2D" parent="SafeArea" index="0"]
-polygon = PoolVector2Array( -102, 51, -31, 86, 102, 19, 28, -15 )
+[node name="CollisionPolygon2D" parent="SafeArea" index="0"]
+polygon = PackedVector2Array(-102, 51, -31, 86, 102, 19, 28, -15)
 
-[node name="In" parent="Connectors" index="0" instance=ExtResource( 3 )]
-position = Vector2( -83, 51 )
+[node name="In" parent="Connectors" index="0" instance=ExtResource("3")]
+position = Vector2(-83, 51)
 
-[node name="In2" parent="Connectors" index="1" instance=ExtResource( 3 )]
-position = Vector2( -43, 71 )
+[node name="In2" parent="Connectors" index="1" instance=ExtResource("3")]
+position = Vector2(-43, 71)
 
-[node name="Out" parent="Connectors" index="2" instance=ExtResource( 5 )]
-position = Vector2( 83, 19 )
+[node name="Out" parent="Connectors" index="2" instance=ExtResource("5")]
+position = Vector2(83, 19)

@@ -1,0 +1,472 @@
+[gd_scene load_steps=30 format=3 uid="uid://b6acfo7s7rnlx"]
+
+[ext_resource type="Script" path="res://scenes/menus/element_menu/element_menu.gd" id="1_jgni7"]
+[ext_resource type="Texture2D" uid="uid://cfxs1woqxwq36" path="res://scenes/menus/element_menu/wire_icon.png" id="2_ii1qw"]
+[ext_resource type="Texture2D" uid="uid://lle1cay2s7o1" path="res://scenes/menus/element_menu/battery_icon.png" id="3_6rlij"]
+[ext_resource type="Texture2D" uid="uid://couri7h8qw2fp" path="res://scenes/menus/element_menu/lamp_icon.png" id="4_j3iby"]
+[ext_resource type="Texture2D" uid="uid://hsigb321afrt" path="res://scenes/menus/element_menu/display_icon.png" id="5_c5g48"]
+[ext_resource type="Texture2D" uid="uid://c6aqtwhd15ysx" path="res://scenes/menus/element_menu/switch_icon.png" id="6_myrku"]
+[ext_resource type="Texture2D" uid="uid://cbphp2dykk24i" path="res://scenes/menus/element_menu/relay_icon.png" id="7_x8nkq"]
+[ext_resource type="Texture2D" uid="uid://dvffw88udru7i" path="res://scenes/menus/element_menu/power_relay_icon.png" id="8_as52l"]
+[ext_resource type="Texture2D" uid="uid://m3ttrhvoqpix" path="res://scenes/menus/element_menu/inverter_icon.png" id="9_4dngy"]
+[ext_resource type="Texture2D" uid="uid://nuekdbs7x5fe" path="res://scenes/menus/element_menu/power_inverter_icon.png" id="10_2a38q"]
+[ext_resource type="Texture2D" uid="uid://cxs4sbywjn3eh" path="res://scenes/menus/element_menu/and_icon.png" id="11_01ji2"]
+[ext_resource type="Texture2D" uid="uid://cu4fu6na78maa" path="res://scenes/menus/element_menu/or_icon.png" id="12_xcdod"]
+[ext_resource type="Texture2D" uid="uid://dneqfhtumyhho" path="res://scenes/menus/element_menu/not_and_icon.png" id="13_s244o"]
+[ext_resource type="Texture2D" uid="uid://bxn87kvace2a5" path="res://scenes/menus/element_menu/not_or_icon.png" id="14_1yqlk"]
+[ext_resource type="Texture2D" uid="uid://djn2yljwagbyd" path="res://scenes/menus/element_menu/ex_and_icon.png" id="15_5ti61"]
+[ext_resource type="Texture2D" uid="uid://cyg0uprf4vke4" path="res://scenes/menus/element_menu/ex_or_icon.png" id="16_dvu0i"]
+[ext_resource type="Texture2D" uid="uid://bxnli8nrh62se" path="res://scenes/menus/element_menu/half_adder_icon.png" id="17_74vjs"]
+[ext_resource type="Texture2D" uid="uid://brf6x8r8qyoai" path="res://scenes/menus/element_menu/full_adder_icon.png" id="18_ipv0k"]
+[ext_resource type="Texture2D" uid="uid://t0fien2ojhc2" path="res://scenes/menus/element_menu/adder_8_bit_icon.png" id="19_kgtw5"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_jswpn"]
+command_or_control_autoremap = true
+keycode = 87
+
+[sub_resource type="Shortcut" id="2"]
+events = [SubResource("InputEventKey_jswpn")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_dss27"]
+command_or_control_autoremap = true
+keycode = 66
+
+[sub_resource type="Shortcut" id="4"]
+events = [SubResource("InputEventKey_dss27")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_q1fpd"]
+command_or_control_autoremap = true
+keycode = 76
+
+[sub_resource type="Shortcut" id="6"]
+events = [SubResource("InputEventKey_q1fpd")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_1ox14"]
+command_or_control_autoremap = true
+keycode = 68
+
+[sub_resource type="Shortcut" id="8"]
+events = [SubResource("InputEventKey_1ox14")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_4xt7x"]
+command_or_control_autoremap = true
+keycode = 83
+
+[sub_resource type="Shortcut" id="Shortcut_otl85"]
+events = [SubResource("InputEventKey_4xt7x")]
+
+[node name="ElementMenu" type="VBoxContainer"]
+custom_minimum_size = Vector2(84, 40)
+offset_right = 196.0
+offset_bottom = 221.0
+size_flags_horizontal = 0
+mouse_filter = 0
+script = ExtResource("1_jgni7")
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="."]
+custom_minimum_size = Vector2(84, 20)
+layout_mode = 2
+mouse_filter = 1
+text = "Elements"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="ColorRect" type="ColorRect" parent="Label"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.12549, 0.12549, 0.12549, 1)
+metadata/_edit_lock_ = true
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 2
+columns = 5
+
+[node name="Wire" type="TextureButton" parent="GridContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+tooltip_text = "Wire"
+mouse_filter = 1
+toggle_mode = true
+shortcut = SubResource("2")
+texture_normal = ExtResource("2_ii1qw")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Wire"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
+[node name="Battery" type="TextureButton" parent="GridContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+tooltip_text = "Battery"
+mouse_filter = 1
+toggle_mode = true
+shortcut = SubResource("4")
+texture_normal = ExtResource("3_6rlij")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Battery"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
+[node name="Lamp" type="TextureButton" parent="GridContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+tooltip_text = "Lamp"
+mouse_filter = 1
+toggle_mode = true
+shortcut = SubResource("6")
+texture_normal = ExtResource("4_j3iby")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Lamp"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
+[node name="Display" type="TextureButton" parent="GridContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+tooltip_text = "Display"
+mouse_filter = 1
+toggle_mode = true
+shortcut = SubResource("8")
+texture_normal = ExtResource("5_c5g48")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Display"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
+[node name="Switch" type="TextureButton" parent="GridContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_stretch_ratio = 0.5
+tooltip_text = "Switch"
+mouse_filter = 1
+toggle_mode = true
+shortcut = SubResource("Shortcut_otl85")
+texture_normal = ExtResource("6_myrku")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Switch"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
+[node name="Relay" type="TextureButton" parent="GridContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_stretch_ratio = 0.5
+tooltip_text = "Relay"
+mouse_filter = 1
+toggle_mode = true
+texture_normal = ExtResource("7_x8nkq")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Relay"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
+[node name="Power Relay" type="TextureButton" parent="GridContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_stretch_ratio = 0.5
+tooltip_text = "Power Relay"
+mouse_filter = 1
+toggle_mode = true
+texture_normal = ExtResource("8_as52l")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Power Relay"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
+[node name="Inverter" type="TextureButton" parent="GridContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_stretch_ratio = 0.5
+tooltip_text = "Inverter"
+mouse_filter = 1
+toggle_mode = true
+texture_normal = ExtResource("9_4dngy")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Inverter"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
+[node name="Power Inverter" type="TextureButton" parent="GridContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_stretch_ratio = 0.5
+tooltip_text = "Power Inverter"
+mouse_filter = 1
+toggle_mode = true
+texture_normal = ExtResource("10_2a38q")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Power Inverter"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
+[node name="And" type="TextureButton" parent="GridContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_stretch_ratio = 0.5
+tooltip_text = "And"
+mouse_filter = 1
+toggle_mode = true
+texture_normal = ExtResource("11_01ji2")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/And"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
+[node name="Or" type="TextureButton" parent="GridContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_stretch_ratio = 0.5
+tooltip_text = "Or"
+mouse_filter = 1
+toggle_mode = true
+texture_normal = ExtResource("12_xcdod")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Or"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
+[node name="Not And" type="TextureButton" parent="GridContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_stretch_ratio = 0.5
+tooltip_text = "Not And"
+mouse_filter = 1
+toggle_mode = true
+texture_normal = ExtResource("13_s244o")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Not And"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
+[node name="Not Or" type="TextureButton" parent="GridContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_stretch_ratio = 0.5
+tooltip_text = "Not Or"
+mouse_filter = 1
+toggle_mode = true
+texture_normal = ExtResource("14_1yqlk")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Not Or"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
+[node name="Ex And" type="TextureButton" parent="GridContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_stretch_ratio = 0.5
+tooltip_text = "Ex And"
+mouse_filter = 1
+toggle_mode = true
+texture_normal = ExtResource("15_5ti61")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Ex And"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
+[node name="Ex Or" type="TextureButton" parent="GridContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_stretch_ratio = 0.5
+tooltip_text = "Ex Or"
+mouse_filter = 1
+toggle_mode = true
+texture_normal = ExtResource("16_dvu0i")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Ex Or"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
+[node name="Half Adder" type="TextureButton" parent="GridContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_stretch_ratio = 0.5
+tooltip_text = "Half Adder"
+mouse_filter = 1
+toggle_mode = true
+texture_normal = ExtResource("17_74vjs")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Half Adder"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
+[node name="Full Adder" type="TextureButton" parent="GridContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_stretch_ratio = 0.5
+tooltip_text = "Half Adder"
+mouse_filter = 1
+toggle_mode = true
+texture_normal = ExtResource("18_ipv0k")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Full Adder"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
+[node name="Adder 8 Bit" type="TextureButton" parent="GridContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_stretch_ratio = 0.5
+tooltip_text = "Half Adder"
+mouse_filter = 1
+toggle_mode = true
+texture_normal = ExtResource("19_kgtw5")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Adder 8 Bit"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
+[node name="HideButton" type="Button" parent="."]
+layout_mode = 2
+focus_mode = 0
+mouse_filter = 1
+text = "^"
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+[connection signal="pressed" from="HideButton" to="." method="_on_hide_button_pressed"]

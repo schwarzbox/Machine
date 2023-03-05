@@ -1,14 +1,19 @@
 extends Node2D
 
-signal scene_deselected
+# ElementMenu
 signal clone_pressed
-signal menu_poped
-signal sprite_showed
-signal sprite_hided
-signal sprite_texture_saved
-signal sprite_texture_removed
-signal sprite_position_updated
+# Cursor
 signal cursor_shape_updated
+# PopupTool
+signal menu_poped
+# ElementMenu
+signal scene_deselected
+# Cursor
+signal sprite_hided
+signal sprite_position_updated
+signal sprite_showed
+signal sprite_texture_removed
+signal sprite_texture_saved
 
 var actual_zoom: float = 1
 
@@ -33,7 +38,7 @@ var active_state: RefCounted = idle_state
 var _wire_scene: PackedScene = load("res://scenes/elements/wire/wire.tscn")
 var _wire_icon: Texture2D= load("res://scenes/elements/wire/wire_cursor_on.png")
 
-var _sort_util = load("res://utils/sort_util.gd").new()
+var _sort_util: SortUtil = load("res://utils/sort_util.gd").new()
 
 func _ready() -> void:
 	prints(name, "ready")
@@ -110,7 +115,7 @@ func has_safe_area_entered_element() -> bool:
 
 func sort_objects_for_representation():
 	var children_top = get_children()
-	children_top.sort_custom(Callable(_sort_util,"__sort_by_rect_bottom_side"))
+	children_top.sort_custom(Callable(_sort_util,"_sort_by_rect_bottom_side"))
 	for i in range(children_top.size()):
 		var child_top = children_top[i]
 		var index = i

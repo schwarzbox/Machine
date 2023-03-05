@@ -1,9 +1,11 @@
 extends VBoxContainer
 
+# Elements
 signal button_pressed
-signal sprite_showed
-signal sprite_hided
 signal element_added
+# Cursor
+signal sprite_hided
+signal sprite_showed
 
 var _elements_scenes: Dictionary = {
 	"Wire": [
@@ -88,15 +90,15 @@ func _ready() -> void:
 	for child in $GridContainer.get_children():
 		child.connect(
 			"pressed",
-			Callable(self, "_on_button_pressed").bind(
+			Callable(self, "_on_element_button_pressed").bind(
 				child,
 				_elements_scenes[child.name][0],
 				_elements_scenes[child.name][1]
 			)
 		)
-	for label in [$Label, $HideButton]:
-		label.add_theme_font_size_override(
-			"font_size", Globals.FONTS.MENU_FONT_SIZE
+	for node in [$HideButton]:
+		node.add_theme_font_size_override(
+			"font_size", Globals.FONTS.DEFAULT_FONT_SIZE
 		)
 
 func _toogle(instance = null) -> void:
@@ -123,7 +125,7 @@ func _on_mouse_exited() -> void:
 	_is_mouse_entered = false
 	emit_signal("sprite_showed")
 
-func _on_button_pressed(
+func _on_element_button_pressed(
 	instance: TextureButton, scene: PackedScene, icon: Texture2D
 ) -> void:
 
@@ -141,10 +143,10 @@ func _on_hide_button_pressed() -> void:
 		$GridContainer.show()
 	_update_rect_size()
 
-func _on_objects_scene_deselected() -> void:
+func _on_elements_scene_deselected() -> void:
 	_toogle()
 
-func _on_objects_clone_pressed(element: Element) -> void:
+func _on_elements_clone_pressed(element: Element) -> void:
 	var scene: PackedScene = (_elements_scenes[element.type_name][0])
 	var clone: Element = scene.instantiate()
 	emit_signal("element_added", clone)

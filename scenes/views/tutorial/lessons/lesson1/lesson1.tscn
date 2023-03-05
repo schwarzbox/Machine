@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://dddwuiuqjw7ec"]
+
+[ext_resource type="PackedScene" uid="uid://dgmx3kbp2v0xc" path="res://scenes/base/view/view.tscn" id="1_71u0s"]
+[ext_resource type="Script" path="res://scenes/views/tutorial/lessons/lesson1/lesson1.gd" id="2_7q2ps"]
+[ext_resource type="PackedScene" uid="uid://cjyhqxpr4pbmf" path="res://scenes/menus/level_menu/level_menu.tscn" id="3_pfprx"]
+[ext_resource type="Script" path="res://scenes/views/tutorial/lessons/lesson1/elements.gd" id="4_oh3vl"]
+
+[node name="Lesson1" instance=ExtResource("1_71u0s")]
+script = ExtResource("2_7q2ps")
+
+[node name="LevelMenu" parent="CanvasLayer" index="0" instance=ExtResource("3_pfprx")]
+offset_left = -95.0
+offset_bottom = 123.0
+
+[node name="Elements" type="Node2D" parent="World" index="0"]
+script = ExtResource("4_oh3vl")
+
+[connection signal="pressed" from="CanvasLayer/LevelMenu/Info/Back" to="." method="_on_back_pressed"]
+
+[editable path="CanvasLayer/LevelMenu"]

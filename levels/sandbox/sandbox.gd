@@ -1,7 +1,0 @@
-extends Level
-
-func _ready() -> void:
-	type = Globals.Levels.SANDBOX
-
-	super._ready()
-

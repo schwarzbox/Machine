@@ -1,11 +1,50 @@
-[gd_scene load_steps=3 format=3 uid="uid://caiqmg6c1qngm"]
+[gd_scene load_steps=4 format=3 uid="uid://de5qcme0f2evj"]
 
 [ext_resource type="Script" path="res://main/main.gd" id="1"]
-[ext_resource type="PackedScene" uid="uid://sqa0g712xqea" path="res://main/gui.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://dgmx3kbp2v0xc" path="res://scenes/base/view/view.tscn" id="1_x3v8t"]
+[ext_resource type="LabelSettings" uid="uid://cdlj1jofg5kij" path="res://main/title_settings.tres" id="3_6bptk"]
 
-[node name="Main" type="Node"]
+[node name="Main" instance=ExtResource("1_x3v8t")]
 script = ExtResource("1")
 
-[node name="GUI" parent="." instance=ExtResource("2")]
+[node name="Menu" type="CenterContainer" parent="CanvasLayer" index="0"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="World" type="Node" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Menu" index="0"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/Menu/VBoxContainer" index="0"]
+layout_mode = 2
+text = "+ machine"
+label_settings = ExtResource("3_6bptk")
+uppercase = true
+
+[node name="Tutorial" type="Button" parent="CanvasLayer/Menu/VBoxContainer" index="1"]
+layout_mode = 2
+text = "Tutorial"
+
+[node name="Campaign" type="Button" parent="CanvasLayer/Menu/VBoxContainer" index="2"]
+layout_mode = 2
+text = "Campaign"
+
+[node name="Sandbox" type="Button" parent="CanvasLayer/Menu/VBoxContainer" index="3"]
+layout_mode = 2
+text = "Sandbox"
+
+[node name="Settings" type="Button" parent="CanvasLayer/Menu/VBoxContainer" index="4"]
+layout_mode = 2
+text = "Settings"
+
+[node name="Exit" type="Button" parent="CanvasLayer/Menu/VBoxContainer" index="5"]
+layout_mode = 2
+text = "Exit"
+
+[connection signal="pressed" from="CanvasLayer/Menu/VBoxContainer/Tutorial" to="." method="_on_tutorial_pressed"]
+[connection signal="pressed" from="CanvasLayer/Menu/VBoxContainer/Campaign" to="." method="_on_campaign_pressed"]
+[connection signal="pressed" from="CanvasLayer/Menu/VBoxContainer/Sandbox" to="." method="_on_sandbox_pressed"]
+[connection signal="pressed" from="CanvasLayer/Menu/VBoxContainer/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="CanvasLayer/Menu/VBoxContainer/Exit" to="." method="_on_exit_pressed"]

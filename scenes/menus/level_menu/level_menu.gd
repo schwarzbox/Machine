@@ -1,17 +1,17 @@
 extends VBoxContainer
 
-signal sprite_showed
+# Cursor
 signal sprite_hided
+signal sprite_showed
 
 func _ready() -> void:
 	hide_menu()
 	_update_rect_size()
 
-	for label in [$Label, $Info/Label, $Info/Back, $HideButton]:
-		label.add_theme_font_size_override(
-			"font_size", Globals.FONTS.MENU_FONT_SIZE
+	for node in [$Info/Label, $Info/Back, $HideButton]:
+		node.add_theme_font_size_override(
+			"font_size", Globals.FONTS.DEFAULT_FONT_SIZE
 		)
-
 
 func _unhandled_input(event) -> void:
 	if event is InputEventKey:
@@ -50,3 +50,4 @@ func _on_file_menu_menu_hided() -> void:
 
 func _on_file_menu_file_name_changed(txt: String) -> void:
 	$Info/Label.text = txt
+

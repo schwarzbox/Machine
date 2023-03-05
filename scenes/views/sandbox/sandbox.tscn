@@ -1,0 +1,67 @@
+[gd_scene load_steps=10 format=3 uid="uid://b81dqlbi4n7no"]
+
+[ext_resource type="PackedScene" uid="uid://dgmx3kbp2v0xc" path="res://scenes/base/view/view.tscn" id="1_q1d62"]
+[ext_resource type="Script" path="res://scenes/views/sandbox/sandbox.gd" id="2_n785n"]
+[ext_resource type="PackedScene" uid="uid://b6acfo7s7rnlx" path="res://scenes/menus/element_menu/element_menu.tscn" id="3_8psw8"]
+[ext_resource type="PackedScene" uid="uid://bkgkrn50kx3se" path="res://scenes/menus/popup_tool/popup_tool.tscn" id="4_qxpja"]
+[ext_resource type="PackedScene" uid="uid://cjyhqxpr4pbmf" path="res://scenes/menus/level_menu/level_menu.tscn" id="5_je47x"]
+[ext_resource type="PackedScene" uid="uid://pvd2iu5xx0tn" path="res://scenes/base/camera/camera_2d.tscn" id="6_7tsva"]
+[ext_resource type="PackedScene" uid="uid://bpsu2pj51hgan" path="res://scenes/menus/file_menu/file_menu.tscn" id="6_ly7c7"]
+[ext_resource type="PackedScene" path="res://scenes/base/cursor/cursor.tscn" id="7_q3ctd"]
+[ext_resource type="Script" path="res://scenes/views/sandbox/elements.gd" id="8_2svtm"]
+
+[node name="Sandbox" instance=ExtResource("1_q1d62")]
+script = ExtResource("2_n785n")
+type = 3
+
+[node name="ElementMenu" parent="CanvasLayer" index="0" instance=ExtResource("3_8psw8")]
+
+[node name="PopupTool" parent="CanvasLayer" index="1" instance=ExtResource("4_qxpja")]
+visible = false
+
+[node name="LevelMenu" parent="CanvasLayer" index="2" instance=ExtResource("5_je47x")]
+
+[node name="ColorLabel" parent="CanvasLayer/LevelMenu" index="0"]
+text = "Sandbox"
+
+[node name="FileMenu" parent="CanvasLayer/LevelMenu/Info" index="1" instance=ExtResource("6_ly7c7")]
+layout_mode = 2
+
+[node name="Elements" type="Node2D" parent="World" index="0"]
+script = ExtResource("8_2svtm")
+
+[node name="Camera2D" parent="." index="2" instance=ExtResource("6_7tsva")]
+offset = Vector2(800, 600)
+
+[node name="Cursor" parent="." index="3" instance=ExtResource("7_q3ctd")]
+
+[connection signal="button_pressed" from="CanvasLayer/ElementMenu" to="World/Elements" method="_on_element_menu_button_pressed"]
+[connection signal="element_added" from="CanvasLayer/ElementMenu" to="World/Elements" method="_on_element_menu_element_added"]
+[connection signal="sprite_hided" from="CanvasLayer/ElementMenu" to="Cursor" method="_on_element_menu_sprite_hided"]
+[connection signal="sprite_showed" from="CanvasLayer/ElementMenu" to="Cursor" method="_on_element_menu_sprite_showed"]
+[connection signal="clone_pressed" from="CanvasLayer/PopupTool" to="World/Elements" method="_on_popup_tool_clone_pressed"]
+[connection signal="delete_pressed" from="CanvasLayer/PopupTool" to="World/Elements" method="_on_popup_tool_delete_pressed"]
+[connection signal="flip_pressed" from="CanvasLayer/PopupTool" to="World/Elements" method="_on_popup_tool_flip_pressed"]
+[connection signal="unlink_pressed" from="CanvasLayer/PopupTool" to="World/Elements" method="_on_popup_tool_unlink_pressed"]
+[connection signal="sprite_hided" from="CanvasLayer/LevelMenu" to="Cursor" method="_on_level_menu_sprite_hided"]
+[connection signal="sprite_showed" from="CanvasLayer/LevelMenu" to="Cursor" method="_on_level_menu_sprite_showed"]
+[connection signal="element_added" from="CanvasLayer/LevelMenu/Info/FileMenu" to="World/Elements" method="_on_file_menu_element_added"]
+[connection signal="elements_deleted" from="CanvasLayer/LevelMenu/Info/FileMenu" to="World/Elements" method="_on_file_menu_elements_deleted"]
+[connection signal="file_loaded" from="CanvasLayer/LevelMenu/Info/FileMenu" to="Camera2D" method="_on_file_menu_file_loaded"]
+[connection signal="file_name_changed" from="CanvasLayer/LevelMenu/Info/FileMenu" to="CanvasLayer/LevelMenu" method="_on_file_menu_file_name_changed"]
+[connection signal="menu_hided" from="CanvasLayer/LevelMenu/Info/FileMenu" to="CanvasLayer/LevelMenu" method="_on_file_menu_menu_hided"]
+[connection signal="sprite_hided" from="CanvasLayer/LevelMenu/Info/FileMenu" to="Cursor" method="_on_file_menu_sprite_hided"]
+[connection signal="sprite_showed" from="CanvasLayer/LevelMenu/Info/FileMenu" to="Cursor" method="_on_file_menu_sprite_showed"]
+[connection signal="pressed" from="CanvasLayer/LevelMenu/Info/Back" to="." method="_on_back_pressed"]
+[connection signal="clone_pressed" from="World/Elements" to="CanvasLayer/ElementMenu" method="_on_elements_clone_pressed"]
+[connection signal="cursor_shape_updated" from="World/Elements" to="Cursor" method="_on_elements_cursor_shape_updated"]
+[connection signal="menu_poped" from="World/Elements" to="CanvasLayer/PopupTool" method="_on_elements_menu_poped"]
+[connection signal="scene_deselected" from="World/Elements" to="CanvasLayer/ElementMenu" method="_on_elements_scene_deselected"]
+[connection signal="sprite_hided" from="World/Elements" to="Cursor" method="_on_elements_sprite_hided"]
+[connection signal="sprite_position_updated" from="World/Elements" to="Cursor" method="_on_elements_sprite_position_updated"]
+[connection signal="sprite_showed" from="World/Elements" to="Cursor" method="_on_elements_sprite_showed"]
+[connection signal="sprite_texture_removed" from="World/Elements" to="Cursor" method="_on_elements_sprite_texture_removed"]
+[connection signal="sprite_texture_saved" from="World/Elements" to="Cursor" method="_on_elements_sprite_texture_saved"]
+[connection signal="zoom_changed" from="Camera2D" to="World/Elements" method="_on_camera_2d_zoom_changed"]
+
+[editable path="CanvasLayer/LevelMenu"]

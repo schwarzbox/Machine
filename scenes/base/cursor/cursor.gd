@@ -44,24 +44,25 @@ func _on_level_menu_sprite_showed() -> void:
 func _on_level_menu_sprite_hided() -> void:
 	_hide_sprite()
 
-func _on_objects_sprite_showed(tx: Texture2D = null) -> void:
+func _on_elements_sprite_showed(tx: Texture2D = null) -> void:
 	_show_sprite(tx)
 
-func _on_objects_sprite_hided() -> void:
+func _on_elements_sprite_hided() -> void:
 	_hide_sprite()
 
-func _on_objects_sprite_texture_saved(
+func _on_elements_sprite_texture_saved(
 	tx: Texture2D, polygon: PackedVector2Array
 ) -> void:
 	$Area2D/CollisionPolygon2D.polygon = polygon
 	_cursor_texture = tx
 
-func _on_objects_sprite_texture_removed() -> void:
+func _on_elements_sprite_texture_removed() -> void:
 	$Area2D/CollisionPolygon2D.polygon = []
 	_cursor_texture = null
 
-func _on_objects_sprite_position_updated(pos: Vector2) -> void:
+func _on_elements_sprite_position_updated(pos: Vector2) -> void:
 	_set_position(pos)
 
-func _on_objects_cursor_shape_updated(shape: int) -> void:
+func _on_elements_cursor_shape_updated(shape: int) -> void:
 	Input.set_default_cursor_shape(shape)
+

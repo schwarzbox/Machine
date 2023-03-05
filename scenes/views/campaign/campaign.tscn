@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://dotn7vv3eyrxo"]
+
+[ext_resource type="PackedScene" uid="uid://dgmx3kbp2v0xc" path="res://scenes/base/view/view.tscn" id="1_m8d2a"]
+[ext_resource type="Script" path="res://scenes/views/campaign/campaign.gd" id="2_nxqq3"]
+
+[node name="Campaign" instance=ExtResource("1_m8d2a")]
+script = ExtResource("2_nxqq3")
+type = 2

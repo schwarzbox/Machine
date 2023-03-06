@@ -17,14 +17,14 @@ var _relay_util3: RelayDelayUtil = _relay_util_class.new()
 func _ready() -> void:
 	type = Globals.Elements.FULL_ADDER
 
-	super._ready()
+	super()
 
 func reset_energy() -> void:
 	_relay_util1.reset()
 	_relay_util2.reset()
 	_relay_util3.reset()
 	_set_off_texture()
-	super.reset_energy()
+	super()
 
 func _has_energy() -> bool:
 	var in1: bool = _relay_util1.run($Connectors/In.connected_has_energy())

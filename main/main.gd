@@ -1,7 +1,5 @@
 extends View
-
-# hertz scheme
-
+# merge
 # try top-down elem
 
 # clone outside safe area?
@@ -74,7 +72,7 @@ func _ready() -> void:
 		)
 
 	# warning-ignore:return_value_discarded
-	connect("tree_exiting", Callable(self, "_on_main_exited"))
+	connect("tree_exiting", self._on_main_exited)
 
 	_setup()
 
@@ -84,7 +82,7 @@ func _setup() -> void:
 	for view in _views_scenes:
 		var node: Node = view.instantiate()
 		# warning-ignore:return_value_discarded
-		node.connect("view_exited", Callable(self, "_on_view_exited"))
+		node.connect("view_exited", self._on_view_exited)
 		_views.append(node)
 
 	$CanvasLayer/Menu.show()

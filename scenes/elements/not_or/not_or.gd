@@ -13,13 +13,13 @@ func _ready() -> void:
 	type = Globals.Elements.NOT_OR
 	add_to_group("Energy")
 
-	super._ready()
+	super()
 
 func reset_energy():
 	_relay_util1.reset()
 	_relay_util2.reset()
 	_set_off_texture()
-	super.reset_energy()
+	super()
 
 func _has_energy() -> bool:
 	var in1: bool = _relay_util1.run($Connectors/In.connected_has_energy())

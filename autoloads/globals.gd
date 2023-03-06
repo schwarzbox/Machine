@@ -60,7 +60,7 @@ const GAME: Dictionary = {
 }
 
 const CAMERA: Dictionary = {
-	ZOOM_MAX = 4.0,
+	ZOOM_MAX = 3.0,
 	PAN_SPEED = 8.0,
 	DRAG_SPEED = 1.5
 }

@@ -7,7 +7,7 @@ func _ready() -> void:
 	type = Globals.Elements.BATTERY
 	add_to_group("Energy")
 
-	super._ready()
+	super()
 
 func _has_energy() -> bool:
 	$Connectors/Out.set_energy(true)

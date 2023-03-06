@@ -19,7 +19,7 @@ func _ready() -> void:
 	for _i in range(_connectors.size()):
 		_relay_utils.append(_relay_util_class.new())
 
-	super._ready()
+	super()
 
 func reset_energy() -> void:
 	_relay_utilC.reset()
@@ -27,7 +27,7 @@ func reset_energy() -> void:
 		ru.reset()
 
 	_set_off_texture()
-	super.reset_energy()
+	super()
 
 func _has_energy() -> bool:
 	var inC: bool = _relay_utilC.run($Connectors/InC.connected_has_energy())

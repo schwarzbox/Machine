@@ -6,7 +6,7 @@ const _off: Texture2D = preload("res://scenes/elements/lamp/lamp_off.png")
 func _ready() -> void:
 	type = Globals.Elements.LAMP
 
-	super._ready()
+	super()
 
 func _has_energy() -> bool:
 	for child in _connectors_children:

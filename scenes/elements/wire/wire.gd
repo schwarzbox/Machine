@@ -7,7 +7,7 @@ var _is_second_area_mouse_entered = false
 
 func _ready() -> void:
 	type = Globals.Elements.WIRE
-	super._ready()
+	super()
 
 	hide_sprites()
 
@@ -227,7 +227,7 @@ func unlink_wire() -> void:
 		unlink_points(false, true)
 
 func unlink() -> void:
-	super.unlink()
+	super()
 	unlink_points(true, true)
 
 func unlink_points(is_first: bool = false, is_second: bool = false) -> void:

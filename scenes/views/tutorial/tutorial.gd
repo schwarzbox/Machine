@@ -33,9 +33,9 @@ func _setup() -> void:
 
 	for view_scene in _views_scenes.values():
 		var node: Node = view_scene.instantiate()
-		node.connect("view_restarted", Callable(self, "_on_view_restarted"))
-		node.connect("view_changed", Callable(self, "_on_view_changed"))
-		node.connect("view_exited", Callable(self, "_on_view_exited"))
+		node.connect("view_restarted", self._on_view_restarted)
+		node.connect("view_changed", self._on_view_changed)
+		node.connect("view_exited", self._on_view_exited)
 		_views.append(node)
 
 	$CanvasLayer/Menu.show()

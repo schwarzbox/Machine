@@ -10,12 +10,12 @@ var _relay_util: RelayDelayUtil = preload("res://utils/relay_delay_util.gd").new
 func _ready() -> void:
 	type = Globals.Elements.RELAY
 
-	super._ready()
+	super()
 
 func reset_energy():
 	_relay_util.reset()
 	_set_off_texture()
-	super.reset_energy()
+	super()
 
 func _has_energy() -> bool:
 	var in1: bool = _relay_util.run($Connectors/In.connected_has_energy())

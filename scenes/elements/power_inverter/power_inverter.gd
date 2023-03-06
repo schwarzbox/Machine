@@ -9,12 +9,12 @@ func _ready() -> void:
 	type = Globals.Elements.POWER_INVERTER
 	add_to_group("Energy")
 
-	super._ready()
+	super()
 
 func reset_energy():
 	_relay_util.reset()
 	_set_off_texture()
-	super.reset_energy()
+	super()
 
 func _has_energy() -> bool:
 	var in1: bool = _relay_util.run($Connectors/In.connected_has_energy())

@@ -50,16 +50,13 @@ func _ready() -> void:
 	_connectors_children = $Connectors.get_children()
 	for connector in _connectors_children:
 		connector.connect(
-			"connector_mouse_entered",
-			Callable(self, "_on_connector_mouse_entered")
+			"connector_mouse_entered", self._on_connector_mouse_entered
 		)
 		connector.connect(
-			"connector_mouse_exited",
-			Callable(self, "_on_connector_mouse_exited")
+			"connector_mouse_exited", self._on_connector_mouse_exited
 		)
 		connector.connect(
-			"connector_area_entered",
-			Callable(self, "_on_connector_area_entered")
+			"connector_area_entered", self._on_connector_area_entered
 		)
 
 	type_name = Globals.Elements.keys()[type].capitalize()

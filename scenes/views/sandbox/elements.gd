@@ -1,14 +1,19 @@
 extends Node2D
 
-signal scene_deselected
+# ElementMenu
 signal clone_pressed
-signal menu_poped
-signal sprite_showed
-signal sprite_hided
-signal sprite_texture_saved
-signal sprite_texture_removed
-signal sprite_position_updated
+# Cursor
 signal cursor_shape_updated
+# PopupTool
+signal menu_poped
+# ElementMenu
+signal scene_deselected
+# Cursor
+signal sprite_hided
+signal sprite_position_updated
+signal sprite_showed
+signal sprite_texture_removed
+signal sprite_texture_saved
 
 var actual_zoom: float = 1
 
@@ -33,7 +38,7 @@ var active_state: RefCounted = idle_state
 var _wire_scene: PackedScene = load("res://scenes/elements/wire/wire.tscn")
 var _wire_icon: Texture2D= load("res://scenes/elements/wire/wire_cursor_on.png")
 
-var _sort_util = load("res://utils/sort_util.gd").new()
+var _sort_util: SortUtil = load("res://utils/sort_util.gd").new()
 
 func _ready() -> void:
 	prints(name, "ready")
@@ -67,19 +72,19 @@ func _draw():
 
 func add_child_element(element: Element) -> void:
 	# warning-ignore:return_value_discarded
-	element.connect("connector_mouse_entered", Callable(self, "_on_objects_connector_sprite_showed"))
+	element.connect("connector_mouse_entered", self._on_objects_connector_sprite_showed)
 	# warning-ignore:return_value_discarded
-	element.connect("connector_mouse_exited", Callable(self, "_on_objects_connector_sprite_hided"))
+	element.connect("connector_mouse_exited", self._on_objects_connector_sprite_hided)
 	# warning-ignore:return_value_discarded
-	element.connect("connector_area_entered", Callable(self, "_on_objects_connector_area_entered"))
+	element.connect("connector_area_entered", self._on_objects_connector_area_entered)
 	# warning-ignore:return_value_discarded
-	element.connect("delete_processed", Callable(self, "_on_element_delete_processed"))
+	element.connect("delete_processed", self._on_element_delete_processed)
 	# warning-ignore:return_value_discarded
-	element.connect("child_moved_on_top", Callable(self, "_on_element_child_moved_on_top"))
+	element.connect("child_moved_on_top", self._on_element_child_moved_on_top)
 	# warning-ignore:return_value_discarded
-	element.connect("safe_area_entered", Callable(self, "_on_element_safe_area_processed"))
+	element.connect("safe_area_entered", self._on_element_safe_area_processed)
 	# warning-ignore:return_value_discarded
-	element.connect("safe_area_exited", Callable(self, "_on_element_safe_area_processed"))
+	element.connect("safe_area_exited", self._on_element_safe_area_processed)
 	add_child(element)
 
 func show_sprite_icon(element: Element, connector: Connector):
@@ -110,7 +115,7 @@ func has_safe_area_entered_element() -> bool:
 
 func sort_objects_for_representation():
 	var children_top = get_children()
-	children_top.sort_custom(Callable(_sort_util,"__sort_by_rect_bottom_side"))
+	children_top.sort_custom(_sort_util._sort_by_rect_bottom_side)
 	for i in range(children_top.size()):
 		var child_top = children_top[i]
 		var index = i

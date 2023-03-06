@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=3 uid="uid://bfmtnxr4n1jl5"]
+
+[ext_resource type="PackedScene" uid="uid://dgmx3kbp2v0xc" path="res://scenes/base/view/view.tscn" id="1_gcytn"]
+[ext_resource type="Script" path="res://scenes/views/tutorial/tutorial.gd" id="2_g0yix"]
+[ext_resource type="PackedScene" uid="uid://bvmk3ar4aosee" path="res://scenes/menus/color_label/color_label.tscn" id="3_g50yb"]
+
+[node name="Tutorial" instance=ExtResource("1_gcytn")]
+script = ExtResource("2_g0yix")
+type = 1
+
+[node name="Menu" type="CenterContainer" parent="CanvasLayer" index="0"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Menu" index="0"]
+layout_mode = 2
+
+[node name="ColorLabel" parent="CanvasLayer/Menu/VBoxContainer" index="0" instance=ExtResource("3_g50yb")]
+layout_mode = 2
+text = "Lessons"
+
+[node name="GridContainer" type="GridContainer" parent="CanvasLayer/Menu/VBoxContainer" index="1"]
+layout_mode = 2
+columns = 4
+
+[node name="Back" type="Button" parent="CanvasLayer/Menu/VBoxContainer" index="2"]
+layout_mode = 2
+text = "Main Menu"
+
+[connection signal="pressed" from="CanvasLayer/Menu/VBoxContainer/Back" to="." method="_on_back_pressed"]

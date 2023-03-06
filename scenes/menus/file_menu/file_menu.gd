@@ -1,12 +1,17 @@
 extends HBoxContainer
 
-signal menu_hided
-signal file_name_changed
-signal file_loaded
+# Elements
 signal element_added
 signal elements_deleted
-signal sprite_showed
+# Camera2D
+signal file_loaded
+# LevelMenu
+signal file_name_changed
+# LevelMenu
+signal menu_hided
+# Cursor
 signal sprite_hided
+signal sprite_showed
 
 const _default_file_name: String = Globals.GAME.DEFAULT_FILE_NAME
 
@@ -15,9 +20,9 @@ var _file_path: String = ""
 var _after_save: Callable = Callable()
 
 func _ready() -> void:
-	for button in [$New, $Open, $"Save As", $Save, $Load]:
-		button.add_theme_font_size_override(
-			"font_size", Globals.FONTS.MENU_FONT_SIZE
+	for node in [$New, $Open, $"Save As", $Save, $Load]:
+		node.add_theme_font_size_override(
+			"font_size", Globals.FONTS.DEFAULT_FONT_SIZE
 		)
 	# set ext filter
 	$FileDialog.add_filter("*.machine")

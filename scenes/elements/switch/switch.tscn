@@ -10,6 +10,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1hwf3"]
 resource_local_to_scene = true
 shader = ExtResource("3_hyyuu")
+shader_parameter/texture_alpha = 1.0
 shader_parameter/outline_width = 1.0
 shader_parameter/outline_color = null
 shader_parameter/is_outlined = false
@@ -40,7 +41,7 @@ texture = SubResource("CompressedTexture2D_iii4s")
 polygon = PackedVector2Array(-62, 17, -28, 1, 55, 42, 21, 59)
 
 [node name="In" parent="Connectors" index="0" instance=ExtResource("3")]
-position = Vector2(-31, 11)
+position = Vector2(-30, 13)
 
 [node name="Out" parent="Connectors" index="1" instance=ExtResource("5")]
 position = Vector2(31, 45)

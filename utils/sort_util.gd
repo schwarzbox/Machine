@@ -2,12 +2,12 @@ class_name SortUtil
 
 extends Resource
 
-static func __sort_by_position(a: Element, b: Element):
+static func _sort_by_position(a: Element, b: Element):
 	if a.position > b.position:
 		return true
 	return false
 
-static func __sort_by_rect_bottom_side(a: Element, b: Element):
+static func _sort_by_rect_bottom_side(a: Element, b: Element):
 	var a_sorting_position = Vector2()
 	var b_sorting_position = Vector2()
 	var a_size = a.sprite_size / 2

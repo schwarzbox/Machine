@@ -1,6 +1,7 @@
-[gd_scene load_steps=30 format=3 uid="uid://b6acfo7s7rnlx"]
+[gd_scene load_steps=31 format=3 uid="uid://b6acfo7s7rnlx"]
 
 [ext_resource type="Script" path="res://scenes/menus/element_menu/element_menu.gd" id="1_jgni7"]
+[ext_resource type="PackedScene" uid="uid://bvmk3ar4aosee" path="res://scenes/menus/color_label/color_label.tscn" id="2_0oyv5"]
 [ext_resource type="Texture2D" uid="uid://cfxs1woqxwq36" path="res://scenes/menus/element_menu/wire_icon.png" id="2_ii1qw"]
 [ext_resource type="Texture2D" uid="uid://lle1cay2s7o1" path="res://scenes/menus/element_menu/battery_icon.png" id="3_6rlij"]
 [ext_resource type="Texture2D" uid="uid://couri7h8qw2fp" path="res://scenes/menus/element_menu/lamp_icon.png" id="4_j3iby"]
@@ -64,22 +65,9 @@ mouse_filter = 0
 script = ExtResource("1_jgni7")
 metadata/_edit_use_anchors_ = true
 
-[node name="Label" type="Label" parent="."]
-custom_minimum_size = Vector2(84, 20)
+[node name="ColorLabel" parent="." instance=ExtResource("2_0oyv5")]
 layout_mode = 2
-mouse_filter = 1
 text = "Elements"
-horizontal_alignment = 1
-uppercase = true
-
-[node name="ColorRect" type="ColorRect" parent="Label"]
-show_behind_parent = true
-layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-color = Color(0.12549, 0.12549, 0.12549, 1)
-metadata/_edit_lock_ = true
 
 [node name="GridContainer" type="GridContainer" parent="."]
 layout_mode = 2

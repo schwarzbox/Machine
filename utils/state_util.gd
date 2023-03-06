@@ -28,7 +28,7 @@ class Idle:
 	extends State
 
 	func _init(machine: Node2D):
-		super._init(machine)
+		super(machine)
 		_name = "Idle"
 
 	func process_set_selected_scene(scene: PackedScene, texture: Texture2D) -> void:
@@ -118,7 +118,7 @@ class Create:
 	extends State
 
 	func _init(machine: Node2D):
-		super._init(machine)
+		super(machine)
 		_name = "Create"
 
 	func process_set_selected_scene(scene: PackedScene, texture: Texture2D) -> void:
@@ -164,7 +164,7 @@ class DrawWire:
 	extends State
 
 	func _init(machine: Node2D):
-		super._init(machine)
+		super(machine)
 		_name = "DrawWire"
 
 	func process_event(event: InputEvent, mouse_pos: Vector2) -> void:
@@ -193,7 +193,7 @@ class Select:
 	extends State
 
 	func _init(machine: Node2D):
-		super._init(machine)
+		super(machine)
 		_name = "Select"
 
 	func process_event(event: InputEvent, mouse_pos: Vector2) -> void:
@@ -245,7 +245,7 @@ class DragWire:
 	extends State
 
 	func _init(machine: Node2D):
-		super._init(machine)
+		super(machine)
 		_name = "DragWire"
 
 	func process_event(event: InputEvent, mouse_pos: Vector2) -> void:
@@ -284,7 +284,7 @@ class DragElement:
 	extends DragWire
 
 	func _init(machine: Node2D):
-		super._init(machine)
+		super(machine)
 		_name = "DragElement"
 
 	func _process_drag(elements: Array, delta: Vector2, _mouse_pos: Vector2) -> void:
@@ -295,7 +295,7 @@ class DragSelected:
 	extends DragWire
 
 	func _init(machine: Node2D):
-		super._init(machine)
+		super(machine)
 		_name = "DragSelected"
 
 	func _process_drag(elements: Array, delta: Vector2, _mouse_pos: Vector2) -> void:

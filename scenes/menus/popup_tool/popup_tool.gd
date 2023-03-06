@@ -2,10 +2,11 @@ class_name PopupTools
 
 extends PopupMenu
 
-signal flip_pressed
+# Elements
 signal clone_pressed
-signal unlink_pressed
 signal delete_pressed
+signal flip_pressed
+signal unlink_pressed
 
 enum PopupIds {
 	HEADER,
@@ -21,10 +22,10 @@ var _is_group: bool = false
 
 func _ready() -> void:
 	add_theme_font_size_override(
-		"font_size", Globals.FONTS.MENU_FONT_SIZE
+		"font_size", Globals.FONTS.DEFAULT_FONT_SIZE
 	)
 	add_theme_font_size_override(
-		"font_separator_size", Globals.FONTS.MENU_FONT_SIZE
+		"font_separator_size", Globals.FONTS.DEFAULT_FONT_SIZE
 	)
 
 func _on_id_pressed(id: int) -> void:
@@ -62,7 +63,7 @@ func _on_about_to_popup() -> void:
 		add_item('Unlink', PopupIds.UNLINK)
 		add_item('Delete', PopupIds.DELETE)
 
-func _on_objects_menu_poped(
+func _on_elements_menu_poped(
 	element: Element, is_group: bool = false
 ) -> void:
 	_is_group = is_group

@@ -9,7 +9,7 @@ var _is_activated: bool = false
 func _ready() -> void:
 	type = Globals.Elements.SWITCH
 
-	super._ready()
+	super()
 
 func switch() -> void:
 	_is_activated = !_is_activated

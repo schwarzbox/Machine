@@ -9,6 +9,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_060n8"]
 resource_local_to_scene = true
 shader = ExtResource("3_q8xqr")
+shader_parameter/texture_alpha = 1.0
 shader_parameter/outline_width = 1.0
 shader_parameter/outline_color = null
 shader_parameter/is_outlined = false
@@ -39,7 +40,7 @@ texture = SubResource("CompressedTexture2D_3o46e")
 polygon = PackedVector2Array(-29, 1, 54, 43, 25, 58, -58, 16)
 
 [node name="In" parent="Connectors" index="0" instance=ExtResource("3")]
-position = Vector2(-31, 11)
+position = Vector2(-30, 13)
 
 [node name="In2" parent="Connectors" index="1" instance=ExtResource("3")]
 position = Vector2(31, 45)

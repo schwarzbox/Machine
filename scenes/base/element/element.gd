@@ -267,6 +267,22 @@ func _on_safe_area_area_entered(area: Area2D) -> void:
 func _on_safe_area_area_exited(area: Area2D) -> void:
 	emit_signal("safe_area_exited", self, area, false)
 
+func _on_visible_on_screen_notifier_2d_screen_entered() -> void:
+	print('enter')
+	if type != Globals.Elements.WIRE:
+		$FirstArea.show()
+		$FirstSprite2D.show()
+		$SafeArea.show()
+		$Connectors.show()
+
+func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
+	print('exit')
+	if type != Globals.Elements.WIRE:
+		$FirstArea.hide()
+		$FirstSprite2D.hide()
+		$SafeArea.hide()
+		$Connectors.hide()
+
 func _on_animation_player_animation_finished(anim_name: String) -> void:
 	if anim_name == "Delete":
 		emit_signal("delete_processed", self)
@@ -279,3 +295,4 @@ func _on_connector_mouse_exited() -> void:
 
 func _on_connector_area_entered(connector: Connector, other: Connector) -> void:
 	emit_signal("connector_area_entered", connector, other)
+

@@ -72,19 +72,19 @@ func _draw():
 
 func add_child_element(element: Element) -> void:
 	# warning-ignore:return_value_discarded
-	element.connect("connector_mouse_entered", self._on_objects_connector_sprite_showed)
+	element.connect("delete_processed", _on_element_delete_processed)
 	# warning-ignore:return_value_discarded
-	element.connect("connector_mouse_exited", self._on_objects_connector_sprite_hided)
+	element.connect("child_moved_on_top", _on_element_child_moved_on_top)
 	# warning-ignore:return_value_discarded
-	element.connect("connector_area_entered", self._on_objects_connector_area_entered)
+	element.connect("safe_area_entered", _on_element_safe_area_processed)
 	# warning-ignore:return_value_discarded
-	element.connect("delete_processed", self._on_element_delete_processed)
+	element.connect("safe_area_exited", _on_element_safe_area_processed)
 	# warning-ignore:return_value_discarded
-	element.connect("child_moved_on_top", self._on_element_child_moved_on_top)
+	element.connect("connector_mouse_entered", _on_objects_connector_sprite_showed)
 	# warning-ignore:return_value_discarded
-	element.connect("safe_area_entered", self._on_element_safe_area_processed)
+	element.connect("connector_mouse_exited", _on_objects_connector_sprite_hided)
 	# warning-ignore:return_value_discarded
-	element.connect("safe_area_exited", self._on_element_safe_area_processed)
+	element.connect("connector_area_entered", _on_objects_connector_area_entered)
 	add_child(element)
 
 func show_sprite_icon(element: Element, connector: Connector):

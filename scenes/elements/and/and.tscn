@@ -10,6 +10,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4iw5c"]
 resource_local_to_scene = true
 shader = ExtResource("3_c0aeb")
+shader_parameter/texture_alpha = 1.0
 shader_parameter/outline_width = 1.0
 shader_parameter/outline_color = null
 shader_parameter/is_outlined = false

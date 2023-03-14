@@ -18,7 +18,6 @@ func _ready() -> void:
 	type = Globals.Elements.ADDER_8_BIT
 	for _i in range(_connectors.size()):
 		_relay_utils.append(_relay_util_class.new())
-
 	super()
 
 func reset_energy() -> void:

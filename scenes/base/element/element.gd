@@ -16,24 +16,33 @@ signal safe_area_exited
 
 var type_name: String = ""
 var sprite_size: Vector2 = Vector2()
-var sprite_alpha: float = 0.0
-var last_valid_position: Vector2 = Vector2()
+var half_sprite_size: Vector2 = Vector2()
 var is_checked: bool = false
 
-var _connectors_children: Array = []
-# weird var for correctly clone group of elements
-var _is_cloned: bool = false
+# var for correctly clone group of elements
+var _is_cloned: bool = false: get = is_cloned, set =  set_is_cloned
 var _is_first_area_mouse_entered: bool = false
 var _safe_area_entered_areas: Dictionary = {}
-var _temporary_wires: Array = []
+var _temporary_wires: Array = []:
+	set(value): return
 
 var _on_texture: Texture2D = null
 var _off_texture: Texture2D = null
 
+@onready var last_valid_position: Vector2 = position
+@onready var connectors_children: Array = $Connectors.get_children():
+	set(value): return
+
 func _ready() -> void:
 	add_to_group("Elements")
 
+	# prevent any error with type_name setup
+	(func():
+		type_name = Globals.Elements.keys()[type].capitalize()
+	).call_deferred()
+
 	sprite_size = $FirstSprite2D.texture.get_size()
+	half_sprite_size = sprite_size / 2
 
 	$FirstSprite2D.material.set_shader_parameter("texture_size", sprite_size)
 	$FirstSprite2D.material.set_shader_parameter(
@@ -47,8 +56,7 @@ func _ready() -> void:
 	_set_off_texture()
 	_set_off()
 
-	_connectors_children = $Connectors.get_children()
-	for connector in _connectors_children:
+	for connector in connectors_children:
 		connector.connect(
 			"connector_mouse_entered", self._on_connector_mouse_entered
 		)
@@ -59,19 +67,33 @@ func _ready() -> void:
 			"connector_area_entered", self._on_connector_area_entered
 		)
 
-	type_name = Globals.Elements.keys()[type].capitalize()
-
-	last_valid_position = position
-
 	set_alpha(1.0)
+
+	$VisibleOnScreenNotifier2D.rect.position = half_sprite_size * -1
+	$VisibleOnScreenNotifier2D.rect.size = sprite_size
+
+	# hide all invisble elements
+	visible_hide()
+
 
 func outline(value: bool) -> void:
 	$FirstSprite2D.material.set_shader_parameter("is_outlined", value)
 
 func set_alpha(value: float) -> void:
-	sprite_alpha = value
 	$FirstSprite2D.modulate.a = value
-	$FirstSprite2D.material.set_shader_parameter("texture_alpha", sprite_alpha)
+	$FirstSprite2D.material.set_shader_parameter("texture_alpha", value)
+
+func visible_show() -> void:
+	$FirstArea.show()
+	$FirstSprite2D.show()
+	$SafeArea.show()
+	$Connectors.show()
+
+func visible_hide() -> void:
+	$FirstArea.hide()
+	$FirstSprite2D.hide()
+	$SafeArea.hide()
+	$Connectors.hide()
 
 func safe_area_alarm(value: bool) -> void:
 	$FirstSprite2D.material.set_shader_parameter("is_striped",  value)
@@ -90,7 +112,7 @@ func move_element(pos: Vector2) -> void:
 	remove_temporary_wires()
 
 func move_connected_wires() -> void:
-	for child in _connectors_children:
+	for child in connectors_children:
 		var child_connected = child.connected_element
 		var child_connected_area = child.connected_area
 		if (
@@ -101,7 +123,7 @@ func move_connected_wires() -> void:
 			child_connected.switch_connections()
 
 func restore_connected_wires() -> void:
-	for child in _connectors_children:
+	for child in connectors_children:
 		var child_connected = child.connected_element
 		var child_connected_area = child.connected_area
 		if (
@@ -112,7 +134,7 @@ func restore_connected_wires() -> void:
 			child_connected.position = child_connected.last_valid_position
 
 func move_wires_on_top() -> void:
-	for child in _connectors_children:
+	for child in connectors_children:
 		var child_connected = child.connected_element
 		var child_connected_area = child.connected_area
 		if (
@@ -133,7 +155,7 @@ func remove_temporary_wires() -> void:
 			temporary_wire.delete_if_more(Globals.GAME.CONNECTED_WIRE_LENGTH)
 
 func clear_temporary_wires() -> void:
-	_temporary_wires = []
+	_temporary_wires.clear()
 
 # safe area
 
@@ -149,13 +171,13 @@ func remove_safe_area_entered(area: Area2D):
 # connectors
 
 func get_connectors_children() -> Array:
-	return _connectors_children
+	return connectors_children
 
 func clear_connectors_children() -> void:
-	_connectors_children = []
+	connectors_children.clear()
 
 func get_entered_connector() -> Connector:
-	for child in _connectors_children:
+	for child in connectors_children:
 		if child.is_mouse_entered_connector():
 			return child
 	return null
@@ -175,11 +197,11 @@ func flip() -> void:
 		return
 
 	scale = Vector2(scale.x * -1, 1)
-	for child in _connectors_children:
+	for child in connectors_children:
 		child.remove_connections_with_elements()
 
 func unlink() -> void:
-	for child in _connectors_children:
+	for child in connectors_children:
 		var child_connected = child.connected_element
 		var child_connected_area = child.connected_area
 		if (
@@ -215,7 +237,7 @@ func transfer_energy(instance: Element) -> void:
 	if self_energy:
 		call_deferred("_set_on")
 
-		for child in _connectors_children:
+		for child in connectors_children:
 			var child_connected = child.connected_element
 			var child_connected_area = child.connected_area
 			if (
@@ -234,7 +256,7 @@ func transfer_energy(instance: Element) -> void:
 		call_deferred("_set_off")
 
 func reset_energy() -> void:
-	for child in _connectors_children:
+	for child in connectors_children:
 		child.set_energy(false)
 	_set_off()
 
@@ -267,6 +289,12 @@ func _on_safe_area_area_entered(area: Area2D) -> void:
 func _on_safe_area_area_exited(area: Area2D) -> void:
 	emit_signal("safe_area_exited", self, area, false)
 
+func _on_visible_on_screen_notifier_2d_screen_entered() -> void:
+	visible_show()
+
+func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
+	visible_hide()
+
 func _on_animation_player_animation_finished(anim_name: String) -> void:
 	if anim_name == "Delete":
 		emit_signal("delete_processed", self)
@@ -279,3 +307,4 @@ func _on_connector_mouse_exited() -> void:
 
 func _on_connector_area_entered(connector: Connector, other: Connector) -> void:
 	emit_signal("connector_area_entered", connector, other)
+

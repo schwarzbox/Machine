@@ -1,6 +1,7 @@
 extends View
 
 func _ready() -> void:
+	prints(name, "ready")
 	type = Globals.Levels.SANDBOX
 
 func _on_back_pressed() -> void:

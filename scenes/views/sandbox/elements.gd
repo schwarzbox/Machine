@@ -66,25 +66,25 @@ func _draw():
 
 #func _notification(what):
 #	if what == NOTIFICATION_WM_MOUSE_ENTER:
-#		self._is_mouse_in_app = true
+#		_is_mouse_in_app = true
 #	elif what == NOTIFICATION_WM_MOUSE_EXIT:
-#		self._is_mouse_in_app = false
+#		_is_mouse_in_app = false
 
 func add_child_element(element: Element) -> void:
 	# warning-ignore:return_value_discarded
-	element.connect("connector_mouse_entered", self._on_objects_connector_sprite_showed)
+	element.connect("delete_processed", _on_element_delete_processed)
 	# warning-ignore:return_value_discarded
-	element.connect("connector_mouse_exited", self._on_objects_connector_sprite_hided)
+	element.connect("child_moved_on_top", _on_element_child_moved_on_top)
 	# warning-ignore:return_value_discarded
-	element.connect("connector_area_entered", self._on_objects_connector_area_entered)
+	element.connect("safe_area_entered", _on_element_safe_area_processed)
 	# warning-ignore:return_value_discarded
-	element.connect("delete_processed", self._on_element_delete_processed)
+	element.connect("safe_area_exited", _on_element_safe_area_processed)
 	# warning-ignore:return_value_discarded
-	element.connect("child_moved_on_top", self._on_element_child_moved_on_top)
+	element.connect("connector_mouse_entered", _on_objects_connector_sprite_showed)
 	# warning-ignore:return_value_discarded
-	element.connect("safe_area_entered", self._on_element_safe_area_processed)
+	element.connect("connector_mouse_exited", _on_objects_connector_sprite_hided)
 	# warning-ignore:return_value_discarded
-	element.connect("safe_area_exited", self._on_element_safe_area_processed)
+	element.connect("connector_area_entered", _on_objects_connector_area_entered)
 	add_child(element)
 
 func show_sprite_icon(element: Element, connector: Connector):
@@ -101,6 +101,7 @@ func get_mouse_entered_element() -> Element:
 	# reverse to get top instanse
 	var children: Array = get_children()
 	children.reverse()
+
 	for child in children:
 		if child.is_mouse_entered():
 			return child
@@ -227,7 +228,9 @@ func _on_popup_tool_clone_pressed() -> void:
 	for element in elements:
 		emit_signal("clone_pressed", element)
 		var clone = get_child(get_child_count()-1)
+
 		clone.set_is_cloned(true)
+
 		clone.position = element.position + Vector2(32, 32)
 		clone.scale = element.scale
 		if clone.type == Globals.Elements.WIRE:

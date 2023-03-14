@@ -84,5 +84,8 @@ polygon = PackedVector2Array(0, -1, 7, 2, 7, 5, 0, 8, -7, 5, -7, 2)
 
 [node name="Out2" parent="Connectors" index="3" instance=ExtResource("4")]
 
+[node name="VisibleOnScreenNotifier2D" parent="." index="8"]
+rect = Rect2(-8, -8, 16, 16)
+
 [connection signal="mouse_entered" from="SecondArea" to="." method="_on_second_area_mouse_entered"]
 [connection signal="mouse_exited" from="SecondArea" to="." method="_on_second_area_mouse_exited"]

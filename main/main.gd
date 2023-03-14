@@ -1,35 +1,31 @@
 extends View
-# merge
 # try top-down elem
-
-# clone outside safe area?
-# shift straight lines
 
 # new elements MV (rozetta?) ex_or ex_and
 # new art A O !A !O battery
 # hertz elem
+# 1 byte memmory
+
+# read about resourses
 
 # notes tool (pop-up menu, main menu)
 # highlight correct connector (if new art without color)
 
-# 1 byte memmory
+# remove .owner references for connectors
 
 # IDEAS
-# show minimap?
-
 # increase areas (how to highlight them)?
 # add pixelate shader or texture for wire
-# remove .owner references for connectors
-# remove help_label
-
 # animate elements create, scale or particles + sounds
+# info about element more (in pop-up or on demand)
+# remove help_label?
+# show minimap?
+# shift straight lines and grid for elements?
 
 # graph nodes?
-# read about resourses
-
-# info about element more (in pop-up or on demand)
 
 # IMPOSSIBLE BACKLOG
+# sort for reprsentation really heavy!
 # hertz blink
 # add wire shader or texture
 # _on_file_dialog_window_input (reset)
@@ -38,7 +34,6 @@ extends View
 # check FPS
 # debug/settings/fps/force_fps
 # application/run/max_fps
-# physics/common/physics_ticks_per_second
 # physics/common/physics_ticks_per_second
 
 # force move mouse

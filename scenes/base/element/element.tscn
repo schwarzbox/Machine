@@ -106,8 +106,13 @@ libraries = {
 
 [node name="Connectors" type="Node2D" parent="."]
 
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+rect = Rect2(-64, -64, 128, 128)
+
 [connection signal="mouse_entered" from="FirstArea" to="." method="_on_first_area_mouse_entered"]
 [connection signal="mouse_exited" from="FirstArea" to="." method="_on_first_area_mouse_exited"]
 [connection signal="area_entered" from="SafeArea" to="." method="_on_safe_area_area_entered"]
 [connection signal="area_exited" from="SafeArea" to="." method="_on_safe_area_area_exited"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+[connection signal="screen_entered" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

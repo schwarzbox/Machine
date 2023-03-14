@@ -1,37 +1,31 @@
 extends View
-# try  use visible false
-# add method to hide for elem and wire
-# add wire optimization
-
-# use set get
-# shift straight lines
-# remove .owner references for connectors
-# clone outside safe area?
-
 # try top-down elem
 
 # new elements MV (rozetta?) ex_or ex_and
 # new art A O !A !O battery
 # hertz elem
+# 1 byte memmory
 
 # read about resourses
 
 # notes tool (pop-up menu, main menu)
 # highlight correct connector (if new art without color)
 
-# 1 byte memmory
+# remove .owner references for connectors
 
 # IDEAS
-# remove help_label?
-# show minimap?
 # increase areas (how to highlight them)?
 # add pixelate shader or texture for wire
 # animate elements create, scale or particles + sounds
 # info about element more (in pop-up or on demand)
+# remove help_label?
+# show minimap?
+# shift straight lines and grid for elements?
 
 # graph nodes?
 
 # IMPOSSIBLE BACKLOG
+# sort for reprsentation really heavy!
 # hertz blink
 # add wire shader or texture
 # _on_file_dialog_window_input (reset)

@@ -9,11 +9,7 @@ func _ready() -> void:
 	type = Globals.Elements.WIRE
 	super()
 
-	hide_sprites()
-
-	$SecondSprite2D.material.set_shader_parameter(
-		"texture_size", sprite_size
-	)
+	$SecondSprite2D.material.set_shader_parameter("texture_size", sprite_size)
 	$SecondSprite2D.material.set_shader_parameter(
 		"stripe_color",  Globals.COLORS.SAFE_AREA_ALARM
 	)
@@ -21,12 +17,17 @@ func _ready() -> void:
 		"outline_color",  Globals.COLORS.OUTLINE
 	)
 
+	# restore notifiers after load
+	if $Line2D.points:
+		_sync_visible_notifier_size()
+
+	hide_sprites()
+
 func outline(value: bool) -> void:
 	$FirstSprite2D.material.set_shader_parameter("is_outlined", value)
 	$SecondSprite2D.material.set_shader_parameter("is_outlined", value)
 
 func set_alpha(value) -> void:
-	sprite_alpha = value
 	$Line2D.modulate.a = value
 	$FirstSprite2D.modulate.a = 1.0
 	$SecondSprite2D.modulate.a = 1.0
@@ -38,6 +39,22 @@ func show_sprites() -> void:
 func hide_sprites() -> void:
 	$FirstSprite2D.hide()
 	$SecondSprite2D.hide()
+
+func visible_show() -> void:
+	$Line2D.show()
+	$FirstArea.show()
+	$SecondArea.show()
+	show_sprites()
+	$SafeArea.show()
+	$Connectors.show()
+
+func visible_hide() -> void:
+	$Line2D.hide()
+	$FirstArea.hide()
+	$SecondArea.hide()
+	hide_sprites()
+	$SafeArea.hide()
+	$Connectors.hide()
 
 # create
 
@@ -52,7 +69,7 @@ func start_drawing() -> void:
 	outline(true)
 
 	var count = 0
-	for child in _connectors_children:
+	for child in connectors_children:
 		if child.has_connection():
 			count += 1
 
@@ -75,7 +92,7 @@ func finish_drawing() -> void:
 	if delete_if_less():
 		return
 
-	for child in _connectors_children:
+	for child in connectors_children:
 		if child.has_connection():
 			switch_connections()
 
@@ -174,7 +191,7 @@ func check_connect_to_wire(
 	connector: Connector, with_connection: bool = true
 ) -> bool:
 	var self_connected: Array = []
-	for self_child in get_connectors_children():
+	for self_child in connectors_children:
 		var self_child_connected = self_child.connected_element
 		var self_child_connected_area = self_child.connected_area
 		if self_child_connected && self_child_connected_area:
@@ -288,9 +305,22 @@ func _switch_second_points() -> void:
 			out_connected.to_global(out_connected_area.position)
 		)
 
+func _sync_visible_notifier_size() -> void:
+	var v_sign = sign($Line2D.points[1])
+	if v_sign.x < 0:
+		$VisibleOnScreenNotifier2D.rect.position.x = (
+			$Line2D.points[1].x - half_sprite_size.x
+		)
+	if v_sign.y < 0:
+		$VisibleOnScreenNotifier2D.rect.position.y = (
+			$Line2D.points[1].y - half_sprite_size.y
+		)
+	$VisibleOnScreenNotifier2D.rect.size = abs($Line2D.points[1]) + sprite_size
+
 func _sync_node_position(nodes: Array, pos: Vector2) -> void:
 	for node in nodes:
 		node.position = pos
+	_sync_visible_notifier_size()
 
 # energy loop
 
@@ -305,9 +335,9 @@ func _set_off() -> void:
 	$Line2D.default_color = Globals.COLORS.ENERGY_OFF
 
 func _has_energy() -> bool:
-	for child in _connectors_children:
+	for child in connectors_children:
 		if child.connected_has_energy():
-			for connector in _connectors_children:
+			for connector in connectors_children:
 				connector.set_energy(true)
 			return true
 	return false

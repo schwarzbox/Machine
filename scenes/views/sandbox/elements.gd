@@ -66,9 +66,9 @@ func _draw():
 
 #func _notification(what):
 #	if what == NOTIFICATION_WM_MOUSE_ENTER:
-#		self._is_mouse_in_app = true
+#		_is_mouse_in_app = true
 #	elif what == NOTIFICATION_WM_MOUSE_EXIT:
-#		self._is_mouse_in_app = false
+#		_is_mouse_in_app = false
 
 func add_child_element(element: Element) -> void:
 	# warning-ignore:return_value_discarded
@@ -101,6 +101,7 @@ func get_mouse_entered_element() -> Element:
 	# reverse to get top instanse
 	var children: Array = get_children()
 	children.reverse()
+
 	for child in children:
 		if child.is_mouse_entered():
 			return child
@@ -227,7 +228,9 @@ func _on_popup_tool_clone_pressed() -> void:
 	for element in elements:
 		emit_signal("clone_pressed", element)
 		var clone = get_child(get_child_count()-1)
+
 		clone.set_is_cloned(true)
+
 		clone.position = element.position + Vector2(32, 32)
 		clone.scale = element.scale
 		if clone.type == Globals.Elements.WIRE:

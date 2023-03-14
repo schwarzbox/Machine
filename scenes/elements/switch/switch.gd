@@ -19,7 +19,7 @@ func _has_energy() -> bool:
 	if _is_activated:
 		_off_texture = _on_off
 
-		for child in _connectors_children:
+		for child in connectors_children:
 			if child.type == Globals.Connectors.IN:
 				if child.connected_has_energy():
 					$Connectors/Out.set_energy(true)

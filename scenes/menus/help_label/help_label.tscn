@@ -1,26 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cgyr4bltky37s"]
+[gd_scene load_steps=3 format=3 uid="uid://cgyr4bltky37s"]
 
 [ext_resource type="Script" path="res://scenes/menus/help_label/help_label.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://bvmk3ar4aosee" path="res://scenes/menus/color_label/color_label.tscn" id="1_untyt"]
 
-[node name="HelpLabel" type="Label"]
-custom_minimum_size = Vector2(64, 0)
-offset_right = 64.0
-offset_bottom = 14.0
-text = "Label"
-horizontal_alignment = 1
-uppercase = true
+[node name="HelpLabel" instance=ExtResource("1_untyt")]
 script = ExtResource("1")
-
-[node name="ColorRect" type="ColorRect" parent="."]
-show_behind_parent = true
-custom_minimum_size = Vector2(42, 14)
-layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -4.0
-offset_top = -4.0
-offset_right = 4.0
-offset_bottom = 2.0
-mouse_filter = 2
-color = Color(0.2, 0.2, 0.2, 1)
-metadata/_edit_lock_ = true

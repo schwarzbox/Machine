@@ -8,9 +8,6 @@ const type: int = Globals.GAME.CURSOR_TYPE
 
 var _cursor_texture: Texture2D = null
 
-func _set_position(pos: Vector2 = Vector2()) -> void:
-	position = pos
-
 func _show_sprite(tx: Texture2D = null) -> void:
 	if tx:
 		texture = tx
@@ -23,7 +20,7 @@ func _show_sprite(tx: Texture2D = null) -> void:
 
 func _hide_sprite() -> void:
 	texture = null
-	_set_position()
+	position = Vector2()
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 func _on_file_menu_sprite_showed() -> void:
@@ -61,7 +58,7 @@ func _on_elements_sprite_texture_removed() -> void:
 	_cursor_texture = null
 
 func _on_elements_sprite_position_updated(pos: Vector2) -> void:
-	_set_position(pos)
+	position = pos
 
 func _on_elements_cursor_shape_updated(shape: int) -> void:
 	Input.set_default_cursor_shape(shape)

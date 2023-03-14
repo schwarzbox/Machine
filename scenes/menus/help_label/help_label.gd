@@ -1,3 +1,5 @@
+class_name ColorLabel
+
 extends Label
 
 func _on_help_showed(txt: String, position: Vector2, height: float) -> void:

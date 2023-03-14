@@ -38,7 +38,6 @@ class Idle:
 
 	func process_event(event: InputEvent, mouse_pos: Vector2) -> void:
 		var entered_element = _machine.get_mouse_entered_element()
-
 		# fix popup tool behaviour after hide
 		if (
 			entered_element
@@ -65,6 +64,10 @@ class Idle:
 			_machine.emit_signal("cursor_shape_updated", Input.CURSOR_ARROW)
 
 			if event is InputEventMouseButton && event.pressed:
+				# prevent put element in safe area
+				if _machine.has_safe_area_entered_element():
+					return
+
 				if event.button_index == MOUSE_BUTTON_LEFT:
 					_machine.emit_signal("cursor_shape_updated", Input.CURSOR_CROSS)
 					_machine.remove_selected_elements()
@@ -84,7 +87,7 @@ class Idle:
 			)
 		else:
 			# sort before select enetered element
-			_machine.sort_objects_for_representation()
+#			_machine.sort_objects_for_representation()
 			_machine.move_child(
 				entered_element, _machine.get_child_count() - 1
 			)
@@ -147,7 +150,7 @@ class Create:
 						_machine.re_add_selected_element(instance)
 						_machine.active_state = _machine.draw_wire_state
 				else:
-					# prevent create
+					# prevent put element in safe area
 					if _machine.has_safe_area_entered_element():
 						return
 
@@ -168,6 +171,7 @@ class DrawWire:
 		_name = "DrawWire"
 
 	func process_event(event: InputEvent, mouse_pos: Vector2) -> void:
+
 		if is_instance_valid(_machine.active_wire):
 			if !_machine.active_wire.has_points():
 				_machine.active_wire.add_points(mouse_pos)
@@ -255,6 +259,7 @@ class DragWire:
 			_process_drag(selected_elements, delta, mouse_pos)
 
 		elif event is InputEventMouseButton && !event.pressed:
+			# prevent put element in safe area
 			if _machine.has_safe_area_entered_element():
 				for element in selected_elements:
 					element.position = element.last_valid_position

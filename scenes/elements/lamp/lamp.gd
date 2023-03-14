@@ -9,7 +9,7 @@ func _ready() -> void:
 	super()
 
 func _has_energy() -> bool:
-	for child in _connectors_children:
+	for child in connectors_children:
 		if child.type == Globals.Connectors.IN:
 			if child.connected_has_energy():
 				return true

@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cjyhqxpr4pbmf" path="res://scenes/menus/level_menu/level_menu.tscn" id="5_je47x"]
 [ext_resource type="PackedScene" uid="uid://pvd2iu5xx0tn" path="res://scenes/base/camera/camera_2d.tscn" id="6_7tsva"]
 [ext_resource type="PackedScene" uid="uid://bpsu2pj51hgan" path="res://scenes/menus/file_menu/file_menu.tscn" id="6_ly7c7"]
-[ext_resource type="PackedScene" path="res://scenes/base/cursor/cursor.tscn" id="7_q3ctd"]
+[ext_resource type="PackedScene" uid="uid://jn1vihlbnvi1" path="res://scenes/base/cursor/cursor.tscn" id="7_q3ctd"]
 [ext_resource type="Script" path="res://scenes/views/sandbox/elements.gd" id="8_2svtm"]
 
 [node name="Sandbox" instance=ExtResource("1_q1d62")]
@@ -47,6 +47,7 @@ offset = Vector2(800, 600)
 [connection signal="sprite_showed" from="CanvasLayer/LevelMenu" to="Cursor" method="_on_level_menu_sprite_showed"]
 [connection signal="element_added" from="CanvasLayer/LevelMenu/Info/FileMenu" to="World/Elements" method="_on_file_menu_element_added"]
 [connection signal="elements_deleted" from="CanvasLayer/LevelMenu/Info/FileMenu" to="World/Elements" method="_on_file_menu_elements_deleted"]
+[connection signal="file_loaded" from="CanvasLayer/LevelMenu/Info/FileMenu" to="World/Elements" method="_on_file_menu_file_loaded"]
 [connection signal="file_loaded" from="CanvasLayer/LevelMenu/Info/FileMenu" to="Camera2D" method="_on_file_menu_file_loaded"]
 [connection signal="file_name_changed" from="CanvasLayer/LevelMenu/Info/FileMenu" to="CanvasLayer/LevelMenu" method="_on_file_menu_file_name_changed"]
 [connection signal="menu_hided" from="CanvasLayer/LevelMenu/Info/FileMenu" to="CanvasLayer/LevelMenu" method="_on_file_menu_menu_hided"]

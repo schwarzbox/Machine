@@ -12,5 +12,7 @@ func _has_energy() -> bool:
 	for child in connectors_children:
 		if child.type == Globals.Connectors.IN:
 			if child.connected_has_energy():
+				$Connectors/Out.set_energy(true)
+				$Connectors/Out2.set_energy(true)
 				return true
 	return false

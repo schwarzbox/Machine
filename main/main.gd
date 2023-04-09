@@ -1,17 +1,33 @@
 extends View
-# try top-down elem
+# icons
+# not connect after cloned
+# no wire sprite when create
+
+# create first screen image in mother board style
+
+# create wire problem
+# unlink problem
+# ? sort ?
+# highlight correct connector (if new art without color)
+
+# style for first menu
+
+# animate relay with tween or animation node
+# animate magnet field
+
+# rename display to pixel
 
 # new elements MV (rozetta?) ex_or ex_and
-# new art A O !A !O battery
 # hertz elem
+
+# check old saves
+# remove .owner references for connectors
+# notes tool (pop-up menu, main menu)
+
 # 1 byte memmory
 
 # read about resourses
 
-# notes tool (pop-up menu, main menu)
-# highlight correct connector (if new art without color)
-
-# remove .owner references for connectors
 
 # IDEAS
 # increase areas (how to highlight them)?
@@ -32,7 +48,6 @@ extends View
 
 # HACKS
 # check FPS
-# debug/settings/fps/force_fps
 # application/run/max_fps
 # physics/common/physics_ticks_per_second
 

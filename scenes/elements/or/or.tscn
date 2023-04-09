@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cv1d7xmckspa"]
+[gd_scene load_steps=11 format=3 uid="uid://cv1d7xmckspa"]
 
 [ext_resource type="PackedScene" uid="uid://bhsk0p4obuir6" path="res://scenes/base/element/element.tscn" id="1"]
 [ext_resource type="Script" path="res://scenes/elements/or/or.gd" id="2"]
@@ -7,9 +7,13 @@
 [ext_resource type="PackedScene" uid="uid://dd47odg8af7i3" path="res://scenes/base/connector/out.tscn" id="6"]
 [ext_resource type="PackedScene" uid="uid://i3np3a2r6kve" path="res://scenes/base/connector/in.tscn" id="7"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_77h37"]
+size = Vector2(256, 480)
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jann6"]
 resource_local_to_scene = true
 shader = ExtResource("3_cs821")
+shader_parameter/texture_alpha = 1.0
 shader_parameter/outline_width = 1.0
 shader_parameter/outline_color = null
 shader_parameter/is_outlined = false
@@ -25,25 +29,32 @@ shader_parameter/dissolveNoise = ExtResource("4_74tgp")
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_41qu0"]
 load_path = "res://.godot/imported/or_off.png-000f02c50052e317ba4f43e089bf7111.ctex"
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s1hmm"]
+size = Vector2(224, 480)
+
 [node name="Or" instance=ExtResource("1")]
 script = ExtResource("2")
 type = 11
 
-[node name="CollisionPolygon2D" parent="FirstArea" index="0"]
-polygon = PackedVector2Array(36, -74, 52, -66, 60, -53, 60, -14, 53, -10, 53, -5, 76, 7, 85, 6, 95, 12, 95, 18, -32, 81, -95, 50, -95, 43, -64, 27, -64, -20, -48, -28, -36, -22, -16, -32, -8, -28, -8, -24, -12, -22, -12, 2, 8, -8, 8, -40, 4, -42, 4, -46, 20, -54, 20, -66)
+[node name="CollisionShape2D" parent="FirstArea" index="0"]
+shape = SubResource("RectangleShape2D_77h37")
 
 [node name="FirstSprite2D" parent="." index="1"]
 material = SubResource("ShaderMaterial_jann6")
 texture = SubResource("CompressedTexture2D_41qu0")
 
-[node name="CollisionPolygon2D" parent="SafeArea" index="0"]
-polygon = PackedVector2Array(-102, 51, -31, 86, 102, 19, 28, -15)
+[node name="CollisionShape2D" parent="SafeArea" index="0"]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_s1hmm")
 
 [node name="In" parent="Connectors" index="0" instance=ExtResource("7")]
-position = Vector2(-83, 51)
+position = Vector2(-112, -160)
 
 [node name="In2" parent="Connectors" index="1" instance=ExtResource("7")]
-position = Vector2(-43, 71)
+position = Vector2(-112, 160)
 
 [node name="Out" parent="Connectors" index="2" instance=ExtResource("6")]
-position = Vector2(83, 19)
+position = Vector2(112, 2.08165e-12)
+
+[node name="VisibleOnScreenNotifier2D" parent="." index="5"]
+rect = Rect2(-112, -240, 224, 480)

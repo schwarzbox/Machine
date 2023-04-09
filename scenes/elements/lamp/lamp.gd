@@ -9,8 +9,5 @@ func _ready() -> void:
 	super()
 
 func _has_energy() -> bool:
-	for child in connectors_children:
-		if child.type == Globals.Connectors.IN:
-			if child.connected_has_energy():
-				return true
-	return false
+	return $Connectors/In.connected_has_energy()
+

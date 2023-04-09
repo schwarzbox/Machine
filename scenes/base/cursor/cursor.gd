@@ -9,6 +9,9 @@ const type: int = Globals.GAME.CURSOR_TYPE
 var _cursor_texture: Texture2D = null
 
 func _show_sprite(tx: Texture2D = null) -> void:
+	$Area2D.show()
+	$Area2D/CollisionShape2D.disabled = false
+
 	if tx:
 		texture = tx
 		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
@@ -19,6 +22,9 @@ func _show_sprite(tx: Texture2D = null) -> void:
 		_hide_sprite()
 
 func _hide_sprite() -> void:
+	$Area2D.hide()
+	$Area2D/CollisionShape2D.disabled = true
+
 	texture = null
 	position = Vector2()
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -48,13 +54,12 @@ func _on_elements_sprite_hided() -> void:
 	_hide_sprite()
 
 func _on_elements_sprite_texture_saved(
-	tx: Texture2D, polygon: PackedVector2Array
+	tx: Texture2D, size: Vector2
 ) -> void:
-	$Area2D/CollisionPolygon2D.polygon = polygon
+	$Area2D/CollisionShape2D.shape.size = size
 	_cursor_texture = tx
 
 func _on_elements_sprite_texture_removed() -> void:
-	$Area2D/CollisionPolygon2D.polygon = []
 	_cursor_texture = null
 
 func _on_elements_sprite_position_updated(pos: Vector2) -> void:

@@ -24,14 +24,14 @@ var _is_cloned: bool = false: get = is_cloned, set =  set_is_cloned
 var _is_first_area_mouse_entered: bool = false
 var _safe_area_entered_areas: Dictionary = {}
 var _temporary_wires: Array = []:
-	set(value): return
+	set(_value): return
 
 var _on_texture: Texture2D = null
 var _off_texture: Texture2D = null
 
 @onready var last_valid_position: Vector2 = position
 @onready var connectors_children: Array = $Connectors.get_children():
-	set(value): return
+	set(_value): return
 
 func _ready() -> void:
 	add_to_group("Elements")
@@ -72,9 +72,8 @@ func _ready() -> void:
 	$VisibleOnScreenNotifier2D.rect.position = half_sprite_size * -1
 	$VisibleOnScreenNotifier2D.rect.size = sprite_size
 
-	# hide all invisble elements
+	# hide all invisible elements
 	visible_hide()
-
 
 func outline(value: bool) -> void:
 	$FirstSprite2D.material.set_shader_parameter("is_outlined", value)

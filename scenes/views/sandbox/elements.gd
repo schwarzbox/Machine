@@ -131,7 +131,7 @@ func set_selected_scene(scene: PackedScene, tx: Texture2D) -> void:
 		"sprite_texture_saved",
 		tx,
 		# save polygon data to check safe area
-		scene.instantiate().get_node("SafeArea/CollisionPolygon2D").polygon
+		scene.instantiate().get_node(^"SafeArea/CollisionShape2D").shape.size
 	)
 	get_tree().call_group(
 		"Elements", "set_alpha", Globals.GAME.UNSELECTED_ALPHA
@@ -193,6 +193,9 @@ func _is_draw_wire_state() -> bool:
 
 func _is_wire_selected_scene() -> bool:
 	return (selected_scene == _wire_scene)
+
+func _on_file_menu_file_loaded() -> void:
+	sort_objects_for_representation()
 
 func _on_camera_2d_zoom_changed(value: float) -> void:
 	actual_zoom = value
@@ -349,16 +352,16 @@ func _on_objects_connector_area_entered(
 
 		var wire_connector = null
 		if connector.type == Globals.Connectors.IN:
-			wire_connector = wire.get_node("Connectors/Out")
+			wire_connector = wire.get_node(^"Connectors/Out")
 		else:
-			wire_connector = wire.get_node("Connectors/In")
+			wire_connector = wire.get_node(^"Connectors/In")
 
 		Connector.setup_connection(connector, connector.owner, wire_connector, wire)
 
 		if other.type == Globals.Connectors.IN:
-			wire_connector = wire.get_node("Connectors/Out2")
+			wire_connector = wire.get_node(^"Connectors/Out2")
 		else:
-			wire_connector = wire.get_node("Connectors/In2")
+			wire_connector = wire.get_node(^"Connectors/In2")
 
 		Connector.setup_connection(other, other.owner, wire_connector, wire)
 

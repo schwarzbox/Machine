@@ -10,5 +10,4 @@ func _ready() -> void:
 
 func _has_energy() -> bool:
 	$Connectors/Out.set_energy(true)
-	$Connectors/Out2.set_energy(true)
 	return true

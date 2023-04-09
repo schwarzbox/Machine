@@ -11,9 +11,9 @@ uniform sampler2D dissolveNoise;
 uniform bool is_dissolve = false;
 
 // stripe
-uniform vec2 texture_size = vec2(137, 137);
+uniform vec2 texture_size = vec2(256, 256);
 uniform vec4 stripe_color : source_color;
-uniform float stripe_width = 4.0;
+uniform float stripe_width = 24.0;
 uniform float stripe_bias = 2.0;
 uniform bool is_striped = false;
 // set alpha
@@ -50,15 +50,16 @@ void fragment() {
 	} else if (is_outlined) {
 		COLOR = mix(col, outline_color, maxa - mina);
 	} else if (is_striped) {
+		
 		float divisions = texture_size.x / stripe_width;
-		//	vec2 base_uv = fract(UV * 2.0);
-		if (floor(mod(UV.x * divisions, stripe_bias)) < 0.0001) {
+//		reduce size
+//		vec2 base_uv = fract(UV * 2.0);
+		if (floor(mod((UV.y - UV.x) * divisions, stripe_bias)) < 0.01) {
 			COLOR = col;
 		} else {
 			COLOR = mix(col, stripe_color, col.a * 0.7); 
 		} 
 	} else if (is_created)  {
-		
 		col.a = col.a * texture_alpha;
 		COLOR = col;
 	} else {

@@ -28,7 +28,8 @@ func outline(value: bool) -> void:
 	$SecondSprite2D.material.set_shader_parameter("is_outlined", value)
 
 func set_alpha(value) -> void:
-	$Line2D.modulate.a = value
+	# always
+	$Line2D.modulate.a = 0.7
 	$FirstSprite2D.modulate.a = 1.0
 	$SecondSprite2D.modulate.a = 1.0
 

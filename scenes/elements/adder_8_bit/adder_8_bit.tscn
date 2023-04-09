@@ -30,18 +30,12 @@ load_path = "res://.godot/imported/adder_8_bit_off.png-93f47762d126cd5bd6f5b1533
 script = ExtResource("7")
 type = 18
 
-[node name="CollisionPolygon2D" parent="FirstArea" index="0"]
-polygon = PackedVector2Array(312, -147, 335, -136, 335, -125, 351, -116, 351, -108, 212, -38, 224, -32, 224, -27, 214, -22, 220, -19, 220, -14, -84, 139, -96, 133, -112, 141, -128, 133, -272, 205, -304, 189, -328, 201, -384, 173, -384, 164, -372, 158, -374, 149, 251, -163, 272, -151, 276, -153, 300, -142)
-
 [node name="FirstSprite2D" parent="." index="1"]
 material = SubResource("ShaderMaterial_m46s6")
 texture = SubResource("CompressedTexture2D_0tgvb")
 
 [node name="SafeArea" parent="." index="2"]
 visible = false
-
-[node name="CollisionPolygon2D" parent="SafeArea" index="0"]
-polygon = PackedVector2Array(269, -179, 427, -94, -261, 254, -431, 171)
 
 [node name="Out" parent="Connectors" index="0" instance=ExtResource("2")]
 position = Vector2(207, -11)

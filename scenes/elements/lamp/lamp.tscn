@@ -1,10 +1,13 @@
-[gd_scene load_steps=8 format=3 uid="uid://cn77kyk8aw75o"]
+[gd_scene load_steps=10 format=3 uid="uid://cn77kyk8aw75o"]
 
 [ext_resource type="PackedScene" uid="uid://bhsk0p4obuir6" path="res://scenes/base/element/element.tscn" id="1"]
 [ext_resource type="Script" path="res://scenes/elements/lamp/lamp.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://i3np3a2r6kve" path="res://scenes/base/connector/in.tscn" id="3"]
 [ext_resource type="Shader" path="res://scenes/base/element/element_shader.gdshader" id="3_q8xqr"]
 [ext_resource type="Texture2D" uid="uid://cr8kjefxskk42" path="res://scenes/base/element/dissolve_texture.tres" id="4_mt5pg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rjt60"]
+size = Vector2(160, 206)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_060n8"]
 resource_local_to_scene = true
@@ -14,9 +17,9 @@ shader_parameter/outline_width = 1.0
 shader_parameter/outline_color = null
 shader_parameter/is_outlined = false
 shader_parameter/is_dissolve = false
-shader_parameter/texture_size = Vector2(137, 137)
+shader_parameter/texture_size = Vector2(256, 256)
 shader_parameter/stripe_color = null
-shader_parameter/stripe_width = 4.0
+shader_parameter/stripe_width = 24.0
 shader_parameter/stripe_bias = 2.0
 shader_parameter/is_striped = false
 shader_parameter/is_created = false
@@ -25,22 +28,26 @@ shader_parameter/dissolveNoise = ExtResource("4_mt5pg")
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_3o46e"]
 load_path = "res://.godot/imported/lamp_off.png-4170925f85ad573a45b87a3de54c24be.ctex"
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kfruk"]
+size = Vector2(160, 192)
+
 [node name="Lamp" instance=ExtResource("1")]
 script = ExtResource("2")
 type = 4
 
-[node name="CollisionPolygon2D" parent="FirstArea" index="0"]
-polygon = PackedVector2Array(4, -42, 19, -34, 23, -28, 23, 0, 19, 6, 16, 8, 16, 19, 24, 24, 24, 32, 32, 32, 43, 38, 43, 43, 20, 55, 8, 49, 8, 40, 0, 45, -24, 33, -24, 28, -28, 27, -32, 29, -44, 23, -44, 18, -20, 6, -24, 0, -24, -28, -20, -34, -4, -42)
+[node name="CollisionShape2D" parent="FirstArea" index="0"]
+position = Vector2(2.08165e-12, 6)
+shape = SubResource("RectangleShape2D_rjt60")
 
 [node name="FirstSprite2D" parent="." index="1"]
 material = SubResource("ShaderMaterial_060n8")
 texture = SubResource("CompressedTexture2D_3o46e")
 
-[node name="CollisionPolygon2D" parent="SafeArea" index="0"]
-polygon = PackedVector2Array(-29, 1, 54, 43, 25, 58, -58, 16)
+[node name="CollisionShape2D" parent="SafeArea" index="0"]
+shape = SubResource("RectangleShape2D_kfruk")
 
 [node name="In" parent="Connectors" index="0" instance=ExtResource("3")]
-position = Vector2(-30, 13)
+position = Vector2(2.08165e-12, 96)
 
-[node name="In2" parent="Connectors" index="1" instance=ExtResource("3")]
-position = Vector2(31, 45)
+[node name="VisibleOnScreenNotifier2D" parent="." index="5"]
+rect = Rect2(-80, -96, 160, 192)

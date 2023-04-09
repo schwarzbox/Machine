@@ -69,8 +69,8 @@ func _set_camera_in_center() -> void:
 
 func _camera_zoom(factor: float) -> void:
 	zoom = Vector2(
-		clamp(zoom.x * factor, 1.0, Globals.CAMERA.ZOOM_MAX),
-		clamp(zoom.y * factor, 1.0, Globals.CAMERA.ZOOM_MAX)
+		clamp(zoom.x * factor, 0.5, Globals.CAMERA.ZOOM_MAX),
+		clamp(zoom.y * factor, 0.5, Globals.CAMERA.ZOOM_MAX)
 	)
 	emit_signal("zoom_changed", zoom.x)
 

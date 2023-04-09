@@ -87,7 +87,7 @@ class Idle:
 			)
 		else:
 			# sort before select enetered element
-#			_machine.sort_objects_for_representation()
+			_machine.sort_objects_for_representation()
 			_machine.move_child(
 				entered_element, _machine.get_child_count() - 1
 			)
@@ -148,6 +148,8 @@ class Create:
 						_machine.add_child_element(instance)
 
 						_machine.re_add_selected_element(instance)
+
+						instance.position = mouse_pos
 						_machine.active_state = _machine.draw_wire_state
 				else:
 					# prevent put element in safe area
@@ -158,7 +160,7 @@ class Create:
 					_machine.add_child_element(instance)
 					_machine.re_add_selected_element(instance)
 					# sort after create element
-					_machine.sort_objects_for_representation()
+#					_machine.sort_objects_for_representation()
 
 			elif event.button_index == MOUSE_BUTTON_RIGHT:
 				process_remove_selected_scene()

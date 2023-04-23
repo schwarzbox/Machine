@@ -5,12 +5,10 @@ const _off: Texture2D = preload("res://scenes/elements/switch/switch_off.png")
 const _on_off: Texture2D = preload("res://scenes/elements/switch/switch_on_off.png")
 const _off_on: Texture2D = preload("res://scenes/elements/switch/switch_off_on.png")
 
-
 var _is_activated: bool = false
 
 func _ready() -> void:
 	type = Globals.Elements.SWITCH
-
 	super()
 
 func reset_energy():

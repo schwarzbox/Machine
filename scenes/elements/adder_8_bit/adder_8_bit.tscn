@@ -1,23 +1,27 @@
-[gd_scene load_steps=9 format=3 uid="uid://ck8uvwlwnv14h"]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="PackedScene" uid="uid://dd47odg8af7i3" path="res://scenes/base/connector/out.tscn" id="2"]
 [ext_resource type="PackedScene" uid="uid://bhsk0p4obuir6" path="res://scenes/base/element/element.tscn" id="3"]
-[ext_resource type="Shader" path="res://scenes/base/element/element_shader.gdshader" id="3_x12bh"]
+[ext_resource type="Shader" path="res://scenes/base/element/element.gdshader" id="3_x12bh"]
 [ext_resource type="Texture2D" uid="uid://cr8kjefxskk42" path="res://scenes/base/element/dissolve_texture.tres" id="4_ltgog"]
+[ext_resource type="Texture2D" uid="uid://dod40pcuxqhnp" path="res://scenes/elements/adder_8_bit/diod.png" id="5_5wfnl"]
 [ext_resource type="PackedScene" uid="uid://i3np3a2r6kve" path="res://scenes/base/connector/in.tscn" id="6"]
 [ext_resource type="Script" path="res://scenes/elements/adder_8_bit/adder_8_bit.gd" id="7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l3uap"]
+size = Vector2(416, 1538)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_m46s6"]
 resource_local_to_scene = true
 shader = ExtResource("3_x12bh")
 shader_parameter/texture_alpha = 1.0
-shader_parameter/outline_width = 1.0
+shader_parameter/outline_width = 2.0
 shader_parameter/outline_color = null
 shader_parameter/is_outlined = false
 shader_parameter/is_dissolve = false
-shader_parameter/texture_size = Vector2(137, 137)
+shader_parameter/texture_size = Vector2(256, 256)
 shader_parameter/stripe_color = null
-shader_parameter/stripe_width = 4.0
+shader_parameter/stripe_width = 24.0
 shader_parameter/stripe_bias = 2.0
 shader_parameter/is_striped = false
 shader_parameter/is_created = false
@@ -26,91 +30,181 @@ shader_parameter/dissolveNoise = ExtResource("4_ltgog")
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_0tgvb"]
 load_path = "res://.godot/imported/adder_8_bit_off.png-93f47762d126cd5bd6f5b1533e739463.ctex"
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r2jvr"]
+size = Vector2(384, 1504)
+
 [node name="Adder8Bit" instance=ExtResource("3")]
 script = ExtResource("7")
 type = 18
+
+[node name="CollisionShape2D" parent="FirstArea" index="0"]
+shape = SubResource("RectangleShape2D_l3uap")
 
 [node name="FirstSprite2D" parent="." index="1"]
 material = SubResource("ShaderMaterial_m46s6")
 texture = SubResource("CompressedTexture2D_0tgvb")
 
-[node name="SafeArea" parent="." index="2"]
+[node name="InSprite" type="Sprite2D" parent="FirstSprite2D" index="0"]
 visible = false
+position = Vector2(-88, -612)
+texture = ExtResource("5_5wfnl")
+
+[node name="InSprite2" type="Sprite2D" parent="FirstSprite2D" index="1"]
+visible = false
+position = Vector2(-88, -532)
+texture = ExtResource("5_5wfnl")
+
+[node name="InSprite3" type="Sprite2D" parent="FirstSprite2D" index="2"]
+visible = false
+position = Vector2(-88, -452)
+texture = ExtResource("5_5wfnl")
+
+[node name="InSprite4" type="Sprite2D" parent="FirstSprite2D" index="3"]
+visible = false
+position = Vector2(-88, -372)
+texture = ExtResource("5_5wfnl")
+
+[node name="InSprite5" type="Sprite2D" parent="FirstSprite2D" index="4"]
+visible = false
+position = Vector2(-88, -292)
+texture = ExtResource("5_5wfnl")
+
+[node name="InSprite6" type="Sprite2D" parent="FirstSprite2D" index="5"]
+visible = false
+position = Vector2(-88, -212)
+texture = ExtResource("5_5wfnl")
+
+[node name="InSprite7" type="Sprite2D" parent="FirstSprite2D" index="6"]
+visible = false
+position = Vector2(-88, -132)
+texture = ExtResource("5_5wfnl")
+
+[node name="InSprite8" type="Sprite2D" parent="FirstSprite2D" index="7"]
+visible = false
+position = Vector2(-88, -52)
+texture = ExtResource("5_5wfnl")
+
+[node name="InSprite9" type="Sprite2D" parent="FirstSprite2D" index="8"]
+visible = false
+position = Vector2(-88, 52)
+texture = ExtResource("5_5wfnl")
+
+[node name="InSprite10" type="Sprite2D" parent="FirstSprite2D" index="9"]
+visible = false
+position = Vector2(-88, 132)
+texture = ExtResource("5_5wfnl")
+
+[node name="InSprite11" type="Sprite2D" parent="FirstSprite2D" index="10"]
+visible = false
+position = Vector2(-88, 212)
+texture = ExtResource("5_5wfnl")
+
+[node name="InSprite12" type="Sprite2D" parent="FirstSprite2D" index="11"]
+visible = false
+position = Vector2(-88, 292)
+texture = ExtResource("5_5wfnl")
+
+[node name="InSprite13" type="Sprite2D" parent="FirstSprite2D" index="12"]
+visible = false
+position = Vector2(-88, 372)
+texture = ExtResource("5_5wfnl")
+
+[node name="InSprite14" type="Sprite2D" parent="FirstSprite2D" index="13"]
+visible = false
+position = Vector2(-88, 452)
+texture = ExtResource("5_5wfnl")
+
+[node name="InSprite15" type="Sprite2D" parent="FirstSprite2D" index="14"]
+visible = false
+position = Vector2(-88, 532)
+texture = ExtResource("5_5wfnl")
+
+[node name="InSprite16" type="Sprite2D" parent="FirstSprite2D" index="15"]
+visible = false
+position = Vector2(-88, 612)
+texture = ExtResource("5_5wfnl")
+
+[node name="CollisionShape2D" parent="SafeArea" index="0"]
+position = Vector2(-0.5, 0)
+shape = SubResource("RectangleShape2D_r2jvr")
 
 [node name="Out" parent="Connectors" index="0" instance=ExtResource("2")]
-position = Vector2(207, -11)
+position = Vector2(192, -280)
 
 [node name="Out2" parent="Connectors" index="1" instance=ExtResource("2")]
-position = Vector2(167, 9)
+position = Vector2(192, -200)
 
 [node name="Out3" parent="Connectors" index="2" instance=ExtResource("2")]
-position = Vector2(127, 29)
+position = Vector2(192, -120)
 
 [node name="Out4" parent="Connectors" index="3" instance=ExtResource("2")]
-position = Vector2(87, 49)
+position = Vector2(192, -40)
 
 [node name="Out5" parent="Connectors" index="4" instance=ExtResource("2")]
-position = Vector2(47, 69)
+position = Vector2(192, 40)
 
 [node name="Out6" parent="Connectors" index="5" instance=ExtResource("2")]
-position = Vector2(7, 89)
+position = Vector2(192, 120)
 
 [node name="Out7" parent="Connectors" index="6" instance=ExtResource("2")]
-position = Vector2(-33, 109)
+position = Vector2(192, 200)
 
 [node name="Out8" parent="Connectors" index="7" instance=ExtResource("2")]
-position = Vector2(-73, 129)
+position = Vector2(192, 280)
 
 [node name="OutC" parent="Connectors" index="8" instance=ExtResource("2")]
-position = Vector2(-339, 191)
+position = Vector2(2.08165e-12, 752)
 
-[node name="In" parent="Connectors" index="9" instance=ExtResource("6")]
-position = Vector2(242, -155)
+[node name="InC" parent="Connectors" index="9" instance=ExtResource("6")]
+position = Vector2(0, -752)
 
-[node name="InC" parent="Connectors" index="10" instance=ExtResource("6")]
-position = Vector2(322, -142)
+[node name="In" parent="Connectors" index="10" instance=ExtResource("6")]
+position = Vector2(-192, -612)
 
 [node name="In2" parent="Connectors" index="11" instance=ExtResource("6")]
-position = Vector2(202, -135)
+position = Vector2(-192, -532)
 
 [node name="In3" parent="Connectors" index="12" instance=ExtResource("6")]
-position = Vector2(162, -115)
+position = Vector2(-192, -452)
 
 [node name="In4" parent="Connectors" index="13" instance=ExtResource("6")]
-position = Vector2(122, -95)
+position = Vector2(-192, -372)
 
 [node name="In5" parent="Connectors" index="14" instance=ExtResource("6")]
-position = Vector2(82, -75)
+position = Vector2(-192, -292)
 
 [node name="In6" parent="Connectors" index="15" instance=ExtResource("6")]
-position = Vector2(42, -55)
+position = Vector2(-192, -212)
 
 [node name="In7" parent="Connectors" index="16" instance=ExtResource("6")]
-position = Vector2(2, -35)
+position = Vector2(-192, -132)
 
 [node name="In8" parent="Connectors" index="17" instance=ExtResource("6")]
-position = Vector2(-38, -15)
+position = Vector2(-192, -52)
 
 [node name="In9" parent="Connectors" index="18" instance=ExtResource("6")]
-position = Vector2(-78, 5)
+position = Vector2(-192, 52)
 
 [node name="In10" parent="Connectors" index="19" instance=ExtResource("6")]
-position = Vector2(-118, 25)
+position = Vector2(-192, 132)
 
 [node name="In11" parent="Connectors" index="20" instance=ExtResource("6")]
-position = Vector2(-158, 45)
+position = Vector2(-192, 212)
 
 [node name="In12" parent="Connectors" index="21" instance=ExtResource("6")]
-position = Vector2(-198, 65)
+position = Vector2(-192, 292)
 
 [node name="In13" parent="Connectors" index="22" instance=ExtResource("6")]
-position = Vector2(-238, 85)
+position = Vector2(-192, 372)
 
 [node name="In14" parent="Connectors" index="23" instance=ExtResource("6")]
-position = Vector2(-278, 105)
+position = Vector2(-192, 452)
 
 [node name="In15" parent="Connectors" index="24" instance=ExtResource("6")]
-position = Vector2(-318, 125)
+position = Vector2(-192, 532)
 
 [node name="In16" parent="Connectors" index="25" instance=ExtResource("6")]
-position = Vector2(-358, 145)
+position = Vector2(-192, 612)
+
+[node name="VisibleOnScreenNotifier2D" parent="." index="5"]
+position = Vector2(18, -76)

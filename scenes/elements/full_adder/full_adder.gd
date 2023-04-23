@@ -36,15 +36,15 @@ func _has_energy() -> bool:
 		$Connectors/Out2.set_energy(true)
 		_on_texture = self._on
 		return true
-	if in1 && in2:
+	elif in1 && in2:
 		$Connectors/Out.set_energy(false)
 		$Connectors/Out2.set_energy(true)
-		_on_texture = self._on_on_off
+		_on_texture = self._off_on_on
 		return true
 	elif in2 && in3:
 		$Connectors/Out.set_energy(false)
 		$Connectors/Out2.set_energy(true)
-		_on_texture = self._off_on_on
+		_on_texture = self._on_on_off
 		return true
 	elif in1 && in3:
 		$Connectors/Out.set_energy(false)
@@ -54,7 +54,7 @@ func _has_energy() -> bool:
 	elif in1:
 		$Connectors/Out.set_energy(true)
 		$Connectors/Out2.set_energy(false)
-		_on_texture = self._on_off_off
+		_on_texture = self._off_off_on
 		return true
 	elif in2:
 		$Connectors/Out.set_energy(true)
@@ -64,7 +64,7 @@ func _has_energy() -> bool:
 	elif in3:
 		$Connectors/Out.set_energy(true)
 		$Connectors/Out2.set_energy(false)
-		_on_texture = self._off_off_on
+		_on_texture = self._on_off_off
 		return true
 	else:
 		_off_texture = self._off

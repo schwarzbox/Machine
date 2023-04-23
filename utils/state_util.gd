@@ -37,6 +37,11 @@ class Idle:
 		_machine.active_state = _machine.create_state
 
 	func process_event(event: InputEvent, mouse_pos: Vector2) -> void:
+		if event is InputEventKey:
+			var elements = _machine.selected_elements.values()
+			if elements.size() == 1:
+				_rotate_with_arrows(elements[0])
+
 		var entered_element = _machine.get_mouse_entered_element()
 		# fix popup tool behaviour after hide
 		if (
@@ -46,13 +51,21 @@ class Idle:
 
 			_machine.emit_signal("cursor_shape_updated", Input.CURSOR_CAN_DROP)
 
+			if entered_element.is_cloned:
+				# to correctly reconect wires after cloning
+				_machine.get_tree().call_group_flags(
+					SceneTree.GROUP_CALL_DEFAULT, "Elements", "set_is_cloned", false
+				)
+
 			var element_type = entered_element.type
 			if event is InputEventMouseButton:
 				if event.button_index == MOUSE_BUTTON_LEFT:
 					if event.is_double_click():
 						if element_type == Globals.Elements.WIRE:
 							entered_element.unlink_wire()
-						if element_type == Globals.Elements.SWITCH:
+						elif element_type == Globals.Elements.SWITCH:
+							entered_element.switch()
+						elif element_type == Globals.Elements.BUTTON:
 							entered_element.switch()
 
 					elif event.pressed:
@@ -60,6 +73,7 @@ class Idle:
 
 				elif event.button_index == MOUSE_BUTTON_RIGHT:
 					_right_button_clicked(entered_element)
+
 		else:
 			_machine.emit_signal("cursor_shape_updated", Input.CURSOR_ARROW)
 
@@ -79,6 +93,12 @@ class Idle:
 	func draw():
 		# to prevent warning after switch from select_state
 		pass
+
+	func _rotate_with_arrows(element: Element) -> void:
+		if Input.is_action_pressed("ui_left"):
+			element.rotate_ccw()
+		elif Input.is_action_pressed("ui_right"):
+			element.rotate_cw()
 
 	func _left_button_pressed(element_type, entered_element: Element) -> void:
 		if element_type == Globals.Elements.WIRE:
@@ -147,8 +167,6 @@ class Create:
 						_machine.active_wire = instance
 						_machine.add_child_element(instance)
 
-						_machine.re_add_selected_element(instance)
-
 						instance.position = mouse_pos
 						_machine.active_state = _machine.draw_wire_state
 				else:
@@ -158,7 +176,7 @@ class Create:
 
 					instance.position = mouse_pos
 					_machine.add_child_element(instance)
-					_machine.re_add_selected_element(instance)
+
 					# sort after create element
 #					_machine.sort_objects_for_representation()
 

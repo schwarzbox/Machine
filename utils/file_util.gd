@@ -41,6 +41,7 @@ func _serialize(element: Element) -> Dictionary:
 		"filename": element.get_scene_file_path(),
 		"name": String(element.get_name()),
 		"position": element.position,
+		"rotation": element.rotation,
 		"scale": element.scale,
 		"points": []
 	}
@@ -52,6 +53,7 @@ func _deserialize(data):
 	var element = load(data["filename"]).instantiate()
 	element.name = String(data["name"])
 	element.position = data["position"]
+	element.rotation = data["rotation"]
 	element.scale = data["scale"]
 
 	if element.type == Globals.Elements.WIRE:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://b6acfo7s7rnlx"]
+[gd_scene load_steps=35 format=3 uid="uid://c1jkg4wa7280n"]
 
 [ext_resource type="Script" path="res://scenes/menus/element_menu/element_menu.gd" id="1_jgni7"]
 [ext_resource type="PackedScene" uid="uid://bvmk3ar4aosee" path="res://scenes/menus/color_label/color_label.tscn" id="2_0oyv5"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://c6aqtwhd15ysx" path="res://scenes/menus/element_menu/switch_icon.png" id="6_myrku"]
 [ext_resource type="Texture2D" uid="uid://cbphp2dykk24i" path="res://scenes/menus/element_menu/relay_icon.png" id="7_x8nkq"]
 [ext_resource type="Texture2D" uid="uid://dvffw88udru7i" path="res://scenes/menus/element_menu/power_relay_icon.png" id="8_as52l"]
+[ext_resource type="Texture2D" uid="uid://nlsjt80a66o0" path="res://scenes/menus/element_menu/button_icon.png" id="8_on0h3"]
 [ext_resource type="Texture2D" uid="uid://m3ttrhvoqpix" path="res://scenes/menus/element_menu/inverter_icon.png" id="9_4dngy"]
 [ext_resource type="Texture2D" uid="uid://nuekdbs7x5fe" path="res://scenes/menus/element_menu/power_inverter_icon.png" id="10_2a38q"]
 [ext_resource type="Texture2D" uid="uid://cxs4sbywjn3eh" path="res://scenes/menus/element_menu/and_icon.png" id="11_01ji2"]
@@ -19,7 +20,10 @@
 [ext_resource type="Texture2D" uid="uid://cyg0uprf4vke4" path="res://scenes/menus/element_menu/ex_or_icon.png" id="16_dvu0i"]
 [ext_resource type="Texture2D" uid="uid://bxnli8nrh62se" path="res://scenes/menus/element_menu/half_adder_icon.png" id="17_74vjs"]
 [ext_resource type="Texture2D" uid="uid://brf6x8r8qyoai" path="res://scenes/menus/element_menu/full_adder_icon.png" id="18_ipv0k"]
-[ext_resource type="Texture2D" uid="uid://t0fien2ojhc2" path="res://scenes/menus/element_menu/adder_8_bit_icon.png" id="19_kgtw5"]
+[ext_resource type="Texture2D" uid="uid://d0gask7ysfmta" path="res://scenes/menus/element_menu/selector_icon.png" id="19_qf14h"]
+[ext_resource type="Texture2D" uid="uid://lq50qu1ohur8" path="res://scenes/menus/element_menu/trigger_reset_icon.png" id="22_me1ba"]
+[ext_resource type="Texture2D" uid="uid://x18kxwr5yrx8" path="res://scenes/menus/element_menu/trigger_level_icon.png" id="23_ct1sc"]
+[ext_resource type="Texture2D" uid="uid://ck0im8spthior" path="res://scenes/menus/element_menu/trigger_level_reset_icon.png" id="24_ajilk"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_jswpn"]
 command_or_control_autoremap = true
@@ -51,7 +55,7 @@ events = [SubResource("InputEventKey_1ox14")]
 
 [sub_resource type="InputEventKey" id="InputEventKey_4xt7x"]
 command_or_control_autoremap = true
-keycode = 83
+keycode = 66
 
 [sub_resource type="Shortcut" id="Shortcut_otl85"]
 events = [SubResource("InputEventKey_4xt7x")]
@@ -71,11 +75,11 @@ text = "Elements"
 
 [node name="GridContainer" type="GridContainer" parent="."]
 layout_mode = 2
-columns = 5
+columns = 2
 
 [node name="Wire" type="TextureButton" parent="GridContainer"]
 clip_contents = true
-custom_minimum_size = Vector2(64, 64)
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 tooltip_text = "Wire"
 mouse_filter = 1
@@ -96,7 +100,7 @@ metadata/_edit_lock_ = true
 
 [node name="Battery" type="TextureButton" parent="GridContainer"]
 clip_contents = true
-custom_minimum_size = Vector2(64, 64)
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 tooltip_text = "Battery"
 mouse_filter = 1
@@ -116,7 +120,8 @@ color = Color(0.333333, 0.333333, 0.333333, 1)
 metadata/_edit_lock_ = true
 
 [node name="Lamp" type="TextureButton" parent="GridContainer"]
-custom_minimum_size = Vector2(64, 64)
+clip_contents = true
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 tooltip_text = "Lamp"
 mouse_filter = 1
@@ -136,7 +141,7 @@ color = Color(0.333333, 0.333333, 0.333333, 1)
 metadata/_edit_lock_ = true
 
 [node name="Display" type="TextureButton" parent="GridContainer"]
-custom_minimum_size = Vector2(64, 64)
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 tooltip_text = "Display"
 mouse_filter = 1
@@ -156,7 +161,8 @@ color = Color(0.333333, 0.333333, 0.333333, 1)
 metadata/_edit_lock_ = true
 
 [node name="Switch" type="TextureButton" parent="GridContainer"]
-custom_minimum_size = Vector2(64, 64)
+clip_contents = true
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_stretch_ratio = 0.5
 tooltip_text = "Switch"
@@ -176,9 +182,31 @@ mouse_filter = 2
 color = Color(0.333333, 0.333333, 0.333333, 1)
 metadata/_edit_lock_ = true
 
+[node name="Button" type="TextureButton" parent="GridContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+size_flags_stretch_ratio = 0.5
+tooltip_text = "Button"
+mouse_filter = 1
+toggle_mode = true
+shortcut = SubResource("Shortcut_otl85")
+texture_normal = ExtResource("8_on0h3")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Button"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
 [node name="Relay" type="TextureButton" parent="GridContainer"]
 clip_contents = true
-custom_minimum_size = Vector2(64, 64)
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_stretch_ratio = 0.5
 tooltip_text = "Relay"
@@ -199,7 +227,7 @@ metadata/_edit_lock_ = true
 
 [node name="Power Relay" type="TextureButton" parent="GridContainer"]
 clip_contents = true
-custom_minimum_size = Vector2(64, 64)
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_stretch_ratio = 0.5
 tooltip_text = "Power Relay"
@@ -220,7 +248,7 @@ metadata/_edit_lock_ = true
 
 [node name="Inverter" type="TextureButton" parent="GridContainer"]
 clip_contents = true
-custom_minimum_size = Vector2(64, 64)
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_stretch_ratio = 0.5
 tooltip_text = "Inverter"
@@ -241,7 +269,7 @@ metadata/_edit_lock_ = true
 
 [node name="Power Inverter" type="TextureButton" parent="GridContainer"]
 clip_contents = true
-custom_minimum_size = Vector2(64, 64)
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_stretch_ratio = 0.5
 tooltip_text = "Power Inverter"
@@ -262,7 +290,7 @@ metadata/_edit_lock_ = true
 
 [node name="And" type="TextureButton" parent="GridContainer"]
 clip_contents = true
-custom_minimum_size = Vector2(64, 64)
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_stretch_ratio = 0.5
 tooltip_text = "And"
@@ -283,7 +311,7 @@ metadata/_edit_lock_ = true
 
 [node name="Or" type="TextureButton" parent="GridContainer"]
 clip_contents = true
-custom_minimum_size = Vector2(64, 64)
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_stretch_ratio = 0.5
 tooltip_text = "Or"
@@ -304,7 +332,7 @@ metadata/_edit_lock_ = true
 
 [node name="Not And" type="TextureButton" parent="GridContainer"]
 clip_contents = true
-custom_minimum_size = Vector2(64, 64)
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_stretch_ratio = 0.5
 tooltip_text = "Not And"
@@ -325,7 +353,7 @@ metadata/_edit_lock_ = true
 
 [node name="Not Or" type="TextureButton" parent="GridContainer"]
 clip_contents = true
-custom_minimum_size = Vector2(64, 64)
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_stretch_ratio = 0.5
 tooltip_text = "Not Or"
@@ -346,7 +374,7 @@ metadata/_edit_lock_ = true
 
 [node name="Ex And" type="TextureButton" parent="GridContainer"]
 clip_contents = true
-custom_minimum_size = Vector2(64, 64)
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_stretch_ratio = 0.5
 tooltip_text = "Ex And"
@@ -367,7 +395,7 @@ metadata/_edit_lock_ = true
 
 [node name="Ex Or" type="TextureButton" parent="GridContainer"]
 clip_contents = true
-custom_minimum_size = Vector2(64, 64)
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_stretch_ratio = 0.5
 tooltip_text = "Ex Or"
@@ -388,7 +416,7 @@ metadata/_edit_lock_ = true
 
 [node name="Half Adder" type="TextureButton" parent="GridContainer"]
 clip_contents = true
-custom_minimum_size = Vector2(64, 64)
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_stretch_ratio = 0.5
 tooltip_text = "Half Adder"
@@ -409,10 +437,10 @@ metadata/_edit_lock_ = true
 
 [node name="Full Adder" type="TextureButton" parent="GridContainer"]
 clip_contents = true
-custom_minimum_size = Vector2(64, 64)
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_stretch_ratio = 0.5
-tooltip_text = "Half Adder"
+tooltip_text = "Full Adder"
 mouse_filter = 1
 toggle_mode = true
 texture_normal = ExtResource("18_ipv0k")
@@ -428,19 +456,82 @@ mouse_filter = 2
 color = Color(0.333333, 0.333333, 0.333333, 1)
 metadata/_edit_lock_ = true
 
-[node name="Adder 8 Bit" type="TextureButton" parent="GridContainer"]
+[node name="Selector" type="TextureButton" parent="GridContainer"]
 clip_contents = true
-custom_minimum_size = Vector2(64, 64)
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_stretch_ratio = 0.5
-tooltip_text = "Half Adder"
+tooltip_text = "Selector"
 mouse_filter = 1
 toggle_mode = true
-texture_normal = ExtResource("19_kgtw5")
+texture_normal = ExtResource("19_qf14h")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="ColorRect" type="ColorRect" parent="GridContainer/Adder 8 Bit"]
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Selector"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
+[node name="Trigger Reset" type="TextureButton" parent="GridContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+size_flags_stretch_ratio = 0.5
+tooltip_text = "Trigger Reset"
+mouse_filter = 1
+toggle_mode = true
+texture_normal = ExtResource("22_me1ba")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Trigger Reset"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
+[node name="Trigger Level" type="TextureButton" parent="GridContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+size_flags_stretch_ratio = 0.5
+tooltip_text = "Trigger Level"
+mouse_filter = 1
+toggle_mode = true
+texture_normal = ExtResource("23_ct1sc")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Trigger Level"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
+[node name="Trigger Level Reset" type="TextureButton" parent="GridContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+size_flags_stretch_ratio = 0.5
+tooltip_text = "Trigger Level Reset"
+mouse_filter = 1
+toggle_mode = true
+texture_normal = ExtResource("24_ajilk")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Trigger Level Reset"]
 show_behind_parent = true
 layout_mode = 0
 anchor_right = 1.0

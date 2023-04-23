@@ -131,10 +131,9 @@ func set_selected_scene(scene: PackedScene, tx: Texture2D) -> void:
 		"sprite_texture_saved",
 		tx,
 		# save polygon data to check safe area
-		scene.instantiate().get_node(^"SafeArea/CollisionShape2D").shape.size
-	)
-	get_tree().call_group(
-		"Elements", "set_alpha", Globals.GAME.UNSELECTED_ALPHA
+		scene.instantiate().get_node(^"SafeArea/CollisionShape2D").shape.size,
+		# is_element to use BW cursors
+		false if _is_wire_selected_scene() else true
 	)
 
 func remove_selected_scene() -> void:
@@ -142,7 +141,6 @@ func remove_selected_scene() -> void:
 	selected_scene = null
 	emit_signal("sprite_hided")
 	emit_signal("sprite_texture_removed")
-	get_tree().call_group("Elements", "set_alpha", 1.0)
 
 func set_selected_elements_from_areas(selected_areas: Array) -> void:
 	for area in selected_areas:
@@ -219,9 +217,13 @@ func _on_file_menu_elements_deleted() -> void:
 func _on_file_menu_element_added(element: Element) -> void:
 	add_child_element(element)
 
-func _on_popup_tool_flip_pressed() -> void:
+func _on_popup_tool_rotate_cw_pressed() -> void:
 	for element in selected_elements.values():
-		element.call_deferred("flip")
+		element.call_deferred("rotate_cw")
+
+func _on_popup_tool_rotate_ccw_pressed() -> void:
+	for element in selected_elements.values():
+		element.call_deferred("rotate_ccw")
 
 func _on_popup_tool_clone_pressed() -> void:
 	var elements = selected_elements.values()
@@ -236,6 +238,7 @@ func _on_popup_tool_clone_pressed() -> void:
 
 		clone.position = element.position + Vector2(32, 32)
 		clone.scale = element.scale
+		clone.rotation = element.rotation
 		if clone.type == Globals.Elements.WIRE:
 			clone.set_points(element.get_points())
 		clones.append(clone)
@@ -336,7 +339,6 @@ func _on_objects_connector_area_entered(
 
 		Connector.setup_connection(connector, connector.owner, other, other.owner)
 	else:
-
 		if _is_drag_selected_state():
 			return
 
@@ -364,6 +366,9 @@ func _on_objects_connector_area_entered(
 			wire_connector = wire.get_node(^"Connectors/In2")
 
 		Connector.setup_connection(other, other.owner, wire_connector, wire)
+
+		# sync sprites
+		wire.switch_connections(true)
 
 		wire.call_deferred("show_sprites")
 

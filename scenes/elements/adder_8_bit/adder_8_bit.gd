@@ -2,6 +2,8 @@ extends Element
 
 const _on: Texture2D = preload("res://scenes/elements/adder_8_bit/adder_8_bit_on.png")
 const _off: Texture2D = preload("res://scenes/elements/adder_8_bit/adder_8_bit_off.png")
+const _on_off: Texture2D = preload("res://scenes/elements/adder_8_bit/adder_8_bit_on_off.png")
+const _off_on: Texture2D = preload("res://scenes/elements/adder_8_bit/adder_8_bit_off_on.png")
 
 const _relay_util_class: Resource = preload("res://utils/relay_delay_util.gd")
 var _relay_utilC: RelayDelayUtil = _relay_util_class.new()
@@ -15,7 +17,7 @@ var _relay_utils: Array = []
 ]
 
 func _ready() -> void:
-	type = Globals.Elements.ADDER_8_BIT
+#	type = Globals.Elements.ADDER_8_BIT
 	for _i in range(_connectors.size()):
 		_relay_utils.append(_relay_util_class.new())
 	super()
@@ -33,15 +35,34 @@ func _has_energy() -> bool:
 
 	var digit_1 = []
 	for i in range(8):
+		var suffix = str(i + 1)
+		var node_name = "FirstSprite2D/InSprite"
+		if i:
+			node_name = node_name + suffix
+
 		digit_1.append(
 			_relay_utils[i].run(_connectors[i].connected_has_energy())
 		)
+		var connector = get_node(node_name)
+		if digit_1[i]:
+			connector.show()
+		else:
+			connector.hide()
 
 	var digit_2 = []
 	for i in range(8, 16):
+		var suffix = str(i + 1)
+		var node_name = "FirstSprite2D/InSprite"
+		if i:
+			node_name = node_name + suffix
 		digit_2.append(
 			_relay_utils[i].run(_connectors[i].connected_has_energy())
 		)
+		var connector = get_node(node_name)
+		if digit_2[i - 8]:
+			connector.show()
+		else:
+			connector.hide()
 
 	var bits = _add_binary(digit_1, digit_2, inC)
 	# exclude carry_out bit
@@ -59,9 +80,16 @@ func _has_energy() -> bool:
 	var carry_out = bits[-1]
 	if carry_out == 1:
 		$Connectors/OutC.set_energy(true)
-		_on_texture = self._on
+		if inC:
+			_on_texture = self._on
+		else:
+			_on_texture = self._on_off
 	else:
 		$Connectors/OutC.set_energy(false)
+		if inC:
+			_on_texture = self._off_on
+		else:
+			_on_texture = self._off
 
 	if 1 in bits || carry_out == 1:
 		return true

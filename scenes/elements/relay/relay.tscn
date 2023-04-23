@@ -1,9 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://d11af0uojsd2b"]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="PackedScene" uid="uid://bhsk0p4obuir6" path="res://scenes/base/element/element.tscn" id="1"]
 [ext_resource type="Script" path="res://scenes/elements/relay/relay.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://i3np3a2r6kve" path="res://scenes/base/connector/in.tscn" id="3"]
-[ext_resource type="Shader" path="res://scenes/base/element/element_shader.gdshader" id="3_x5cko"]
+[ext_resource type="Shader" path="res://scenes/base/element/element.gdshader" id="3_x5cko"]
 [ext_resource type="PackedScene" uid="uid://dd47odg8af7i3" path="res://scenes/base/connector/out.tscn" id="4"]
 [ext_resource type="Texture2D" uid="uid://cr8kjefxskk42" path="res://scenes/base/element/dissolve_texture.tres" id="4_d6sas"]
 [ext_resource type="Texture2D" uid="uid://lljlg7i3ft7l" path="res://scenes/elements/relay/relay_off.png" id="5_vln54"]
@@ -15,7 +15,7 @@ size = Vector2(256, 320)
 resource_local_to_scene = true
 shader = ExtResource("3_x5cko")
 shader_parameter/texture_alpha = 1.0
-shader_parameter/outline_width = 1.0
+shader_parameter/outline_width = 2.0
 shader_parameter/outline_color = null
 shader_parameter/is_outlined = false
 shader_parameter/is_dissolve = false

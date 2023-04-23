@@ -67,8 +67,6 @@ func _ready() -> void:
 			"connector_area_entered", self._on_connector_area_entered
 		)
 
-	set_alpha(1.0)
-
 	$VisibleOnScreenNotifier2D.rect.position = half_sprite_size * -1
 	$VisibleOnScreenNotifier2D.rect.size = sprite_size
 
@@ -77,10 +75,6 @@ func _ready() -> void:
 
 func outline(value: bool) -> void:
 	$FirstSprite2D.material.set_shader_parameter("is_outlined", value)
-
-func set_alpha(value: float) -> void:
-	$FirstSprite2D.modulate.a = value
-	$FirstSprite2D.material.set_shader_parameter("texture_alpha", value)
 
 func visible_show() -> void:
 	$FirstArea.show()
@@ -191,11 +185,21 @@ func set_is_cloned(value: bool) -> void:
 
 # popup
 
-func flip() -> void:
+func rotate_cw() -> void:
 	if type == Globals.Elements.WIRE:
 		return
 
-	scale = Vector2(scale.x * -1, 1)
+	self.rotation += PI / 2
+
+	for child in connectors_children:
+		child.remove_connections_with_elements()
+
+func rotate_ccw() -> void:
+	if type == Globals.Elements.WIRE:
+		return
+
+	self.rotation -= PI / 2
+
 	for child in connectors_children:
 		child.remove_connections_with_elements()
 

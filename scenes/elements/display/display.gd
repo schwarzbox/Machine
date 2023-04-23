@@ -5,7 +5,6 @@ var _off: Texture2D = preload("res://scenes/elements/display/display_off.png")
 
 func _ready() -> void:
 	type = Globals.Elements.DISPLAY
-
 	super()
 
 func _has_energy() -> bool:

@@ -28,6 +28,10 @@ var _elements_scenes: Dictionary = {
 		load("res://scenes/elements/switch/switch.tscn"),
 		preload("res://scenes/elements/switch/switch_off.png")
 	],
+	"Button": [
+		load("res://scenes/elements/button/button.tscn"),
+		preload("res://scenes/elements/button/button_off.png")
+	],
 	"Relay": [
 		load("res://scenes/elements/relay/relay.tscn"),
 		preload("res://scenes/elements/relay/relay_off.png")
@@ -76,9 +80,21 @@ var _elements_scenes: Dictionary = {
 		load("res://scenes/elements/full_adder/full_adder.tscn"),
 		preload("res://scenes/elements/full_adder/full_adder_off.png")
 	],
-	"Adder 8 Bit": [
-		load("res://scenes/elements/adder_8_bit/adder_8_bit.tscn"),
-		preload("res://scenes/elements/adder_8_bit/adder_8_bit_off.png")
+	"Selector": [
+		load("res://scenes/elements/selector/selector.tscn"),
+		preload("res://scenes/elements/selector/selector_off.png")
+	],
+	"Trigger Reset": [
+		load("res://scenes/elements/trigger_reset/trigger_reset.tscn"),
+		preload("res://scenes/elements/trigger_reset/trigger_reset_off.png")
+	],
+	"Trigger Level": [
+		load("res://scenes/elements/trigger_level/trigger_level.tscn"),
+		preload("res://scenes/elements/trigger_level/trigger_level_off.png")
+	],
+	"Trigger Level Reset": [
+		load("res://scenes/elements/trigger_level_reset/trigger_level_reset.tscn"),
+		preload("res://scenes/elements/trigger_level_reset/trigger_level_reset_off.png")
 	]
 }
 

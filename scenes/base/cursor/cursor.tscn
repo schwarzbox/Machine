@@ -1,10 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://jn1vihlbnvi1"]
+[gd_scene load_steps=5 format=3 uid="uid://jn1vihlbnvi1"]
 
 [ext_resource type="Script" path="res://scenes/base/cursor/cursor.gd" id="1"]
+[ext_resource type="Shader" path="res://scenes/base/cursor/cursor.gdshader" id="1_4taie"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_60hgm"]
+shader = ExtResource("1_4taie")
+shader_parameter/is_element = false
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4jv5w"]
 
 [node name="Cursor" type="Sprite2D"]
+material = SubResource("ShaderMaterial_60hgm")
 script = ExtResource("1")
 
 [node name="Area2D" type="Area2D" parent="."]

@@ -34,7 +34,7 @@ func connected_has_energy() -> bool:
 func is_mouse_entered_connector() -> bool:
 	return _is_mouse_entered
 
-# for flip and unlink
+# for rotate and unlink
 func remove_connections_with_elements() -> void:
 	var self_connected_area: Connector = connected_area
 	if self_connected_area:

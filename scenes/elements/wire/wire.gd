@@ -21,17 +21,13 @@ func _ready() -> void:
 	if $Line2D.points:
 		_sync_visible_notifier_size()
 
+	# set default alpha for line
+	$Line2D.modulate.a = Globals.GAME.WIRE_ALPHA
 	hide_sprites()
 
 func outline(value: bool) -> void:
 	$FirstSprite2D.material.set_shader_parameter("is_outlined", value)
 	$SecondSprite2D.material.set_shader_parameter("is_outlined", value)
-
-func set_alpha(value) -> void:
-	# always
-	$Line2D.modulate.a = 0.7
-	$FirstSprite2D.modulate.a = 1.0
-	$SecondSprite2D.modulate.a = 1.0
 
 func show_sprites() -> void:
 	$FirstSprite2D.show()
@@ -66,8 +62,6 @@ func start_drawing() -> void:
 		move_first_point(mouse_pos)
 	elif _is_second_area_mouse_entered:
 		move_last_point(mouse_pos)
-
-	outline(true)
 
 	var count = 0
 	for child in connectors_children:

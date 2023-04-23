@@ -1,38 +1,60 @@
 extends View
-# icons
-# not connect after cloned
-# no wire sprite when create
+# commit
 
-# create first screen image in mother board style
+# create summator with selector
 
-# create wire problem
-# unlink problem
-# ? sort ?
-# highlight correct connector (if new art without color)
+# d trigger front image
+# splitter?
+# menu 3 or 4 rows
 
-# style for first menu
-
-# animate relay with tween or animation node
-# animate magnet field
-
-# rename display to pixel
-
-# new elements MV (rozetta?) ex_or ex_and
-# hertz elem
+# pr
+# github gif
 
 # check old saves
-# remove .owner references for connectors
-# notes tool (pop-up menu, main menu)
+# move _elements_scenes in globals
+# cursor outside screen hide element and show cursor
+# rotate menu when in the bottom
+
+# check wire together connection (not well move)
+# previous freed when disconent?
+# clone and not move stay in safe area
 
 # 1 byte memmory
 
+# rotate with arrows near element
+# bigger selected
+
+#Share build (franca beta testers)
+
+# select wire first or select element first
+# unlink problem (errorr)
+
+# create wire problem (not stick)
+
+# highlight correct connector
+# check wire get set (add_points, has_points)
+# sort for reprsentation really heavy!
+
+# create first screen image in mother board style
+# style for first menu
+# try theme miniamlist
+
+# remove .owner references for connectors
+# notes tool (pop-up menu, main menu)
+
 # read about resourses
 
+# TUTORIAL/CAMPAIGN
+# all elements
+# ocsialtor
+# light bulbs
 
 # IDEAS
-# increase areas (how to highlight them)?
-# add pixelate shader or texture for wire
+# accurate pickable area2d (how to highlight them)?
+# add texture for wire (add wire shader or texture)
 # animate elements create, scale or particles + sounds
+# animate relay with tween or animation node?
+# animate magnet field
 # info about element more (in pop-up or on demand)
 # remove help_label?
 # show minimap?
@@ -41,12 +63,11 @@ extends View
 # graph nodes?
 
 # IMPOSSIBLE BACKLOG
-# sort for reprsentation really heavy!
 # hertz blink
-# add wire shader or texture
 # _on_file_dialog_window_input (reset)
 
 # HACKS
+# GIF https://www.veed.io
 # check FPS
 # application/run/max_fps
 # physics/common/physics_ticks_per_second

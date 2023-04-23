@@ -19,7 +19,12 @@ enum Elements {
 	EX_OR,
 	HALF_ADDER,
 	FULL_ADDER,
-	ADDER_8_BIT
+	BUTTON,
+	SELECTOR,
+	TRIGGER_RESET,
+	TRIGGER_LEVEL,
+	TRIGGER_LEVEL_RESET,
+	TRIGGER_FRONT
 }
 
 enum Connectors {
@@ -33,7 +38,7 @@ enum Levels {
 const COLORS: Dictionary = {
 	ENERGY_ON = Color("#FDDF19"),
 	ENERGY_OFF = Color("#1991E8"),
-	OUTLINE = Color("#88ff88"),
+	OUTLINE = Color("#EEEEEE"),
 	TOOGLE_BUTTON = Color("#333333"),
 	DEFAULT_BUTTON = Color("#555555"),
 	SAFE_AREA_ALARM = Color("#CE2E59")
@@ -49,10 +54,11 @@ const GAME: Dictionary = {
 	CURSOR_TYPE = -1,
 	MAXIMUM_ELEMENTS_TO_SELECT = 2048,
 	FREQUENCY = 4,
-	MINIMAL_WIRE_LENGTH = 24,
-	CONNECTED_WIRE_LENGTH = 256,
+	BUTTON_DELAY = 16,
+	MINIMAL_WIRE_LENGTH = 8,
+	CONNECTED_WIRE_LENGTH = 512,
 	REPULSE_WIRE_LENGTH = 48,
-	UNSELECTED_ALPHA = 0.7,
+	WIRE_ALPHA = 0.6,
 	DEFAULT_FILE_NAME = "untitled",
 	FILE_EXTENSION = "machine",
 	SAVE_GAME_DIR = "user://",
@@ -60,7 +66,8 @@ const GAME: Dictionary = {
 }
 
 const CAMERA: Dictionary = {
-	ZOOM_MAX = 2.0,
+	ZOOM_MIN = 0.4,
+	ZOOM_MAX = 1.0,
 	PAN_SPEED = 8.0,
 	DRAG_SPEED = 1.5
 }

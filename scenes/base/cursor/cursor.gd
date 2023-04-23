@@ -54,10 +54,11 @@ func _on_elements_sprite_hided() -> void:
 	_hide_sprite()
 
 func _on_elements_sprite_texture_saved(
-	tx: Texture2D, size: Vector2
+	tx: Texture2D, size: Vector2, is_element: bool
 ) -> void:
 	$Area2D/CollisionShape2D.shape.size = size
 	_cursor_texture = tx
+	material.set_shader_parameter("is_element", is_element)
 
 func _on_elements_sprite_texture_removed() -> void:
 	_cursor_texture = null

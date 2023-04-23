@@ -1,8 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://be7is5rsplj7"]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scenes/elements/inverter/inverter.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://bhsk0p4obuir6" path="res://scenes/base/element/element.tscn" id="3"]
-[ext_resource type="Shader" path="res://scenes/base/element/element_shader.gdshader" id="3_vjl6y"]
+[ext_resource type="Shader" path="res://scenes/base/element/element.gdshader" id="3_vjl6y"]
 [ext_resource type="PackedScene" uid="uid://i3np3a2r6kve" path="res://scenes/base/connector/in.tscn" id="4"]
 [ext_resource type="Texture2D" uid="uid://cr8kjefxskk42" path="res://scenes/base/element/dissolve_texture.tres" id="4_pqspu"]
 [ext_resource type="PackedScene" uid="uid://dd47odg8af7i3" path="res://scenes/base/connector/out.tscn" id="5"]
@@ -14,7 +14,7 @@ size = Vector2(256, 320)
 resource_local_to_scene = true
 shader = ExtResource("3_vjl6y")
 shader_parameter/texture_alpha = 1.0
-shader_parameter/outline_width = 1.0
+shader_parameter/outline_width = 2.0
 shader_parameter/outline_color = null
 shader_parameter/is_outlined = false
 shader_parameter/is_dissolve = false
@@ -47,10 +47,10 @@ texture = SubResource("CompressedTexture2D_6nhky")
 shape = SubResource("RectangleShape2D_1bksa")
 
 [node name="In" parent="Connectors" index="0" instance=ExtResource("4")]
-position = Vector2(-112, 80)
+position = Vector2(-112, -80)
 
 [node name="In2" parent="Connectors" index="1" instance=ExtResource("4")]
-position = Vector2(-112, -80)
+position = Vector2(-112, 80)
 
 [node name="Out" parent="Connectors" index="2" instance=ExtResource("5")]
 position = Vector2(112, -80)

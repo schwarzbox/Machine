@@ -21,16 +21,15 @@ func _ready() -> void:
 	if $Line2D.points:
 		_sync_visible_notifier_size()
 
+	# set default alpha for line
+	$Line2D.modulate.a = Globals.GAME.WIRE_ALPHA
 	hide_sprites()
+	# to correctly connect wire when draw
+	disable_first_connectors()
 
 func outline(value: bool) -> void:
 	$FirstSprite2D.material.set_shader_parameter("is_outlined", value)
 	$SecondSprite2D.material.set_shader_parameter("is_outlined", value)
-
-func set_alpha(value) -> void:
-	$Line2D.modulate.a = value
-	$FirstSprite2D.modulate.a = 1.0
-	$SecondSprite2D.modulate.a = 1.0
 
 func show_sprites() -> void:
 	$FirstSprite2D.show()
@@ -56,34 +55,44 @@ func visible_hide() -> void:
 	$SafeArea.hide()
 	$Connectors.hide()
 
+func is_first_connectors_disabled() -> bool:
+	return $Connectors/In/CollisionShape2D.disabled
+
+func enable_first_connectors() -> void:
+	$Connectors/In/CollisionShape2D.set_deferred("disabled", false)
+	$Connectors/Out/CollisionShape2D.set_deferred("disabled", false)
+
+func disable_first_connectors() -> void:
+	$Connectors/In/CollisionShape2D.set_deferred("disabled", true)
+	$Connectors/Out/CollisionShape2D.set_deferred("disabled", true)
+
 # create
 
-func start_drawing() -> void:
-	var mouse_pos = get_global_mouse_position()
+func start_drawing(mouse_pos: Vector2, direction: Globals.Directions) -> void:
+	if direction == Globals.Directions.HORIZONTAL:
+		mouse_pos.y = to_global($Line2D.points[1]).y
+	elif direction == Globals.Directions.VERTICAL:
+		mouse_pos.x = to_global($Line2D.points[1]).x
 
-	if _is_first_area_mouse_entered:
-		move_first_point(mouse_pos)
-	elif _is_second_area_mouse_entered:
-		move_last_point(mouse_pos)
+	move_first_point(mouse_pos)
 
-	outline(true)
-
-	var count = 0
+	var connected_count = 0
 	for child in connectors_children:
 		if child.has_connection():
-			count += 1
+			connected_count += 1
 
-	if count > 0:
-		if count > 1:
+	if connected_count > 0:
+		if connected_count > 1:
 			# prevent stick when one point has been connected
-			switch_connections(true)
+			sync_wire_nodes(false)
 		else:
 			# stick when point connected first time
-			switch_connections()
-		show_sprites()
+			sync_wire_nodes()
+			show_sprites()
+		# to correctly connect wire when draw
+		if is_first_connectors_disabled:
+			call_deferred("enable_first_connectors")
 		return
-	else:
-		switch_connections()
 
 	# delete if wire still not connected
 	delete_if_more()
@@ -92,10 +101,7 @@ func finish_drawing() -> void:
 	if delete_if_less():
 		return
 
-	for child in connectors_children:
-		if child.has_connection():
-			switch_connections()
-
+	sync_wire_nodes()
 
 func delete_if_less(length: int = Globals.GAME.MINIMAL_WIRE_LENGTH) -> bool:
 	if (
@@ -155,20 +161,21 @@ func is_mouse_intersect_with_shape(mouse_pos: Vector2) -> bool:
 func move_element(pos: Vector2) -> void:
 	if _is_first_area_mouse_entered:
 		move_first_point(pos)
-		switch_connections(true)
+		sync_wire_nodes(false)
 	elif _is_second_area_mouse_entered:
 		move_last_point(pos)
-		switch_connections(true)
+		sync_wire_nodes(false)
 
 	move_connected_wires()
 
+	# to delete self
 	delete_if_less()
 
-func switch_connections(is_drag: bool = false) -> void:
-	if !is_drag:
+func sync_wire_nodes(is_sticked: bool = true) -> void:
+	if is_sticked:
 		# stick to the connectors
-		_switch_first_points()
-		_switch_second_points()
+		_stick_first_points()
+		_stick_second_points()
 
 	_sync_node_position(
 		[$Connectors/In, $Connectors/Out, $FirstArea, $FirstSprite2D],
@@ -190,7 +197,9 @@ func check_connect_to_object() -> bool:
 func check_connect_to_wire(
 	connector: Connector, with_connection: bool = true
 ) -> bool:
+
 	var self_connected: Array = []
+	var count_connected = 0
 	for self_child in connectors_children:
 		var self_child_connected = self_child.connected_element
 		var self_child_connected_area = self_child.connected_area
@@ -217,6 +226,7 @@ func check_connect_to_wire(
 			return false
 		if self_connected[3] && self_connected[3].type != Globals.Elements.WIRE:
 			return false
+
 		if (
 			with_connection
 			&& $Connectors/In2.has_connection()
@@ -272,26 +282,24 @@ func is_in_first_points(connector: Connector) -> bool:
 func is_in_second_points(connector: Connector) -> bool:
 	return connector in [$Connectors/In2, $Connectors/Out2]
 
-func _switch_first_points() -> void:
+func _stick_first_points() -> void:
 	var in_connected = $Connectors/In.connected_element
 	var in_connected_area = $Connectors/In.connected_area
-
 	if in_connected && in_connected_area:
 		move_first_point(
 			in_connected.to_global(in_connected_area.position)
 		)
+
 	var out_connected = $Connectors/Out.connected_element
 	var out_connected_area = $Connectors/Out.connected_area
-
 	if out_connected && out_connected_area:
 		move_first_point(
 			out_connected.to_global(out_connected_area.position)
 		)
 
-func _switch_second_points() -> void:
+func _stick_second_points() -> void:
 	var in_connected = $Connectors/In2.connected_element
 	var in_connected_area = $Connectors/In2.connected_area
-
 	if in_connected && in_connected_area:
 		move_last_point(
 			in_connected.to_global(in_connected_area.position)
@@ -299,11 +307,16 @@ func _switch_second_points() -> void:
 
 	var out_connected = $Connectors/Out2.connected_element
 	var out_connected_area = $Connectors/Out2.connected_area
-
 	if out_connected && out_connected_area:
 		move_last_point(
 			out_connected.to_global(out_connected_area.position)
 		)
+
+func _update_connected_wire(element: Element) -> void:
+	super(element)
+	element.delete_if_less()
+
+# notifier
 
 func _sync_visible_notifier_size() -> void:
 	var v_sign = sign($Line2D.points[1])

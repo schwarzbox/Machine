@@ -86,8 +86,10 @@ func _load() -> void:
 		emit_signal("element_added", element)
 
 		if element.type == Globals.Elements.WIRE:
-			element.switch_connections()
+			element.sync_wire_nodes()
 			element.call_deferred("show_sprites")
+			# to correctly connect wire when draw
+			element.call_deferred("enable_first_connectors")
 
 	emit_signal("file_loaded")
 	_save_last_file_path()
@@ -132,7 +134,7 @@ func _has_unsaved_changes() -> bool:
 			if element.name == saved_element.name:
 				if (
 					element.position != saved_element.position
-					|| element.scale != saved_element.scale
+					|| element.rotation != saved_element.rotation
 				):
 					return true
 

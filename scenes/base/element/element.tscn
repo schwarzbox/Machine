@@ -1,23 +1,28 @@
-[gd_scene load_steps=8 format=3 uid="uid://bhsk0p4obuir6"]
+[gd_scene load_steps=10 format=3 uid="uid://4eml6yxfjp8o"]
 
 [ext_resource type="Script" path="res://scenes/base/element/element.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://cr8kjefxskk42" path="res://scenes/base/element/dissolve_texture.tres" id="2"]
-[ext_resource type="Shader" path="res://scenes/base/element/element_shader.gdshader" id="3"]
+[ext_resource type="Shader" path="res://scenes/base/element/element.gdshader" id="2_y18t3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pdpvw"]
+size = Vector2(256, 256)
 
 [sub_resource type="ShaderMaterial" id="5"]
-shader = ExtResource("3")
-shader_parameter/texture_alpha = 1.0
-shader_parameter/outline_width = 1.0
+shader = ExtResource("2_y18t3")
+shader_parameter/outline_width = 2.0
 shader_parameter/outline_color = null
 shader_parameter/is_outlined = false
-shader_parameter/is_dissolve = false
-shader_parameter/texture_size = Vector2(137, 137)
+shader_parameter/texture_size = Vector2(256, 256)
 shader_parameter/stripe_color = null
-shader_parameter/stripe_width = 4.0
+shader_parameter/stripe_width = 24.0
 shader_parameter/stripe_bias = 2.0
 shader_parameter/is_striped = false
-shader_parameter/is_created = false
+shader_parameter/texture_alpha = 1.0
+shader_parameter/is_dissolve = false
 shader_parameter/dissolveNoise = ExtResource("2")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cujws"]
+size = Vector2(256, 256)
 
 [sub_resource type="Animation" id="3"]
 resource_name = "Delete"
@@ -88,7 +93,8 @@ collision_mask = 0
 monitoring = false
 monitorable = false
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="FirstArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FirstArea"]
+shape = SubResource("RectangleShape2D_pdpvw")
 
 [node name="FirstSprite2D" type="Sprite2D" parent="."]
 material = SubResource("5")
@@ -96,8 +102,10 @@ material = SubResource("5")
 [node name="SafeArea" type="Area2D" parent="."]
 collision_layer = 8
 collision_mask = 8
+input_pickable = false
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="SafeArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SafeArea"]
+shape = SubResource("RectangleShape2D_cujws")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

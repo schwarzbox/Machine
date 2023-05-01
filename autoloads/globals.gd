@@ -19,7 +19,12 @@ enum Elements {
 	EX_OR,
 	HALF_ADDER,
 	FULL_ADDER,
-	ADDER_8_BIT
+	BUTTON,
+	SELECTOR,
+	TRIGGER_RESET,
+	TRIGGER_LEVEL,
+	TRIGGER_LEVEL_RESET,
+	TRIGGER_FRONT
 }
 
 enum Connectors {
@@ -30,13 +35,15 @@ enum Levels {
 	NONE, TUTORIAL, CAMPAIGN, SANDBOX, SETTINGS
 }
 
+enum Directions {NONE, HORIZONTAL, VERTICAL}
+
 const COLORS: Dictionary = {
-	ENERGY_ON = Color("#ffff66"),
-	ENERGY_OFF = Color("#99ccff"),
-	OUTLINE = Color("#88ff88"),
+	ENERGY_ON = Color("#FDDF19"),
+	ENERGY_OFF = Color("#1991E8"),
+	OUTLINE = Color("#EEEEEE"),
 	TOOGLE_BUTTON = Color("#333333"),
 	DEFAULT_BUTTON = Color("#555555"),
-	SAFE_AREA_ALARM = Color("#c96d3d")
+	SAFE_AREA_ALARM = Color("#CE2E59")
 }
 
 const FONTS: Dictionary = {
@@ -49,10 +56,11 @@ const GAME: Dictionary = {
 	CURSOR_TYPE = -1,
 	MAXIMUM_ELEMENTS_TO_SELECT = 2048,
 	FREQUENCY = 4,
-	MINIMAL_WIRE_LENGTH = 4,
-	CONNECTED_WIRE_LENGTH = 128,
-	REPULSE_WIRE_LENGTH = 32,
-	UNSELECTED_ALPHA = 0.7,
+	BUTTON_DELAY = 8,
+	MINIMAL_WIRE_LENGTH = 16,
+	CONNECTED_WIRE_LENGTH = 512,
+	REPULSE_WIRE_LENGTH = 64,
+	WIRE_ALPHA = 0.5,
 	DEFAULT_FILE_NAME = "untitled",
 	FILE_EXTENSION = "machine",
 	SAVE_GAME_DIR = "user://",
@@ -60,7 +68,8 @@ const GAME: Dictionary = {
 }
 
 const CAMERA: Dictionary = {
-	ZOOM_MAX = 3.0,
+	ZOOM_MIN = 0.2,
+	ZOOM_MAX = 1.0,
 	PAN_SPEED = 8.0,
 	DRAG_SPEED = 1.5
 }

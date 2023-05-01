@@ -3,5 +3,5 @@
 [resource]
 line_spacing = 16.0
 font_size = 64
-font_color = Color(1, 1, 0.4, 1)
+font_color = Color(0.992157, 0.87451, 0.0980392, 1)
 outline_size = 1

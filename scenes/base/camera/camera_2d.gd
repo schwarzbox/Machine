@@ -17,9 +17,9 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if _is_zoom_in:
-		_camera_zoom(1 - delta)
-	if _is_zoom_out:
 		_camera_zoom(1 + delta)
+	if _is_zoom_out:
+		_camera_zoom(1 - delta)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMagnifyGesture:
@@ -69,8 +69,8 @@ func _set_camera_in_center() -> void:
 
 func _camera_zoom(factor: float) -> void:
 	zoom = Vector2(
-		clamp(zoom.x * factor, 1.0, Globals.CAMERA.ZOOM_MAX),
-		clamp(zoom.y * factor, 1.0, Globals.CAMERA.ZOOM_MAX)
+		clamp(zoom.x * factor, Globals.CAMERA.ZOOM_MIN, Globals.CAMERA.ZOOM_MAX),
+		clamp(zoom.y * factor, Globals.CAMERA.ZOOM_MIN, Globals.CAMERA.ZOOM_MAX)
 	)
 	emit_signal("zoom_changed", zoom.x)
 

@@ -25,12 +25,12 @@ func _has_energy() -> bool:
 		_off_texture = self._on
 		return false
 	elif in1:
-		_off_texture = self._off_on
-		return false
-	elif in2:
 		$Connectors/Out.set_energy(true)
-		_on_texture = self._on_off
+		_on_texture = self._off_on
 		return true
+	elif in2:
+		_off_texture = self._on_off
+		return false
 	else:
 		_off_texture = self._off
 		return false

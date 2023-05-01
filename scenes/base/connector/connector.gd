@@ -5,6 +5,8 @@ extends Area2D
 signal connector_mouse_entered
 signal connector_mouse_exited
 signal connector_area_entered
+signal connector_area_exited
+
 
 @export var type: Globals.Connectors
 
@@ -34,7 +36,7 @@ func connected_has_energy() -> bool:
 func is_mouse_entered_connector() -> bool:
 	return _is_mouse_entered
 
-# for flip and unlink
+# for rotate and unlink
 func remove_connections_with_elements() -> void:
 	var self_connected_area: Connector = connected_area
 	if self_connected_area:
@@ -46,7 +48,7 @@ func remove_connections_with_self() -> void:
 	var self_connected: Element = connected_element
 	var self_connected_area: Connector = connected_area
 	if self_connected && self_connected_area:
-		for connected_child in self_connected.get_connectors_children():
+		for connected_child in self_connected.connectors_children:
 			if connected_child.connected_area == self:
 				connected_child.connected_area = null
 			if connected_child.connected_element == owner:
@@ -79,8 +81,7 @@ func _on_area_exited(other: Connector) -> void:
 		&& has_connection()
 		&& other.has_connection()
 	):
-		_reset_connection()
-		other._reset_connection()
+		emit_signal("connector_area_exited", self, other)
 
 func _on_mouse_entered() -> void:
 	_is_mouse_entered = true
@@ -102,26 +103,40 @@ static func setup_connection(
 	other_connector.connected_element = self_element
 	other_connector.connected_area = self_connector
 
-static func can_connect_to_wire(
+static func allowed_connection_to_wire(
 	self_connector: Connector, other_connector: Connector
 ) -> bool:
 	var self_connected: Array = []
-	for self_child in self_connector.owner.get_connectors_children():
+	for self_child in self_connector.owner.connectors_children:
 		self_connected.append(self_child.connected_element)
 
 	if !self_connector.owner.check_connect_to_wire(self_connector, false):
 		return false
 
 	var other_connected: Array = []
-	for other_child in other_connector.owner.get_connectors_children():
+	for other_child in other_connector.owner.connectors_children:
 		other_connected.append(other_child.connected_element)
 
 	if !other_connector.owner.check_connect_to_wire(other_connector, false):
 		return false
 
+	# restrict loop connection
 	if (
 		self_connector.owner in other_connected
 		|| other_connector.owner in self_connected
 	):
 		return false
+	return true
+
+static  func allowed_connection_to_object(
+	self_connector: Connector, other_connector: Connector
+) -> bool:
+	if self_connector.owner.type == Globals.Elements.WIRE:
+		if !self_connector.owner.check_connect_to_object():
+			return false
+
+	if other_connector.owner.type == Globals.Elements.WIRE:
+		if !other_connector.owner.check_connect_to_object():
+			return false
+
 	return true

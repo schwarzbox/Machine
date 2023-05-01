@@ -85,17 +85,15 @@ func add_child_element(element: Element) -> void:
 	element.connect("connector_mouse_exited", _on_objects_connector_sprite_hided)
 	# warning-ignore:return_value_discarded
 	element.connect("connector_area_entered", _on_objects_connector_area_entered)
+	# warning-ignore:return_value_discarded
+	element.connect("connector_area_exited", _on_objects_connector_area_exited)
 	add_child(element)
 
 func show_sprite_icon(element: Element, connector: Connector):
 	var icon: Texture2D = _wire_icon if _is_wire_selected_scene() else null
 
-	if element.type == Globals.Elements.WIRE:
-		if element.check_connect_to_wire(connector):
-			emit_signal("sprite_showed",  icon)
-	else:
-		if !connector.has_connection():
-			emit_signal("sprite_showed",  icon)
+	if element.check_connect_to_wire(connector):
+		emit_signal("sprite_showed",  icon)
 
 func get_mouse_entered_element() -> Element:
 	# reverse to get top instanse
@@ -131,10 +129,9 @@ func set_selected_scene(scene: PackedScene, tx: Texture2D) -> void:
 		"sprite_texture_saved",
 		tx,
 		# save polygon data to check safe area
-		scene.instantiate().get_node("SafeArea/CollisionPolygon2D").polygon
-	)
-	get_tree().call_group(
-		"Elements", "set_alpha", Globals.GAME.UNSELECTED_ALPHA
+		scene.instantiate().get_node(^"SafeArea/CollisionShape2D").shape.size,
+		# is_element to use BW cursors
+		false if _is_wire_selected_scene() else true
 	)
 
 func remove_selected_scene() -> void:
@@ -142,7 +139,6 @@ func remove_selected_scene() -> void:
 	selected_scene = null
 	emit_signal("sprite_hided")
 	emit_signal("sprite_texture_removed")
-	get_tree().call_group("Elements", "set_alpha", 1.0)
 
 func set_selected_elements_from_areas(selected_areas: Array) -> void:
 	for area in selected_areas:
@@ -182,17 +178,26 @@ func _remove_selected_element(element: Element) -> void:
 	# warning-ignore:return_value_discarded
 	selected_elements.erase(element.get_instance_id())
 
-func _is_drag_selected_state() -> bool:
-	return (active_state == drag_selected_state)
-
-func _is_drag_element_state() -> bool:
-	return (active_state == drag_element_state)
+func _is_create_state() -> bool:
+	return (active_state == create_state)
 
 func _is_draw_wire_state() -> bool:
 	return (active_state == draw_wire_state)
 
+func _is_drag_wire_state() -> bool:
+	return (active_state == drag_wire_state)
+
+func _is_drag_element_state() -> bool:
+	return (active_state == drag_element_state)
+
+func _is_drag_selected_state() -> bool:
+	return (active_state == drag_selected_state)
+
 func _is_wire_selected_scene() -> bool:
 	return (selected_scene == _wire_scene)
+
+func _on_file_menu_file_loaded() -> void:
+	sort_objects_for_representation()
 
 func _on_camera_2d_zoom_changed(value: float) -> void:
 	actual_zoom = value
@@ -216,9 +221,13 @@ func _on_file_menu_elements_deleted() -> void:
 func _on_file_menu_element_added(element: Element) -> void:
 	add_child_element(element)
 
-func _on_popup_tool_flip_pressed() -> void:
+func _on_popup_tool_rotate_cw_pressed() -> void:
 	for element in selected_elements.values():
-		element.call_deferred("flip")
+		element.call_deferred("rotate_cw")
+
+func _on_popup_tool_rotate_ccw_pressed() -> void:
+	for element in selected_elements.values():
+		element.call_deferred("rotate_ccw")
 
 func _on_popup_tool_clone_pressed() -> void:
 	var elements = selected_elements.values()
@@ -231,8 +240,8 @@ func _on_popup_tool_clone_pressed() -> void:
 
 		clone.set_is_cloned(true)
 
-		clone.position = element.position + Vector2(32, 32)
-		clone.scale = element.scale
+		clone.position = element.position + Vector2(64, 64)
+		clone.rotation = element.rotation
 		if clone.type == Globals.Elements.WIRE:
 			clone.set_points(element.get_points())
 		clones.append(clone)
@@ -240,8 +249,9 @@ func _on_popup_tool_clone_pressed() -> void:
 	# in separate cycle to save order
 	for clone in clones:
 		if clone.type == Globals.Elements.WIRE:
-			clone.switch_connections()
+			clone.sync_wire_nodes()
 			clone.call_deferred("show_sprites")
+			clone.call_deferred("enable_first_connectors")
 		else:
 			clone.move_wires_on_top()
 
@@ -256,7 +266,7 @@ func _on_popup_tool_delete_pressed() -> void:
 func _on_element_delete_processed(element: Element) -> void:
 	_remove_selected_element(element)
 
-	for child in element.get_connectors_children():
+	for child in element.connectors_children:
 		child.remove_connections_with_self()
 
 	element.queue_free()
@@ -293,10 +303,9 @@ func _on_objects_connector_sprite_showed(
 	element: Element, connector: Area2D
 ) -> void:
 
-	if _is_draw_wire_state():
-		return
-
-	show_sprite_icon(element, connector)
+	# prevent show when draw
+	if _is_create_state():
+		show_sprite_icon(element, connector)
 
 func _on_objects_connector_sprite_hided() -> void:
 	emit_signal("sprite_showed")
@@ -309,10 +318,11 @@ func _on_objects_connector_area_entered(
 		connector.owner.type == Globals.Elements.WIRE
 		&& other.owner.type == Globals.Elements.WIRE
 	):
-		if _is_drag_element_state():
+		# disable connection in selection mode
+		if _is_drag_selected_state():
 			return
-
-		if !Connector.can_connect_to_wire(connector, other):
+#
+		if !Connector.allowed_connection_to_wire(connector, other):
 			return
 
 		Connector.setup_connection(connector, connector.owner, other, other.owner)
@@ -320,20 +330,16 @@ func _on_objects_connector_area_entered(
 		connector.owner.type == Globals.Elements.WIRE
 		|| other.owner.type == Globals.Elements.WIRE
 	):
-		if _is_drag_element_state():
+		# disable connection in selection and drag element mode
+		if _is_drag_selected_state() || _is_drag_element_state():
 			return
 
-		if connector.owner.type == Globals.Elements.WIRE:
-			if !connector.owner.check_connect_to_object():
-				return
-
-		if other.owner.type == Globals.Elements.WIRE:
-			if !other.owner.check_connect_to_object():
-				return
+		if !Connector.allowed_connection_to_object(connector, other):
+			return
 
 		Connector.setup_connection(connector, connector.owner, other, other.owner)
 	else:
-
+		# disable auto-connection in selection mode
 		if _is_drag_selected_state():
 			return
 
@@ -349,23 +355,34 @@ func _on_objects_connector_area_entered(
 
 		var wire_connector = null
 		if connector.type == Globals.Connectors.IN:
-			wire_connector = wire.get_node("Connectors/Out")
+			wire_connector = wire.get_node(^"Connectors/Out")
 		else:
-			wire_connector = wire.get_node("Connectors/In")
+			wire_connector = wire.get_node(^"Connectors/In")
 
 		Connector.setup_connection(connector, connector.owner, wire_connector, wire)
 
 		if other.type == Globals.Connectors.IN:
-			wire_connector = wire.get_node("Connectors/Out2")
+			wire_connector = wire.get_node(^"Connectors/Out2")
 		else:
-			wire_connector = wire.get_node("Connectors/In2")
+			wire_connector = wire.get_node(^"Connectors/In2")
 
 		Connector.setup_connection(other, other.owner, wire_connector, wire)
 
+		# sync sprites
+		wire.sync_wire_nodes(false)
+
 		wire.call_deferred("show_sprites")
+		# to correctly connect wire when draw
+		wire.call_deferred("enable_first_connectors")
 
 		# create reference to remove wires
 		if connector.owner.is_mouse_entered():
 			connector.owner.add_temporary_wire(wire)
 		else:
 			other.owner.add_temporary_wire(wire)
+
+func _on_objects_connector_area_exited(
+	connector: Connector, other: Connector
+) -> void:
+	connector._reset_connection()
+	other._reset_connection()

@@ -1,38 +1,67 @@
 extends View
-# try top-down elem
+# finish pr
 
-# new elements MV (rozetta?) ex_or ex_and
-# new art A O !A !O battery
-# hertz elem
 # 1 byte memmory
+# clone wire group?
+# select wire first or select element first
+# drag shift
+
+# unlink problem (error)
+# previous freed when disconent?
+
+# how to move groups unlink or link
+
+# check wrap mouse
+
+
+# check old saves
+# move _elements_scenes in globals
+# cursor outside screen hide element and show cursor
+# rotate menu when in the bottom
+
+# clone and not move stay in safe area
+
+# rotate with arrows near element
+# copy among files
+
+# Share build (franca beta testers)
+
+# highlight correct connector
+# check wire get set (add_points, has_points)
+# sort for reprsentation really heavy!
+
+# create first screen image in mother board style
+# style for first menu
+# try theme miniamlist
+
+# remove .owner references for connectors
+# notes tool (pop-up menu, main menu)
 
 # read about resourses
 
-# notes tool (pop-up menu, main menu)
-# highlight correct connector (if new art without color)
-
-# remove .owner references for connectors
+# TUTORIAL/CAMPAIGN
+# construct main all elements
+# ocsialtor
+# light bulbs
 
 # IDEAS
-# increase areas (how to highlight them)?
-# add pixelate shader or texture for wire
+# add texture for wire (add wire shader or texture)
 # animate elements create, scale or particles + sounds
+# animate relay with tween or animation node?
+# animate magnet field
 # info about element more (in pop-up or on demand)
 # remove help_label?
 # show minimap?
-# shift straight lines and grid for elements?
 
 # graph nodes?
 
 # IMPOSSIBLE BACKLOG
-# sort for reprsentation really heavy!
 # hertz blink
-# add wire shader or texture
 # _on_file_dialog_window_input (reset)
 
 # HACKS
+# GIF https://www.veed.io
 # check FPS
-# debug/settings/fps/force_fps
 # application/run/max_fps
 # physics/common/physics_ticks_per_second
 

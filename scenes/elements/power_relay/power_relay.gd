@@ -8,7 +8,6 @@ var _relay_util: RelayDelayUtil = preload("res://utils/relay_delay_util.gd").new
 func _ready() -> void:
 	type = Globals.Elements.POWER_RELAY
 	add_to_group("Energy")
-
 	super()
 
 func reset_energy():

@@ -5,13 +5,15 @@ extends PopupMenu
 # Elements
 signal clone_pressed
 signal delete_pressed
-signal flip_pressed
+signal rotate_cw_pressed
+signal rotate_ccw_pressed
 signal unlink_pressed
 
 enum PopupIds {
 	HEADER,
 	SEPARATOR,
-	FLIP,
+	ROTATE_CW,
+	ROTATE_CCW,
 	CLONE,
 	UNLINK,
 	DELETE
@@ -33,8 +35,10 @@ func _on_id_pressed(id: int) -> void:
 		return
 
 	match id:
-		PopupIds.FLIP:
-			emit_signal("flip_pressed")
+		PopupIds.ROTATE_CW:
+			emit_signal("rotate_cw_pressed")
+		PopupIds.ROTATE_CCW:
+			emit_signal("rotate_ccw_pressed")
 		PopupIds.CLONE:
 			emit_signal("clone_pressed")
 		PopupIds.UNLINK:
@@ -47,21 +51,21 @@ func _on_id_pressed(id: int) -> void:
 
 func _on_about_to_popup() -> void:
 	if _element:
-		add_separator('', PopupIds.HEADER)
-		add_separator('', PopupIds.SEPARATOR)
+		add_separator("", PopupIds.HEADER)
+		add_separator("", PopupIds.SEPARATOR)
 
 		if _is_group:
 			set_item_text(PopupIds.HEADER, "Group")
-			add_item('Flip', PopupIds.FLIP)
 		else:
 			set_item_text(PopupIds.HEADER, _element.type_name)
 
 			if _element.type != Globals.Elements.WIRE:
-				add_item('Flip', PopupIds.FLIP)
+				add_item("Rotate Left", PopupIds.ROTATE_CCW)
+				add_item("Rotate Right", PopupIds.ROTATE_CW)
 
-		add_item('Clone', PopupIds.CLONE)
-		add_item('Unlink', PopupIds.UNLINK)
-		add_item('Delete', PopupIds.DELETE)
+		add_item("Clone", PopupIds.CLONE)
+		add_item("Unlink", PopupIds.UNLINK)
+		add_item("Delete", PopupIds.DELETE)
 
 func _on_elements_menu_poped(
 	element: Element, is_group: bool = false

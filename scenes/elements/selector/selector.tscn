@@ -1,0 +1,60 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="PackedScene" uid="uid://bhsk0p4obuir6" path="res://scenes/base/element/element.tscn" id="1_fwk6p"]
+[ext_resource type="Script" path="res://scenes/elements/selector/selector.gd" id="2_hngk5"]
+[ext_resource type="Shader" path="res://scenes/base/element/element.gdshader" id="3_arq81"]
+[ext_resource type="Texture2D" uid="uid://cr8kjefxskk42" path="res://scenes/base/element/dissolve_texture.tres" id="4_2gfsn"]
+[ext_resource type="Texture2D" uid="uid://ci8qf5dgfvpsw" path="res://scenes/elements/selector/selector_off.png" id="5_d4pt0"]
+[ext_resource type="PackedScene" uid="uid://i3np3a2r6kve" path="res://scenes/base/connector/in.tscn" id="6_c35m8"]
+[ext_resource type="PackedScene" uid="uid://dd47odg8af7i3" path="res://scenes/base/connector/out.tscn" id="7_cvr5d"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wp701"]
+size = Vector2(256, 480)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y1s2c"]
+resource_local_to_scene = true
+shader = ExtResource("3_arq81")
+shader_parameter/texture_alpha = 1.0
+shader_parameter/outline_width = 2.0
+shader_parameter/outline_color = null
+shader_parameter/is_outlined = false
+shader_parameter/is_dissolve = false
+shader_parameter/texture_size = Vector2(256, 256)
+shader_parameter/stripe_color = null
+shader_parameter/stripe_width = 24.0
+shader_parameter/stripe_bias = 2.0
+shader_parameter/is_striped = false
+shader_parameter/is_created = false
+shader_parameter/dissolveNoise = ExtResource("4_2gfsn")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jownk"]
+size = Vector2(224, 480)
+
+[node name="Selector" instance=ExtResource("1_fwk6p")]
+script = ExtResource("2_hngk5")
+type = 19
+
+[node name="CollisionShape2D" parent="FirstArea" index="0"]
+shape = SubResource("RectangleShape2D_wp701")
+
+[node name="FirstSprite2D" parent="." index="1"]
+material = SubResource("ShaderMaterial_y1s2c")
+texture = ExtResource("5_d4pt0")
+
+[node name="CollisionShape2D" parent="SafeArea" index="0"]
+shape = SubResource("RectangleShape2D_jownk")
+
+[node name="In" parent="Connectors" index="0" instance=ExtResource("6_c35m8")]
+position = Vector2(-112, -160)
+
+[node name="In2" parent="Connectors" index="1" instance=ExtResource("6_c35m8")]
+position = Vector2(-112, 2.08165e-12)
+
+[node name="In3" parent="Connectors" index="2" instance=ExtResource("6_c35m8")]
+position = Vector2(-112, 160)
+
+[node name="Out" parent="Connectors" index="3" instance=ExtResource("7_cvr5d")]
+position = Vector2(112, 2.08165e-12)
+
+[node name="VisibleOnScreenNotifier2D" parent="." index="5"]
+rect = Rect2(-112, -240, 224, 480)

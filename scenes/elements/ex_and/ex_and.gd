@@ -12,7 +12,6 @@ var _relay_util2: RelayDelayUtil = _relay_util_class.new()
 func _ready() -> void:
 	type = Globals.Elements.EX_AND
 	add_to_group("Energy")
-
 	super()
 
 func reset_energy():

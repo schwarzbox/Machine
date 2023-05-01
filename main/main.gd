@@ -1,8 +1,8 @@
 extends View
-# finish pr
-
 # 1 byte memmory
 # clone wire group?
+
+# tweet
 # select wire first or select element first
 # drag shift
 
@@ -11,8 +11,7 @@ extends View
 
 # how to move groups unlink or link
 
-# check wrap mouse
-
+# check/remove wrap mouse
 
 # check old saves
 # move _elements_scenes in globals

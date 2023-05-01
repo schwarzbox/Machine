@@ -1,6 +1,6 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=11 format=3 uid="uid://b6j0mg05oldeq"]
 
-[ext_resource type="PackedScene" uid="uid://bhsk0p4obuir6" path="res://scenes/base/element/element.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://4eml6yxfjp8o" path="res://scenes/base/element/element.tscn" id="1"]
 [ext_resource type="Script" path="res://scenes/elements/switch/switch.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://i3np3a2r6kve" path="res://scenes/base/connector/in.tscn" id="3"]
 [ext_resource type="Shader" path="res://scenes/base/element/element.gdshader" id="3_hyyuu"]
@@ -13,17 +13,16 @@ size = Vector2(256, 160)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1hwf3"]
 resource_local_to_scene = true
 shader = ExtResource("3_hyyuu")
-shader_parameter/texture_alpha = 1.0
 shader_parameter/outline_width = 2.0
 shader_parameter/outline_color = null
 shader_parameter/is_outlined = false
-shader_parameter/is_dissolve = false
 shader_parameter/texture_size = Vector2(256, 256)
 shader_parameter/stripe_color = null
 shader_parameter/stripe_width = 24.0
 shader_parameter/stripe_bias = 2.0
 shader_parameter/is_striped = false
-shader_parameter/is_created = false
+shader_parameter/texture_alpha = 1.0
+shader_parameter/is_dissolve = false
 shader_parameter/dissolveNoise = ExtResource("4_xsjqt")
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_iii4s"]

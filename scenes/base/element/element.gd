@@ -142,7 +142,7 @@ func move_wires_on_top() -> void:
 			emit_signal("child_moved_on_top", child_connected)
 
 func check_connect_to_wire(
-	connector: Connector, with_connection: bool = true
+	connector: Connector, _with_connection: bool = true
 ) -> bool:
 	if connector.has_connection():
 		return false

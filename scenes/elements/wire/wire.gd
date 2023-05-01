@@ -199,7 +199,7 @@ func check_connect_to_wire(
 ) -> bool:
 
 	var self_connected: Array = []
-	var count_connected = 0
+
 	for self_child in connectors_children:
 		var self_child_connected = self_child.connected_element
 		var self_child_connected_area = self_child.connected_area

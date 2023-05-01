@@ -3,6 +3,7 @@ class_name Element
 extends Node2D
 
 signal connector_area_entered
+signal connector_area_exited
 signal connector_mouse_entered
 signal connector_mouse_exited
 
@@ -66,6 +67,9 @@ func _ready() -> void:
 		connector.connect(
 			"connector_area_entered", self._on_connector_area_entered
 		)
+		connector.connect(
+			"connector_area_exited", self._on_connector_area_exited
+		)
 
 	$VisibleOnScreenNotifier2D.rect.position = half_sprite_size * -1
 	$VisibleOnScreenNotifier2D.rect.size = sprite_size
@@ -113,7 +117,7 @@ func move_connected_wires() -> void:
 			&& child_connected_area
 			&& child_connected.type == Globals.Elements.WIRE
 		):
-			child_connected.switch_connections()
+			_update_connected_wire(child_connected)
 
 func restore_connected_wires() -> void:
 	for child in connectors_children:
@@ -136,6 +140,13 @@ func move_wires_on_top() -> void:
 			&& child_connected.type == Globals.Elements.WIRE
 		):
 			emit_signal("child_moved_on_top", child_connected)
+
+func check_connect_to_wire(
+	connector: Connector, with_connection: bool = true
+) -> bool:
+	if connector.has_connection():
+		return false
+	return true
 
 # temporary wires
 
@@ -280,6 +291,9 @@ func _set_on():
 func _set_off():
 	$FirstSprite2D.texture =_off_texture
 
+func _update_connected_wire(element: Element) -> void:
+	element.sync_wire_nodes()
+
 func _on_first_area_mouse_entered() -> void:
 	_is_first_area_mouse_entered = true
 
@@ -311,3 +325,5 @@ func _on_connector_mouse_exited() -> void:
 func _on_connector_area_entered(connector: Connector, other: Connector) -> void:
 	emit_signal("connector_area_entered", connector, other)
 
+func _on_connector_area_exited(connector: Connector, other: Connector) -> void:
+	emit_signal("connector_area_exited", connector, other)

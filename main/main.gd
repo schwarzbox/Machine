@@ -1,35 +1,30 @@
 extends View
-# commit
+# finish pr
 
-# create summator with selector
+# 1 byte memmory
+# clone wire group?
+# select wire first or select element first
+# drag shift
 
-# d trigger front image
-# splitter?
-# menu 3 or 4 rows
+# unlink problem (error)
+# previous freed when disconent?
 
-# pr
-# github gif
+# how to move groups unlink or link
+
+# check wrap mouse
+
 
 # check old saves
 # move _elements_scenes in globals
 # cursor outside screen hide element and show cursor
 # rotate menu when in the bottom
 
-# check wire together connection (not well move)
-# previous freed when disconent?
 # clone and not move stay in safe area
 
-# 1 byte memmory
-
 # rotate with arrows near element
-# bigger selected
+# copy among files
 
-#Share build (franca beta testers)
-
-# select wire first or select element first
-# unlink problem (errorr)
-
-# create wire problem (not stick)
+# Share build (franca beta testers)
 
 # highlight correct connector
 # check wire get set (add_points, has_points)
@@ -45,12 +40,11 @@ extends View
 # read about resourses
 
 # TUTORIAL/CAMPAIGN
-# all elements
+# construct main all elements
 # ocsialtor
 # light bulbs
 
 # IDEAS
-# accurate pickable area2d (how to highlight them)?
 # add texture for wire (add wire shader or texture)
 # animate elements create, scale or particles + sounds
 # animate relay with tween or animation node?
@@ -58,7 +52,6 @@ extends View
 # info about element more (in pop-up or on demand)
 # remove help_label?
 # show minimap?
-# shift straight lines and grid for elements?
 
 # graph nodes?
 

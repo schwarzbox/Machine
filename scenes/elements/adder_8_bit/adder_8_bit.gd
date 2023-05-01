@@ -36,7 +36,7 @@ func _has_energy() -> bool:
 	var digit_1 = []
 	for i in range(8):
 		var suffix = str(i + 1)
-		var node_name = "FirstSprite2D/InSprite"
+		var node_name = ^"FirstSprite2D/InSprite"
 		if i:
 			node_name = node_name + suffix
 
@@ -52,7 +52,7 @@ func _has_energy() -> bool:
 	var digit_2 = []
 	for i in range(8, 16):
 		var suffix = str(i + 1)
-		var node_name = "FirstSprite2D/InSprite"
+		var node_name = ^"FirstSprite2D/InSprite"
 		if i:
 			node_name = node_name + suffix
 		digit_2.append(
@@ -68,7 +68,7 @@ func _has_energy() -> bool:
 	# exclude carry_out bit
 	for i in range(bits.size() - 1):
 		var suffix = str(i + 1)
-		var node_name = 'Connectors/Out'
+		var node_name = ^"Connectors/Out"
 		if i:
 			node_name = node_name + suffix
 		var connector = get_node(node_name)

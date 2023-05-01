@@ -35,6 +35,8 @@ enum Levels {
 	NONE, TUTORIAL, CAMPAIGN, SANDBOX, SETTINGS
 }
 
+enum Directions {NONE, HORIZONTAL, VERTICAL}
+
 const COLORS: Dictionary = {
 	ENERGY_ON = Color("#FDDF19"),
 	ENERGY_OFF = Color("#1991E8"),
@@ -54,11 +56,11 @@ const GAME: Dictionary = {
 	CURSOR_TYPE = -1,
 	MAXIMUM_ELEMENTS_TO_SELECT = 2048,
 	FREQUENCY = 4,
-	BUTTON_DELAY = 16,
-	MINIMAL_WIRE_LENGTH = 8,
+	BUTTON_DELAY = 8,
+	MINIMAL_WIRE_LENGTH = 16,
 	CONNECTED_WIRE_LENGTH = 512,
-	REPULSE_WIRE_LENGTH = 48,
-	WIRE_ALPHA = 0.6,
+	REPULSE_WIRE_LENGTH = 64,
+	WIRE_ALPHA = 0.5,
 	DEFAULT_FILE_NAME = "untitled",
 	FILE_EXTENSION = "machine",
 	SAVE_GAME_DIR = "user://",
@@ -66,7 +68,7 @@ const GAME: Dictionary = {
 }
 
 const CAMERA: Dictionary = {
-	ZOOM_MIN = 0.4,
+	ZOOM_MIN = 0.2,
 	ZOOM_MAX = 1.0,
 	PAN_SPEED = 8.0,
 	DRAG_SPEED = 1.5

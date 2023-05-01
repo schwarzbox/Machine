@@ -9,92 +9,96 @@ signal sprite_showed
 
 var _elements_scenes: Dictionary = {
 	"Wire": [
-		load("res://scenes/elements/wire/wire.tscn"),
+		preload("res://scenes/elements/wire/wire.tscn"),
 		preload("res://scenes/elements/wire/wire_cursor_off.png")
 	],
 	"Battery": [
-		load("res://scenes/elements/battery/battery.tscn"),
+		preload("res://scenes/elements/battery/battery.tscn"),
 		preload("res://scenes/elements/battery/battery.png")
 	],
 	"Lamp": [
-		load("res://scenes/elements/lamp/lamp.tscn"),
+		preload("res://scenes/elements/lamp/lamp.tscn"),
 		preload("res://scenes/elements/lamp/lamp_off.png")
 	],
 	"Display": [
-		load("res://scenes/elements/display/display.tscn"),
+		preload("res://scenes/elements/display/display.tscn"),
 		preload("res://scenes/elements/display/display_off.png")
 	],
 	"Switch": [
-		load("res://scenes/elements/switch/switch.tscn"),
+		preload("res://scenes/elements/switch/switch.tscn"),
 		preload("res://scenes/elements/switch/switch_off.png")
 	],
 	"Button": [
-		load("res://scenes/elements/button/button.tscn"),
+		preload("res://scenes/elements/button/button.tscn"),
 		preload("res://scenes/elements/button/button_off.png")
 	],
 	"Relay": [
-		load("res://scenes/elements/relay/relay.tscn"),
+		preload("res://scenes/elements/relay/relay.tscn"),
 		preload("res://scenes/elements/relay/relay_off.png")
 	],
 	"Power Relay": [
-		load("res://scenes/elements/power_relay/power_relay.tscn"),
+		preload("res://scenes/elements/power_relay/power_relay.tscn"),
 		preload("res://scenes/elements/power_relay/power_relay_off.png")
 	],
 	"Inverter": [
-		load("res://scenes/elements/inverter/inverter.tscn"),
+		preload("res://scenes/elements/inverter/inverter.tscn"),
 		preload("res://scenes/elements/inverter/inverter_off.png")
 	],
 	"Power Inverter": [
-		load("res://scenes/elements/power_inverter/power_inverter.tscn"),
+		preload("res://scenes/elements/power_inverter/power_inverter.tscn"),
 		preload("res://scenes/elements/power_inverter/power_inverter_off.png")
 	],
 	"And": [
-		load("res://scenes/elements/and/and.tscn"),
+		preload("res://scenes/elements/and/and.tscn"),
 		preload("res://scenes/elements/and/and_off.png")
 	],
 	"Or": [
-		load("res://scenes/elements/or/or.tscn"),
+		preload("res://scenes/elements/or/or.tscn"),
 		preload("res://scenes/elements/or/or_off.png")
 	],
 	"Not And": [
-		load("res://scenes/elements/not_and/not_and.tscn"),
+		preload("res://scenes/elements/not_and/not_and.tscn"),
 		preload("res://scenes/elements/not_and/not_and_off.png")
 	],
 	"Not Or": [
-		load("res://scenes/elements/not_or/not_or.tscn"),
+		preload("res://scenes/elements/not_or/not_or.tscn"),
 		preload("res://scenes/elements/not_or/not_or_off.png")
 	],
 	"Ex And": [
-		load("res://scenes/elements/ex_and/ex_and.tscn"),
+		preload("res://scenes/elements/ex_and/ex_and.tscn"),
 		preload("res://scenes/elements/ex_and/ex_and_off.png")
 	],
 	"Ex Or": [
-		load("res://scenes/elements/ex_or/ex_or.tscn"),
+		preload("res://scenes/elements/ex_or/ex_or.tscn"),
 		preload("res://scenes/elements/ex_or/ex_or_off.png")
 	],
 	"Half Adder": [
-		load("res://scenes/elements/half_adder/half_adder.tscn"),
+		preload("res://scenes/elements/half_adder/half_adder.tscn"),
 		preload("res://scenes/elements/half_adder/half_adder_off.png")
 	],
 	"Full Adder": [
-		load("res://scenes/elements/full_adder/full_adder.tscn"),
+		preload("res://scenes/elements/full_adder/full_adder.tscn"),
 		preload("res://scenes/elements/full_adder/full_adder_off.png")
 	],
 	"Selector": [
-		load("res://scenes/elements/selector/selector.tscn"),
+		preload("res://scenes/elements/selector/selector.tscn"),
 		preload("res://scenes/elements/selector/selector_off.png")
 	],
 	"Trigger Reset": [
-		load("res://scenes/elements/trigger_reset/trigger_reset.tscn"),
+		preload("res://scenes/elements/trigger_reset/trigger_reset.tscn"),
 		preload("res://scenes/elements/trigger_reset/trigger_reset_off.png")
 	],
 	"Trigger Level": [
-		load("res://scenes/elements/trigger_level/trigger_level.tscn"),
+		preload("res://scenes/elements/trigger_level/trigger_level.tscn"),
 		preload("res://scenes/elements/trigger_level/trigger_level_off.png")
 	],
 	"Trigger Level Reset": [
-		load("res://scenes/elements/trigger_level_reset/trigger_level_reset.tscn"),
+		preload("res://scenes/elements/trigger_level_reset/trigger_level_reset.tscn"),
 		preload("res://scenes/elements/trigger_level_reset/trigger_level_reset_off.png")
+	],
+	"Trigger Front": [
+		preload("res://scenes/elements/trigger_front/trigger_front.tscn"),
+		preload("res://scenes/elements/trigger_front/trigger_front_off.png")
 	]
 }
 
@@ -121,10 +125,10 @@ func _toogle(instance = null) -> void:
 	for child in $GridContainer.get_children():
 		if child != instance:
 			child.button_pressed = false
-			child.get_node("ColorRect").color = Globals.COLORS.DEFAULT_BUTTON
+			child.get_node(^"ColorRect").color = Globals.COLORS.DEFAULT_BUTTON
 
 	if instance:
-		var panel: ColorRect = instance.get_node("ColorRect")
+		var panel: ColorRect = instance.get_node(^"ColorRect")
 		if instance.button_pressed:
 			panel.color = Globals.COLORS.TOOGLE_BUTTON
 		else:

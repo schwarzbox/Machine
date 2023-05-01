@@ -12,7 +12,7 @@ const _relay_util_class: Resource = preload("res://utils/relay_delay_util.gd")
 var _relay_util1: RelayDelayUtil = _relay_util_class.new()
 var _relay_util2: RelayDelayUtil = _relay_util_class.new()
 
-var _last_out_connector: String = ""
+var _last_out_connector: NodePath = ^""
 var _last_texture: Texture2D = null
 
 func _ready() -> void:
@@ -27,7 +27,7 @@ func reset_energy():
 	super()
 
 func _reset_memory():
-	_last_out_connector = ""
+	_last_out_connector =^""
 	_last_texture = null
 
 func _has_energy() -> bool:
@@ -41,14 +41,14 @@ func _has_energy() -> bool:
 		_off_texture = self._on
 		return false
 	elif in1:
-		_last_out_connector = "Connectors/Out2"
+		_last_out_connector = ^"Connectors/Out2"
 		_last_texture = self._out_mem
 		$Connectors/Out.set_energy(false)
 		$Connectors/Out2.set_energy(true)
 		_on_texture = self._off_on
 		return true
 	elif in2:
-		_last_out_connector = "Connectors/Out"
+		_last_out_connector = ^"Connectors/Out"
 		_last_texture = self._in_mem
 		$Connectors/Out.set_energy(true)
 		$Connectors/Out2.set_energy(false)

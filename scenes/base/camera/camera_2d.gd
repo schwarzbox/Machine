@@ -17,9 +17,9 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if _is_zoom_in:
-		_camera_zoom(1 - delta)
-	if _is_zoom_out:
 		_camera_zoom(1 + delta)
+	if _is_zoom_out:
+		_camera_zoom(1 - delta)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMagnifyGesture:

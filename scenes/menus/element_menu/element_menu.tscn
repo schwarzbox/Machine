@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://c1jkg4wa7280n"]
+[gd_scene load_steps=36 format=3 uid="uid://c1jkg4wa7280n"]
 
 [ext_resource type="Script" path="res://scenes/menus/element_menu/element_menu.gd" id="1_jgni7"]
 [ext_resource type="PackedScene" uid="uid://bvmk3ar4aosee" path="res://scenes/menus/color_label/color_label.tscn" id="2_0oyv5"]
@@ -21,9 +21,10 @@
 [ext_resource type="Texture2D" uid="uid://bxnli8nrh62se" path="res://scenes/menus/element_menu/half_adder_icon.png" id="17_74vjs"]
 [ext_resource type="Texture2D" uid="uid://brf6x8r8qyoai" path="res://scenes/menus/element_menu/full_adder_icon.png" id="18_ipv0k"]
 [ext_resource type="Texture2D" uid="uid://d0gask7ysfmta" path="res://scenes/menus/element_menu/selector_icon.png" id="19_qf14h"]
-[ext_resource type="Texture2D" uid="uid://lq50qu1ohur8" path="res://scenes/menus/element_menu/trigger_reset_icon.png" id="22_me1ba"]
-[ext_resource type="Texture2D" uid="uid://x18kxwr5yrx8" path="res://scenes/menus/element_menu/trigger_level_icon.png" id="23_ct1sc"]
-[ext_resource type="Texture2D" uid="uid://ck0im8spthior" path="res://scenes/menus/element_menu/trigger_level_reset_icon.png" id="24_ajilk"]
+[ext_resource type="Texture2D" uid="uid://b8ma4k38sjwwr" path="res://scenes/menus/element_menu/trigger_reset_icon.png" id="22_me1ba"]
+[ext_resource type="Texture2D" uid="uid://5u0oancxgsf7" path="res://scenes/menus/element_menu/trigger_level_icon.png" id="23_ct1sc"]
+[ext_resource type="Texture2D" uid="uid://pmd2bgfwgawa" path="res://scenes/menus/element_menu/trigger_level_reset_icon.png" id="24_ajilk"]
+[ext_resource type="Texture2D" uid="uid://b1l3lej76ihiv" path="res://scenes/menus/element_menu/trigger_front_icon.png" id="25_jmlpo"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_jswpn"]
 command_or_control_autoremap = true
@@ -532,6 +533,27 @@ ignore_texture_size = true
 stretch_mode = 5
 
 [node name="ColorRect" type="ColorRect" parent="GridContainer/Trigger Level Reset"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
+[node name="Trigger Front" type="TextureButton" parent="GridContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+size_flags_stretch_ratio = 0.5
+tooltip_text = "Trigger Front"
+mouse_filter = 1
+toggle_mode = true
+texture_normal = ExtResource("25_jmlpo")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Trigger Front"]
 show_behind_parent = true
 layout_mode = 0
 anchor_right = 1.0

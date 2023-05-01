@@ -42,7 +42,6 @@ func _serialize(element: Element) -> Dictionary:
 		"name": String(element.get_name()),
 		"position": element.position,
 		"rotation": element.rotation,
-		"scale": element.scale,
 		"points": []
 	}
 	if element.type == Globals.Elements.WIRE:
@@ -54,7 +53,6 @@ func _deserialize(data):
 	element.name = String(data["name"])
 	element.position = data["position"]
 	element.rotation = data["rotation"]
-	element.scale = data["scale"]
 
 	if element.type == Globals.Elements.WIRE:
 		element.set_points(data["points"])

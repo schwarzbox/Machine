@@ -18,7 +18,7 @@ var _relay_util1: RelayDelayUtil = _relay_util_class.new()
 var _relay_util2: RelayDelayUtil = _relay_util_class.new()
 var _relay_util3: RelayDelayUtil = _relay_util_class.new()
 
-var _last_out_connector: String = ""
+var _last_out_connector: NodePath = ^""
 var _last_texture: Texture2D = null
 
 func _ready() -> void:
@@ -34,7 +34,7 @@ func reset_energy():
 	super()
 
 func _reset_memory():
-	_last_out_connector = ""
+	_last_out_connector = ^""
 	_last_texture = null
 
 func _has_energy() -> bool:
@@ -61,14 +61,14 @@ func _has_energy() -> bool:
 		_on_texture = self._on_on_off
 		return true
 	elif in1 && in3:
-		_last_out_connector = "Connectors/Out"
+		_last_out_connector = ^"Connectors/Out"
 		_last_texture = self._in_mem
 		$Connectors/Out.set_energy(true)
 		$Connectors/Out2.set_energy(false)
 		_on_texture = self._on_off_on
 		return true
 	elif in1:
-		_last_out_connector = "Connectors/Out2"
+		_last_out_connector = ^"Connectors/Out2"
 		_last_texture = self._out_mem
 		$Connectors/Out.set_energy(false)
 		$Connectors/Out2.set_energy(true)
@@ -81,7 +81,7 @@ func _has_energy() -> bool:
 		_on_texture = self._off_on_off
 		return true
 	elif in3:
-		if _last_out_connector == "Connectors/Out":
+		if _last_out_connector == ^"Connectors/Out":
 			_on_texture = self._on_off_off
 			return true
 		else:

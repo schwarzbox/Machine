@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://pmd2bgfwgawa"
-path="res://.godot/imported/trigger_level_reset_icon.png-f937baf605c9e52d9f3112daf61f5d03.ctex"
+uid="uid://dxyw2s5ge0db2"
+path="res://.godot/imported/trigger_front_off_on.png-d2d054bb61d4576ac3a220d781852eac.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/menus/element_menu/trigger_level_reset_icon.png"
-dest_files=["res://.godot/imported/trigger_level_reset_icon.png-f937baf605c9e52d9f3112daf61f5d03.ctex"]
+source_file="res://scenes/elements/trigger_front/trigger_front_off_on.png"
+dest_files=["res://.godot/imported/trigger_front_off_on.png-d2d054bb61d4576ac3a220d781852eac.ctex"]
 
 [params]
 

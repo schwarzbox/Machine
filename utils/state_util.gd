@@ -9,6 +9,12 @@ class State:
 	func _init(machine: Node2D):
 		_machine = machine
 
+	func _warp_mouse(mouse_pos: Vector2):
+		var viewport = _machine.get_viewport()
+		viewport.warp_mouse(
+			mouse_pos *  _machine.actual_zoom + viewport.canvas_transform.origin
+		)
+
 	func process_event(_event: InputEvent, _mouse_pos: Vector2) -> void:
 		_show_warning("process_event")
 
@@ -37,6 +43,7 @@ class Idle:
 		_machine.active_state = _machine.create_state
 
 	func process_event(event: InputEvent, mouse_pos: Vector2) -> void:
+
 		if event is InputEventKey:
 			var elements = _machine.selected_elements.values()
 			if elements.size() == 1:
@@ -160,10 +167,13 @@ class Create:
 
 				if instance.type == Globals.Elements.WIRE:
 					# instance only when mouse hover checked the Connector
-					if (
-						entered_element
-						&& entered_element.get_entered_connector()
-					):
+					if entered_element:
+						var entered_connector = entered_element.get_entered_connector()
+						if entered_element.get_entered_connector():
+							# prevent create wire when not allowed
+							if !entered_element.check_connect_to_wire(entered_connector):
+								return
+
 						_machine.active_wire = instance
 						_machine.add_child_element(instance)
 
@@ -186,28 +196,46 @@ class Create:
 class DrawWire:
 	extends State
 
+	var direction: Globals.Directions = Globals.Directions.NONE
+
 	func _init(machine: Node2D):
 		super(machine)
 		_name = "DrawWire"
 
 	func process_event(event: InputEvent, mouse_pos: Vector2) -> void:
-
 		if is_instance_valid(_machine.active_wire):
-			if !_machine.active_wire.has_points():
+			if !Input.is_action_pressed("ui_shift"):
+				direction = Globals.Directions.NONE
+
+			var has_points = _machine.active_wire.has_points()
+			if !has_points:
 				_machine.active_wire.add_points(mouse_pos)
 
 			if event is InputEventScreenDrag:
-				_machine.active_wire.start_drawing()
+				# straight lines
+				if Input.is_action_pressed("ui_shift"):
+					if has_points:
+						var points = _machine.active_wire.get_points()
+						var sub_x = abs(points[0].x - points[1].x)
+						var sub_y = abs(points[0].y - points[1].y)
+						if sub_x > sub_y:
+							direction = Globals.Directions.HORIZONTAL
+						elif sub_x < sub_y:
+							direction = Globals.Directions.VERTICAL
+
+				_machine.active_wire.start_drawing(mouse_pos, direction)
+
 			elif event is InputEventMouseButton && !event.pressed:
 				_machine.active_wire.finish_drawing()
 
+				# show icon after create wire
 				var connector: Connector =_machine.active_wire.get_entered_connector()
 				if connector:
 					_machine.show_sprite_icon(_machine.active_wire, connector)
 
 				_machine.active_wire = null
 
-				# sort after create wire
+				# sort after create wire to hide path
 				_machine.sort_objects_for_representation()
 				_machine.active_state = _machine.create_state
 		else:
@@ -235,8 +263,7 @@ class Select:
 
 			query.set_shape(_machine.selection_rectangle)
 			query.transform = Transform2D(
-				0,
-				(mouse_pos + _machine.selection_start) / 2
+				0, (mouse_pos + _machine.selection_start) / 2
 			)
 
 			_machine.remove_selected_elements()
@@ -274,6 +301,7 @@ class DragWire:
 
 	func process_event(event: InputEvent, mouse_pos: Vector2) -> void:
 		var selected_elements = _machine.selected_elements.values()
+
 		if event is InputEventScreenDrag:
 			var delta = event.relative / _machine.actual_zoom
 			_process_drag(selected_elements, delta, mouse_pos)
@@ -296,13 +324,9 @@ class DragWire:
 
 	func _process_drag_end(elements: Array):
 		for element in elements:
-			if element.type == Globals.Elements.WIRE:
-				element.switch_connections()
-			else:
-				element.clear_temporary_wires()
+			element.sync_wire_nodes()
 
 		_machine.emit_signal("cursor_shape_updated", Input.CURSOR_CAN_DROP)
-
 		_machine.active_state = _machine.idle_state
 
 class DragElement:
@@ -315,6 +339,13 @@ class DragElement:
 	func _process_drag(elements: Array, delta: Vector2, _mouse_pos: Vector2) -> void:
 		for element in elements:
 			element.move_element(delta)
+
+	func _process_drag_end(elements: Array):
+		for element in elements:
+			element.clear_temporary_wires()
+
+		_machine.emit_signal("cursor_shape_updated", Input.CURSOR_CAN_DROP)
+		_machine.active_state = _machine.idle_state
 
 class DragSelected:
 	extends DragWire

@@ -14,6 +14,7 @@ config/name="Machine"
 run/main_scene="res://main/main.tscn"
 config/features=PackedStringArray("4.0")
 run/max_fps=60
+boot_splash/use_filter=false
 config/icon="res://icon.png"
 
 [autoload]
@@ -30,8 +31,8 @@ gdscript/warnings/unused_class_variable=true
 
 [display]
 
-window/size/viewport_width=1600
-window/size/viewport_height=1200
+window/size/viewport_width=1800
+window/size/viewport_height=1400
 window/stretch/aspect="ignore"
 
 [importer_defaults]
@@ -56,6 +57,14 @@ texture={
 "size_limit": 0,
 "stream": false,
 "svg/scale": 1.0
+}
+
+[input]
+
+ui_shift={
+"deadzone": 0.5,
+"events": [null, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194325,"key_label":0,"unicode":0,"echo":false,"script":null)
+]
 }
 
 [input_devices]

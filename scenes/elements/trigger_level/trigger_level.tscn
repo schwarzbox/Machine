@@ -52,8 +52,5 @@ position = Vector2(-192, 160)
 [node name="Out" parent="Connectors" index="2" instance=ExtResource("7_v2o20")]
 position = Vector2(192, -160)
 
-[node name="Out2" parent="Connectors" index="3" instance=ExtResource("7_v2o20")]
-position = Vector2(192, 160)
-
 [node name="VisibleOnScreenNotifier2D" parent="." index="5"]
 rect = Rect2(-192, -240, 384, 480)

@@ -45,11 +45,11 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	for element in get_tree().get_nodes_in_group("Energy"):
-		if not element.is_checked:
+		if !element.is_checked:
 			element.transfer_energy(element)
 
 	for element in get_children():
-		if not element.is_checked:
+		if !element.is_checked:
 			element.reset_energy()
 
 	for element in get_children():
@@ -66,9 +66,9 @@ func _draw():
 
 #func _notification(what):
 #	if what == NOTIFICATION_WM_MOUSE_ENTER:
-#		_is_mouse_in_app = true
+#		print(what)
 #	elif what == NOTIFICATION_WM_MOUSE_EXIT:
-#		_is_mouse_in_app = false
+#		print(what)
 
 func add_child_element(element: Element) -> void:
 	# warning-ignore:return_value_discarded
@@ -122,6 +122,8 @@ func sort_objects_for_representation():
 			index = 0
 		move_child(child_top, index)
 
+# selected scene
+
 func set_selected_scene(scene: PackedScene, tx: Texture2D) -> void:
 	selected_scene = scene
 	remove_selected_elements()
@@ -137,8 +139,11 @@ func set_selected_scene(scene: PackedScene, tx: Texture2D) -> void:
 func remove_selected_scene() -> void:
 	emit_signal("scene_deselected")
 	selected_scene = null
+	active_wire = null
 	emit_signal("sprite_hided")
 	emit_signal("sprite_texture_removed")
+
+# selected elements
 
 func set_selected_elements_from_areas(selected_areas: Array) -> void:
 	for area in selected_areas:
@@ -165,12 +170,16 @@ func update_selected_elements_last_valid_position():
 
 func re_add_selected_element(element: Element) -> void:
 	element.last_valid_position = element.position
-	if !selected_elements.has(element.get_instance_id()):
+	if !is_selected_element(element):
 		remove_selected_elements()
 		_add_selected_element(element)
 
+func is_selected_element(element: Element) -> bool:
+	return selected_elements.has(element.get_instance_id())
+
 func _add_selected_element(element: Element) -> void:
 	var element_id = element.get_instance_id()
+	# use element_id as key
 	selected_elements[element_id] = element
 	element.call_deferred("outline", true)
 
@@ -178,14 +187,10 @@ func _remove_selected_element(element: Element) -> void:
 	# warning-ignore:return_value_discarded
 	selected_elements.erase(element.get_instance_id())
 
+# states
+
 func _is_create_state() -> bool:
 	return (active_state == create_state)
-
-func _is_draw_wire_state() -> bool:
-	return (active_state == draw_wire_state)
-
-func _is_drag_wire_state() -> bool:
-	return (active_state == drag_wire_state)
 
 func _is_drag_element_state() -> bool:
 	return (active_state == drag_element_state)
@@ -330,8 +335,8 @@ func _on_objects_connector_area_entered(
 		connector.owner.type == Globals.Elements.WIRE
 		|| other.owner.type == Globals.Elements.WIRE
 	):
-		# disable connection in selection and drag element mode
-		if _is_drag_selected_state() || _is_drag_element_state():
+		# disable connection in selection
+		if _is_drag_selected_state():
 			return
 
 		if !Connector.allowed_connection_to_object(connector, other):
@@ -384,5 +389,10 @@ func _on_objects_connector_area_entered(
 func _on_objects_connector_area_exited(
 	connector: Connector, other: Connector
 ) -> void:
+
+	# disable reset in drag element mode
+	if _is_drag_element_state():
+		return
+
 	connector._reset_connection()
 	other._reset_connection()

@@ -17,19 +17,24 @@ func _ready() -> void:
 		"outline_color",  Globals.COLORS.OUTLINE
 	)
 
+	hide_sprites()
 	# restore notifiers after load
 	if $Line2D.points:
 		_sync_visible_notifier_size()
 
-	# set default alpha for line
-	$Line2D.modulate.a = Globals.GAME.WIRE_ALPHA
-	hide_sprites()
+	# reset alpha for Line2D
+	set_alpha(Globals.COLORS.WIRE_ALPHA)
 	# to correctly connect wire when draw
 	disable_first_connectors()
+
+func set_alpha(value: float) -> void:
+	$Line2D.modulate.a = value
 
 func outline(value: bool) -> void:
 	$FirstSprite2D.material.set_shader_parameter("is_outlined", value)
 	$SecondSprite2D.material.set_shader_parameter("is_outlined", value)
+
+	set_alpha(1.0 if value else Globals.COLORS.WIRE_ALPHA)
 
 func show_sprites() -> void:
 	$FirstSprite2D.show()
@@ -68,29 +73,35 @@ func disable_first_connectors() -> void:
 
 # create
 
-func start_drawing(mouse_pos: Vector2, direction: Globals.Directions) -> void:
+func align_wire(
+	mouse_pos: Vector2, point: Vector2, direction: Globals.Directions
+) -> Vector2:
 	if direction == Globals.Directions.HORIZONTAL:
-		mouse_pos.y = to_global($Line2D.points[1]).y
+		mouse_pos.y = to_global(point).y
 	elif direction == Globals.Directions.VERTICAL:
-		mouse_pos.x = to_global($Line2D.points[1]).x
+		mouse_pos.x = to_global(point).x
 
+	return mouse_pos
+
+func start_drawing(mouse_pos: Vector2) -> void:
 	move_first_point(mouse_pos)
 
-	var connected_count = 0
+	var has_connection = false
 	for child in connectors_children:
 		if child.has_connection():
-			connected_count += 1
+			has_connection = true
+			break
 
-	if connected_count > 0:
-		if connected_count > 1:
-			# prevent stick when one point has been connected
-			sync_wire_nodes(false)
-		else:
+	if has_connection:
+		# prevent stick when one point connected and wire closer to the element
+		sync_wire_nodes(false)
+		if is_first_connectors_disabled():
+			show_sprites()
+			# highlight Line2D
+			set_alpha(1.0)
 			# stick when point connected first time
 			sync_wire_nodes()
-			show_sprites()
-		# to correctly connect wire when draw
-		if is_first_connectors_disabled:
+			# to correctly connect wire when draw
 			call_deferred("enable_first_connectors")
 		return
 
@@ -101,6 +112,8 @@ func finish_drawing() -> void:
 	if delete_if_less():
 		return
 
+	# reset alpha for Line2D
+	set_alpha(Globals.COLORS.WIRE_ALPHA)
 	sync_wire_nodes()
 
 func delete_if_less(length: int = Globals.GAME.MINIMAL_WIRE_LENGTH) -> bool:
@@ -186,12 +199,15 @@ func sync_wire_nodes(is_sticked: bool = true) -> void:
 		$Line2D.points[1]
 	)
 
-func check_connect_to_object() -> bool:
-	if (
-		($Connectors/In.has_connection() || $Connectors/Out.has_connection())
-		&& ($Connectors/In2.has_connection() || $Connectors/Out2.has_connection())
-	):
-		return false
+func check_connect_to_object(connector: Connector) -> bool:
+	if connector in [$Connectors/In, $Connectors/Out]:
+		if ($Connectors/In.has_connection() || $Connectors/Out.has_connection()):
+			return false
+
+	if connector in [$Connectors/In2, $Connectors/Out2]:
+		if ($Connectors/In2.has_connection() || $Connectors/Out2.has_connection()):
+			return false
+
 	return true
 
 func check_connect_to_wire(
@@ -199,7 +215,7 @@ func check_connect_to_wire(
 ) -> bool:
 
 	var self_connected: Array = []
-	var count_connected = 0
+
 	for self_child in connectors_children:
 		var self_child_connected = self_child.connected_element
 		var self_child_connected_area = self_child.connected_area

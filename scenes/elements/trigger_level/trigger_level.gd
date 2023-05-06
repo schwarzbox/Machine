@@ -35,14 +35,12 @@ func _has_energy() -> bool:
 		_last_out_connector = ^"Connectors/Out"
 		_last_texture = self._in_mem
 		$Connectors/Out.set_energy(true)
-		$Connectors/Out2.set_energy(false)
 		_on_texture = self._on
 		return true
 	elif in1:
-		_last_out_connector = ^"Connectors/Out2"
+		_last_out_connector = ^""
 		_last_texture = self._out_mem
 		$Connectors/Out.set_energy(false)
-		$Connectors/Out2.set_energy(true)
 		_on_texture = self._off_on
 		return true
 	elif in2:
@@ -59,7 +57,6 @@ func _has_energy() -> bool:
 			return true
 		else:
 			$Connectors/Out.set_energy(false)
-			$Connectors/Out2.set_energy(true)
 			_on_texture = self._off
 			return true
 

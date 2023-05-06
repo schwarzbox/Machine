@@ -1,61 +1,56 @@
 extends View
-# finish pr
+# pr memmory
 
-# 1 byte memmory
-# clone wire group?
-# select wire first or select element first
-# drag shift
+# R
+# move _elements_scenes in globals
+# sort for reprsentation really heavy
+# check wire get set (add_points, has_points)
+# remove .owner references for connectors
 
-# unlink problem (error)
+# Q
+# rotate with arrows near element? remove key rotation?
+# how to move groups unlinked or linked? (maybe only if with wire?)
+
+# B
 # previous freed when disconent?
 
-# how to move groups unlink or link
-
-# check wrap mouse
-
-
-# check old saves
-# move _elements_scenes in globals
-# cursor outside screen hide element and show cursor
-# rotate menu when in the bottom
-
-# clone and not move stay in safe area
-
-# rotate with arrows near element
-# copy among files
-
-# Share build (franca beta testers)
-
-# highlight correct connector
-# check wire get set (add_points, has_points)
-# sort for reprsentation really heavy!
-
-# create first screen image in mother board style
-# style for first menu
-# try theme miniamlist
-
-# remove .owner references for connectors
+# F
+# show minimap?
 # notes tool (pop-up menu, main menu)
+# copy among files
+# highlight correct connector
 
-# read about resourses
+
+# QUESTIONS
+# select wire first or select element first?
 
 # TUTORIAL/CAMPAIGN
-# construct main all elements
+# learn how to construct main all elements
 # ocsialtor
 # light bulbs
+# counter freq (Hrz) = 256 / 10
 
 # IDEAS
+# BG pattern color?
+# style for first menu
+# create first screen image in mother board style
 # add texture for wire (add wire shader or texture)
 # animate elements create, scale or particles + sounds
 # animate relay with tween or animation node?
 # animate magnet field
 # info about element more (in pop-up or on demand)
 # remove help_label?
-# show minimap?
 
+# read about resourses
 # graph nodes?
 
+# ELEMENTS
+# Trigger Front with Pre and Clr
+# JK trigger
+# T Trigger
+
 # IMPOSSIBLE BACKLOG
+# connect wires without jump
 # hertz blink
 # _on_file_dialog_window_input (reset)
 
@@ -67,6 +62,10 @@ extends View
 
 # force move mouse
 # self.get_viewport().warp_mouse(instance.position)
+#var viewport = _machine.get_viewport()
+#viewport.warp_mouse(
+#	mouse_pos *  _machine.actual_zoom + viewport.canvas_transform.origin
+#)
 
 # convert to CanvasLayer position
 # self.get_global_transform_with_canvas().get_origin()

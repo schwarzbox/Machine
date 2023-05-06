@@ -1,0 +1,65 @@
+[gd_scene load_steps=11 format=3 uid="uid://duujdh0l1u0me"]
+
+[ext_resource type="PackedScene" uid="uid://4eml6yxfjp8o" path="res://scenes/base/element/element.tscn" id="1_w3aqj"]
+[ext_resource type="Script" path="res://scenes/elements/ram_8_bit/ram_8_bit.gd" id="2_x58hn"]
+[ext_resource type="Shader" path="res://scenes/base/element/element.gdshader" id="3_bdfuu"]
+[ext_resource type="PackedScene" uid="uid://i3np3a2r6kve" path="res://scenes/base/connector/in.tscn" id="3_texn6"]
+[ext_resource type="PackedScene" uid="uid://dd47odg8af7i3" path="res://scenes/base/connector/out.tscn" id="4_a688m"]
+[ext_resource type="Texture2D" uid="uid://cr8kjefxskk42" path="res://scenes/base/element/dissolve_texture.tres" id="4_vqmcl"]
+[ext_resource type="Texture2D" uid="uid://c8l8it4afi3ln" path="res://scenes/elements/ram_8_bit/ram_8_bit_off.png" id="5_tahk2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_50ore"]
+size = Vector2(416, 576)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_voldt"]
+resource_local_to_scene = true
+shader = ExtResource("3_bdfuu")
+shader_parameter/outline_width = 2.0
+shader_parameter/outline_color = null
+shader_parameter/is_outlined = false
+shader_parameter/texture_size = Vector2(256, 256)
+shader_parameter/stripe_color = null
+shader_parameter/stripe_width = 24.0
+shader_parameter/stripe_bias = 2.0
+shader_parameter/is_striped = false
+shader_parameter/texture_alpha = 1.0
+shader_parameter/is_dissolve = false
+shader_parameter/dissolveNoise = ExtResource("4_vqmcl")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sifi2"]
+size = Vector2(384, 544)
+
+[node name="Ram8Bit" instance=ExtResource("1_w3aqj")]
+script = ExtResource("2_x58hn")
+type = 24
+
+[node name="CollisionShape2D" parent="FirstArea" index="0"]
+shape = SubResource("RectangleShape2D_50ore")
+
+[node name="FirstSprite2D" parent="." index="1"]
+material = SubResource("ShaderMaterial_voldt")
+texture = ExtResource("5_tahk2")
+
+[node name="CollisionShape2D" parent="SafeArea" index="0"]
+shape = SubResource("RectangleShape2D_sifi2")
+
+[node name="In" parent="Connectors" index="0" instance=ExtResource("3_texn6")]
+position = Vector2(2.08165e-12, -272)
+
+[node name="In2" parent="Connectors" index="1" instance=ExtResource("3_texn6")]
+position = Vector2(-192, -160)
+
+[node name="In3" parent="Connectors" index="2" instance=ExtResource("3_texn6")]
+position = Vector2(-192, 2.08165e-12)
+
+[node name="In4" parent="Connectors" index="3" instance=ExtResource("3_texn6")]
+position = Vector2(-192, 160)
+
+[node name="In5" parent="Connectors" index="4" instance=ExtResource("3_texn6")]
+position = Vector2(2.08165e-12, 272)
+
+[node name="Out" parent="Connectors" index="5" instance=ExtResource("4_a688m")]
+position = Vector2(192, 2.08165e-12)
+
+[node name="VisibleOnScreenNotifier2D" parent="." index="5"]
+rect = Rect2(-192, -272, 384, 544)

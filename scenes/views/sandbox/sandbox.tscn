@@ -31,7 +31,7 @@ layout_mode = 2
 script = ExtResource("8_2svtm")
 
 [node name="Camera2D" parent="." index="2" instance=ExtResource("6_7tsva")]
-offset = Vector2(800, 600)
+offset = Vector2(900, 700)
 
 [node name="Cursor" parent="." index="3" instance=ExtResource("7_q3ctd")]
 

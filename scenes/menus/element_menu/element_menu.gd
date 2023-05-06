@@ -84,21 +84,25 @@ var _elements_scenes: Dictionary = {
 		preload("res://scenes/elements/selector/selector.tscn"),
 		preload("res://scenes/elements/selector/selector_off.png")
 	],
-	"Trigger Reset": [
+	"Reset-Set Flip-Flop": [
 		preload("res://scenes/elements/trigger_reset/trigger_reset.tscn"),
 		preload("res://scenes/elements/trigger_reset/trigger_reset_off.png")
 	],
-	"Trigger Level": [
+	"Level Flip-Flop": [
 		preload("res://scenes/elements/trigger_level/trigger_level.tscn"),
 		preload("res://scenes/elements/trigger_level/trigger_level_off.png")
 	],
-	"Trigger Level Reset": [
+	"Level Flip-Flop with Reset": [
 		preload("res://scenes/elements/trigger_level_reset/trigger_level_reset.tscn"),
 		preload("res://scenes/elements/trigger_level_reset/trigger_level_reset_off.png")
 	],
-	"Trigger Front": [
+	"Edge Flip-Flop": [
 		preload("res://scenes/elements/trigger_front/trigger_front.tscn"),
 		preload("res://scenes/elements/trigger_front/trigger_front_off.png")
+	],
+	"Ram 8 Bit": [
+		preload("res://scenes/elements/ram_8_bit/ram_8_bit.tscn"),
+		preload("res://scenes/elements/ram_8_bit/ram_8_bit_off.png")
 	]
 }
 

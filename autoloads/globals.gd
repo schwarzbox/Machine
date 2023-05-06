@@ -24,7 +24,8 @@ enum Elements {
 	TRIGGER_RESET,
 	TRIGGER_LEVEL,
 	TRIGGER_LEVEL_RESET,
-	TRIGGER_FRONT
+	TRIGGER_FRONT,
+	RAM_8_BIT
 }
 
 enum Connectors {
@@ -43,7 +44,8 @@ const COLORS: Dictionary = {
 	OUTLINE = Color("#EEEEEE"),
 	TOOGLE_BUTTON = Color("#333333"),
 	DEFAULT_BUTTON = Color("#555555"),
-	SAFE_AREA_ALARM = Color("#CE2E59")
+	SAFE_AREA_ALARM = Color("#CE2E59"),
+	WIRE_ALPHA = 0.4
 }
 
 const FONTS: Dictionary = {
@@ -60,7 +62,6 @@ const GAME: Dictionary = {
 	MINIMAL_WIRE_LENGTH = 16,
 	CONNECTED_WIRE_LENGTH = 512,
 	REPULSE_WIRE_LENGTH = 64,
-	WIRE_ALPHA = 0.5,
 	DEFAULT_FILE_NAME = "untitled",
 	FILE_EXTENSION = "machine",
 	SAVE_GAME_DIR = "user://",

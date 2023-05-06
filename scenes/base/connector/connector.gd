@@ -61,6 +61,7 @@ func _reset_connection() -> void:
 
 func _on_area_entered(other: Connector) -> void:
 	# use collision Layer Out [3] and collide only with Mask In [2]
+
 	if (
 		other.owner == owner
 		|| has_connection()
@@ -132,11 +133,11 @@ static  func allowed_connection_to_object(
 	self_connector: Connector, other_connector: Connector
 ) -> bool:
 	if self_connector.owner.type == Globals.Elements.WIRE:
-		if !self_connector.owner.check_connect_to_object():
+		if !self_connector.owner.check_connect_to_object(self_connector):
 			return false
 
 	if other_connector.owner.type == Globals.Elements.WIRE:
-		if !other_connector.owner.check_connect_to_object():
+		if !other_connector.owner.check_connect_to_object(other_connector):
 			return false
 
 	return true

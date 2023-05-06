@@ -18,6 +18,7 @@ signal safe_area_exited
 var type_name: String = ""
 var sprite_size: Vector2 = Vector2()
 var half_sprite_size: Vector2 = Vector2()
+# energy loop
 var is_checked: bool = false
 
 # var for correctly clone group of elements

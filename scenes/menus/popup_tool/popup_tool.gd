@@ -68,7 +68,7 @@ func _on_about_to_popup() -> void:
 		add_item("Delete", PopupIds.DELETE)
 
 func _on_elements_menu_poped(
-	element: Element, is_group: bool = false
+	element: Element, viewport_height: int, is_group: bool = false
 ) -> void:
 	_is_group = is_group
 	_element = element
@@ -78,6 +78,10 @@ func _on_elements_menu_poped(
 		size = min_size
 		popup(Rect2(0, 0, size.x, size.y))
 		position = get_mouse_position()
+		# add offset if out of the screen
+		if (position.y + size.y) > viewport_height:
+			position.y =  position.y - size.y
+
 	else:
 		_is_group = false
 		_element = null

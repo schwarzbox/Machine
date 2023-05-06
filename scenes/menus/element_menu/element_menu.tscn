@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://c1jkg4wa7280n"]
+[gd_scene load_steps=37 format=3 uid="uid://c1jkg4wa7280n"]
 
 [ext_resource type="Script" path="res://scenes/menus/element_menu/element_menu.gd" id="1_jgni7"]
 [ext_resource type="PackedScene" uid="uid://bvmk3ar4aosee" path="res://scenes/menus/color_label/color_label.tscn" id="2_0oyv5"]
@@ -25,6 +25,7 @@
 [ext_resource type="Texture2D" uid="uid://5u0oancxgsf7" path="res://scenes/menus/element_menu/trigger_level_icon.png" id="23_ct1sc"]
 [ext_resource type="Texture2D" uid="uid://pmd2bgfwgawa" path="res://scenes/menus/element_menu/trigger_level_reset_icon.png" id="24_ajilk"]
 [ext_resource type="Texture2D" uid="uid://b1l3lej76ihiv" path="res://scenes/menus/element_menu/trigger_front_icon.png" id="25_jmlpo"]
+[ext_resource type="Texture2D" uid="uid://bxd06wenk7hsw" path="res://scenes/menus/element_menu/ram_8_bit_icon.png" id="26_q5nro"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_jswpn"]
 command_or_control_autoremap = true
@@ -62,7 +63,7 @@ keycode = 66
 events = [SubResource("InputEventKey_4xt7x")]
 
 [node name="ElementMenu" type="VBoxContainer"]
-custom_minimum_size = Vector2(84, 40)
+custom_minimum_size = Vector2(196, 40)
 offset_right = 196.0
 offset_bottom = 221.0
 size_flags_horizontal = 0
@@ -478,19 +479,19 @@ mouse_filter = 2
 color = Color(0.333333, 0.333333, 0.333333, 1)
 metadata/_edit_lock_ = true
 
-[node name="Trigger Reset" type="TextureButton" parent="GridContainer"]
+[node name="Reset-Set Flip-Flop" type="TextureButton" parent="GridContainer"]
 clip_contents = true
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_stretch_ratio = 0.5
-tooltip_text = "Trigger Reset"
+tooltip_text = "Reset-Set Flip-Flop"
 mouse_filter = 1
 toggle_mode = true
 texture_normal = ExtResource("22_me1ba")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="ColorRect" type="ColorRect" parent="GridContainer/Trigger Reset"]
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Reset-Set Flip-Flop"]
 show_behind_parent = true
 layout_mode = 0
 anchor_right = 1.0
@@ -499,19 +500,19 @@ mouse_filter = 2
 color = Color(0.333333, 0.333333, 0.333333, 1)
 metadata/_edit_lock_ = true
 
-[node name="Trigger Level" type="TextureButton" parent="GridContainer"]
+[node name="Level Flip-Flop" type="TextureButton" parent="GridContainer"]
 clip_contents = true
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_stretch_ratio = 0.5
-tooltip_text = "Trigger Level"
+tooltip_text = "Level Flip-Flop"
 mouse_filter = 1
 toggle_mode = true
 texture_normal = ExtResource("23_ct1sc")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="ColorRect" type="ColorRect" parent="GridContainer/Trigger Level"]
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Level Flip-Flop"]
 show_behind_parent = true
 layout_mode = 0
 anchor_right = 1.0
@@ -520,19 +521,19 @@ mouse_filter = 2
 color = Color(0.333333, 0.333333, 0.333333, 1)
 metadata/_edit_lock_ = true
 
-[node name="Trigger Level Reset" type="TextureButton" parent="GridContainer"]
+[node name="Level Flip-Flop with Reset" type="TextureButton" parent="GridContainer"]
 clip_contents = true
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_stretch_ratio = 0.5
-tooltip_text = "Trigger Level Reset"
+tooltip_text = "Level Flip-Flop with Reset"
 mouse_filter = 1
 toggle_mode = true
 texture_normal = ExtResource("24_ajilk")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="ColorRect" type="ColorRect" parent="GridContainer/Trigger Level Reset"]
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Level Flip-Flop with Reset"]
 show_behind_parent = true
 layout_mode = 0
 anchor_right = 1.0
@@ -541,19 +542,40 @@ mouse_filter = 2
 color = Color(0.333333, 0.333333, 0.333333, 1)
 metadata/_edit_lock_ = true
 
-[node name="Trigger Front" type="TextureButton" parent="GridContainer"]
+[node name="Edge Flip-Flop" type="TextureButton" parent="GridContainer"]
 clip_contents = true
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_stretch_ratio = 0.5
-tooltip_text = "Trigger Front"
+tooltip_text = "Edge Flip-Flop"
 mouse_filter = 1
 toggle_mode = true
 texture_normal = ExtResource("25_jmlpo")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="ColorRect" type="ColorRect" parent="GridContainer/Trigger Front"]
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Edge Flip-Flop"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
+[node name="Ram 8 Bit" type="TextureButton" parent="GridContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+size_flags_stretch_ratio = 0.5
+tooltip_text = "Ram 8 Bit"
+mouse_filter = 1
+toggle_mode = true
+texture_normal = ExtResource("26_q5nro")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Ram 8 Bit"]
 show_behind_parent = true
 layout_mode = 0
 anchor_right = 1.0

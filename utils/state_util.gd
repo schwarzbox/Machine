@@ -5,15 +5,11 @@ extends RefCounted
 class State:
 	var _machine: Node2D = null
 	var _name: String = "State"
+	var _align_direction: Globals.Directions = Globals.Directions.NONE
+	var _is_shift_pressed: bool = true
 
 	func _init(machine: Node2D):
 		_machine = machine
-
-	func _warp_mouse(mouse_pos: Vector2):
-		var viewport = _machine.get_viewport()
-		viewport.warp_mouse(
-			mouse_pos *  _machine.actual_zoom + viewport.canvas_transform.origin
-		)
 
 	func process_event(_event: InputEvent, _mouse_pos: Vector2) -> void:
 		_show_warning("process_event")
@@ -27,8 +23,39 @@ class State:
 	func draw():
 		_show_warning("draw")
 
+	func _warp_mouse(mouse_pos: Vector2):
+		var viewport = _machine.get_viewport()
+		viewport.warp_mouse(
+			mouse_pos *  _machine.actual_zoom + viewport.canvas_transform.origin
+		)
+
+	func _shift_input() -> void:
+		if Input.is_action_pressed("ui_shift"):
+			_is_shift_pressed = true
+		else:
+			_is_shift_pressed = false
+			_align_direction = Globals.Directions.NONE
+
+	func _get_align_wire(
+		wire: Element, mouse_pos: Vector2, point_index: int
+	) -> Vector2:
+		var points = wire.get_points()
+		var sub_x = abs(points[0].x - points[1].x)
+		var sub_y = abs(points[0].y - points[1].y)
+		if sub_x > sub_y:
+			_align_direction = Globals.Directions.HORIZONTAL
+		elif sub_x < sub_y:
+			_align_direction = Globals.Directions.VERTICAL
+
+		return wire.align_wire(
+			mouse_pos,
+			wire.get_node(^"Line2D").points[point_index],
+			_align_direction
+		)
+
 	func _show_warning(txt: String) -> void:
 		push_warning("Wrong state {cls}: {txt}".format({cls=_name, txt=txt}))
+
 
 class Idle:
 	extends State
@@ -38,23 +65,33 @@ class Idle:
 		_name = "Idle"
 
 	func process_set_selected_scene(scene: PackedScene, texture: Texture2D) -> void:
+		# prevent put element in safe area
+		if _machine.has_safe_area_entered_element():
+			_machine.remove_selected_scene()
+			return
+
 		_machine.set_selected_scene(scene, texture)
 
 		_machine.active_state = _machine.create_state
 
 	func process_event(event: InputEvent, mouse_pos: Vector2) -> void:
-
 		if event is InputEventKey:
 			var elements = _machine.selected_elements.values()
 			if elements.size() == 1:
 				_rotate_with_arrows(elements[0])
 
-		var entered_element = _machine.get_mouse_entered_element()
 		# fix popup tool behaviour after hide
+		var entered_element = _machine.get_mouse_entered_element()
 		if (
 			entered_element
 			&& entered_element.is_mouse_intersect_with_shape(mouse_pos)
 		):
+			# prevent put element in safe area
+			if (
+				!entered_element.is_safe_area_entered()
+				&& _machine.has_safe_area_entered_element()
+			):
+				return
 
 			_machine.emit_signal("cursor_shape_updated", Input.CURSOR_CAN_DROP)
 
@@ -85,7 +122,7 @@ class Idle:
 			_machine.emit_signal("cursor_shape_updated", Input.CURSOR_ARROW)
 
 			if event is InputEventMouseButton && event.pressed:
-				# prevent put element in safe area
+#				# prevent put element in safe area
 				if _machine.has_safe_area_entered_element():
 					return
 
@@ -120,6 +157,7 @@ class Idle:
 			)
 			entered_element.move_wires_on_top()
 
+		# update previously selected elements
 		_machine.update_selected_elements_last_valid_position()
 		_machine.re_add_selected_element(entered_element)
 
@@ -137,12 +175,15 @@ class Idle:
 		_machine.emit_signal(
 			"menu_poped",
 			entered_element,
-			_machine.selected_elements.size() > 1
+			_machine.get_viewport_rect().size.y,
+			_machine.selected_elements.size() > 1,
 		)
 		_machine.emit_signal("cursor_shape_updated", Input.CURSOR_ARROW)
 
+		# update previously selected elements
 		_machine.update_selected_elements_last_valid_position()
 		_machine.re_add_selected_element(entered_element)
+
 
 class Create:
 	extends State
@@ -156,7 +197,6 @@ class Create:
 
 	func process_remove_selected_scene() -> void:
 		_machine.remove_selected_scene()
-
 		_machine.active_state = _machine.idle_state
 
 	func process_event(event: InputEvent, mouse_pos: Vector2) -> void:
@@ -169,7 +209,7 @@ class Create:
 					# instance only when mouse hover checked the Connector
 					if entered_element:
 						var entered_connector = entered_element.get_entered_connector()
-						if entered_element.get_entered_connector():
+						if entered_connector:
 							# prevent create wire when not allowed
 							if !entered_element.check_connect_to_wire(entered_connector):
 								return
@@ -196,16 +236,13 @@ class Create:
 class DrawWire:
 	extends State
 
-	var direction: Globals.Directions = Globals.Directions.NONE
-
 	func _init(machine: Node2D):
 		super(machine)
 		_name = "DrawWire"
 
 	func process_event(event: InputEvent, mouse_pos: Vector2) -> void:
 		if is_instance_valid(_machine.active_wire):
-			if !Input.is_action_pressed("ui_shift"):
-				direction = Globals.Directions.NONE
+			_shift_input()
 
 			var has_points = _machine.active_wire.has_points()
 			if !has_points:
@@ -213,17 +250,13 @@ class DrawWire:
 
 			if event is InputEventScreenDrag:
 				# straight lines
-				if Input.is_action_pressed("ui_shift"):
-					if has_points:
-						var points = _machine.active_wire.get_points()
-						var sub_x = abs(points[0].x - points[1].x)
-						var sub_y = abs(points[0].y - points[1].y)
-						if sub_x > sub_y:
-							direction = Globals.Directions.HORIZONTAL
-						elif sub_x < sub_y:
-							direction = Globals.Directions.VERTICAL
+				if _is_shift_pressed && has_points:
+					mouse_pos = _get_align_wire(
+						_machine.active_wire, mouse_pos, 1
+					)
+					_warp_mouse(mouse_pos)
 
-				_machine.active_wire.start_drawing(mouse_pos, direction)
+				_machine.active_wire.start_drawing(mouse_pos)
 
 			elif event is InputEventMouseButton && !event.pressed:
 				_machine.active_wire.finish_drawing()
@@ -300,6 +333,8 @@ class DragWire:
 		_name = "DragWire"
 
 	func process_event(event: InputEvent, mouse_pos: Vector2) -> void:
+		_shift_input()
+
 		var selected_elements = _machine.selected_elements.values()
 
 		if event is InputEventScreenDrag:
@@ -317,6 +352,19 @@ class DragWire:
 
 	func _process_drag(elements: Array, _delta: Vector2, mouse_pos: Vector2) -> void:
 		for element in elements:
+			# straight lines
+			if _is_shift_pressed:
+				var entered_connector = element.get_entered_connector()
+				var point_index = 1
+				if entered_connector:
+					if entered_connector.name in ["In2", "Out2"]:
+						point_index = 0
+
+				mouse_pos = _get_align_wire(
+					element, mouse_pos, point_index
+				)
+				_warp_mouse(mouse_pos)
+
 			element.move_element(mouse_pos)
 
 	func _process_safe_areas(element: Element):

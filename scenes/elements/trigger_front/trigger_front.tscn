@@ -4,12 +4,12 @@
 [ext_resource type="Script" path="res://scenes/elements/trigger_front/trigger_front.gd" id="2_s4v5w"]
 [ext_resource type="Shader" path="res://scenes/base/element/element.gdshader" id="3_2x3ue"]
 [ext_resource type="Texture2D" uid="uid://cr8kjefxskk42" path="res://scenes/base/element/dissolve_texture.tres" id="4_bkj1r"]
-[ext_resource type="Texture2D" uid="uid://clx8pd4cvbjyh" path="res://scenes/elements/trigger_front/trigger_front_off.png" id="5_yjcw1"]
+[ext_resource type="Texture2D" uid="uid://dd5wjw5bgegm0" path="res://scenes/elements/trigger_front/trigger_front_off.png" id="5_yjcw1"]
 [ext_resource type="PackedScene" uid="uid://i3np3a2r6kve" path="res://scenes/base/connector/in.tscn" id="6_iuxmf"]
 [ext_resource type="PackedScene" uid="uid://dd47odg8af7i3" path="res://scenes/base/connector/out.tscn" id="7_sufcl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_602fx"]
-size = Vector2(416, 480)
+size = Vector2(320, 480)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0ym6c"]
 resource_local_to_scene = true
@@ -27,13 +27,14 @@ shader_parameter/is_dissolve = false
 shader_parameter/dissolveNoise = ExtResource("4_bkj1r")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nmhjs"]
-size = Vector2(384, 480)
+size = Vector2(368, 480)
 
 [node name="TriggerFront" instance=ExtResource("1_p8t14")]
 script = ExtResource("2_s4v5w")
 type = 23
 
 [node name="CollisionShape2D" parent="FirstArea" index="0"]
+position = Vector2(-8, 2.08165e-12)
 shape = SubResource("RectangleShape2D_602fx")
 
 [node name="FirstSprite2D" parent="." index="1"]
@@ -41,19 +42,23 @@ material = SubResource("ShaderMaterial_0ym6c")
 texture = ExtResource("5_yjcw1")
 
 [node name="CollisionShape2D" parent="SafeArea" index="0"]
+position = Vector2(-8, 2.08165e-12)
 shape = SubResource("RectangleShape2D_nmhjs")
 
 [node name="In" parent="Connectors" index="0" instance=ExtResource("6_iuxmf")]
 position = Vector2(-192, -160)
 
 [node name="In2" parent="Connectors" index="1" instance=ExtResource("6_iuxmf")]
+position = Vector2(-192, 2.08165e-12)
+
+[node name="In3" parent="Connectors" index="2" instance=ExtResource("6_iuxmf")]
 position = Vector2(-192, 160)
 
-[node name="Out" parent="Connectors" index="2" instance=ExtResource("7_sufcl")]
-position = Vector2(192, -160)
+[node name="Out" parent="Connectors" index="3" instance=ExtResource("7_sufcl")]
+position = Vector2(176, -160)
 
-[node name="Out2" parent="Connectors" index="3" instance=ExtResource("7_sufcl")]
-position = Vector2(192, 160)
+[node name="Out2" parent="Connectors" index="4" instance=ExtResource("7_sufcl")]
+position = Vector2(176, 160)
 
 [node name="VisibleOnScreenNotifier2D" parent="." index="5"]
-rect = Rect2(-192, -240, 384, 480)
+rect = Rect2(-192, -240, 392, 480)

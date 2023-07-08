@@ -69,3 +69,5 @@ func _on_elements_sprite_position_updated(pos: Vector2) -> void:
 func _on_elements_cursor_shape_updated(shape: int) -> void:
 	Input.set_default_cursor_shape(shape)
 
+func _on_camera_2d_cursor_shape_updated(shape: int) -> void:
+	Input.set_default_cursor_shape(shape)

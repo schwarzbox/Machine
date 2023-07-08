@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://i3np3a2r6kve" path="res://scenes/base/connector/in.tscn" id="7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_stuf3"]
-size = Vector2(256, 480)
+size = Vector2(160, 480)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_db2f4"]
 resource_local_to_scene = true

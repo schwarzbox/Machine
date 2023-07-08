@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bpsu2pj51hgan"]
+[gd_scene load_steps=3 format=3 uid="uid://bpsu2pj51hgan"]
 
 [ext_resource type="Script" path="res://scenes/menus/file_menu/file_menu.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://givl2yrk2wso" path="res://scenes/menus/menu_label/menu_label.tscn" id="2_x5eck"]
 
 [node name="FileMenu" type="HBoxContainer"]
 offset_right = 265.0
@@ -35,6 +36,7 @@ mouse_filter = 1
 text = "Load"
 
 [node name="FileDialog" type="FileDialog" parent="."]
+disable_3d = true
 gui_embed_subwindows = true
 size = Vector2i(512, 512)
 unresizable = true
@@ -43,8 +45,34 @@ ok_button_text = "Save"
 access = 1
 
 [node name="SaveDialog" type="ConfirmationDialog" parent="."]
-size = Vector2i(249, 100)
+disable_3d = true
+size = Vector2i(251, 100)
+unresizable = true
+borderless = true
+always_on_top = true
+extend_to_title = true
 dialog_text = "Do you want to save changes?"
+
+[node name="NotificationTimer" type="Timer" parent="."]
+
+[node name="Notification" type="Window" parent="."]
+disable_3d = true
+gui_disable_input = true
+title = "Alarm"
+size = Vector2i(129, 200)
+visible = false
+wrap_controls = true
+unresizable = true
+borderless = true
+always_on_top = true
+unfocusable = true
+popup_window = true
+extend_to_title = true
+mouse_passthrough = true
+
+[node name="MenuLabel" parent="Notification" instance=ExtResource("2_x5eck")]
+offset_right = 129.0
+offset_bottom = 38.0
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
@@ -61,3 +89,5 @@ dialog_text = "Do you want to save changes?"
 [connection signal="about_to_popup" from="SaveDialog" to="." method="_on_save_dialog_about_to_popup"]
 [connection signal="canceled" from="SaveDialog" to="." method="_on_save_dialog_canceled"]
 [connection signal="confirmed" from="SaveDialog" to="." method="_on_save_dialog_confirmed"]
+[connection signal="about_to_popup" from="Notification" to="." method="_on_notification_about_to_popup"]
+[connection signal="close_requested" from="Notification" to="." method="_on_notification_close_requested"]

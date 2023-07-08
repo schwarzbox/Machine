@@ -6,10 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://i3np3a2r6kve" path="res://scenes/base/connector/in.tscn" id="4_2tmyr"]
 [ext_resource type="Texture2D" uid="uid://cr8kjefxskk42" path="res://scenes/base/element/dissolve_texture.tres" id="4_wsmib"]
 [ext_resource type="PackedScene" uid="uid://dd47odg8af7i3" path="res://scenes/base/connector/out.tscn" id="5_wtbjy"]
-[ext_resource type="Texture2D" uid="uid://cju74qimm4e1o" path="res://scenes/elements/trigger_reset/trigger_reset_off.png" id="5_xp5si"]
+[ext_resource type="Texture2D" uid="uid://dipc832mfs27b" path="res://scenes/elements/trigger_reset/trigger_reset_off.png" id="5_xp5si"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_b2r40"]
-size = Vector2(416, 480)
+size = Vector2(160, 480)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_humdi"]
 resource_local_to_scene = true
@@ -27,14 +27,14 @@ shader_parameter/is_dissolve = false
 shader_parameter/dissolveNoise = ExtResource("4_wsmib")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_khbje"]
-size = Vector2(384, 480)
+size = Vector2(208, 480)
 
 [node name="TriggerReset" groups=["Energy"] instance=ExtResource("1_g6sh1")]
 script = ExtResource("2_lknrh")
 type = 20
 
 [node name="CollisionShape2D" parent="FirstArea" index="0"]
-position = Vector2(0, 0.5)
+position = Vector2(-8, 2.08165e-12)
 shape = SubResource("RectangleShape2D_b2r40")
 
 [node name="FirstSprite2D" parent="." index="1"]
@@ -42,19 +42,20 @@ material = SubResource("ShaderMaterial_humdi")
 texture = ExtResource("5_xp5si")
 
 [node name="CollisionShape2D" parent="SafeArea" index="0"]
+position = Vector2(-8, 2.08165e-12)
 shape = SubResource("RectangleShape2D_khbje")
 
 [node name="In" parent="Connectors" index="0" instance=ExtResource("4_2tmyr")]
-position = Vector2(-192, -160)
+position = Vector2(-112, -160)
 
 [node name="In2" parent="Connectors" index="1" instance=ExtResource("4_2tmyr")]
-position = Vector2(-192, 160)
+position = Vector2(-112, 160)
 
 [node name="Out" parent="Connectors" index="2" instance=ExtResource("5_wtbjy")]
-position = Vector2(192, -160)
+position = Vector2(96, -160)
 
 [node name="Out2" parent="Connectors" index="3" instance=ExtResource("5_wtbjy")]
-position = Vector2(192, 160)
+position = Vector2(96, 160)
 
 [node name="VisibleOnScreenNotifier2D" parent="." index="5"]
-rect = Rect2(-192, -240, 384, 480)
+rect = Rect2(-112, -240, 232, 480)

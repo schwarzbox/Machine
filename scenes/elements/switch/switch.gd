@@ -2,8 +2,6 @@ extends Element
 
 const _on: Texture2D = preload("res://scenes/elements/switch/switch_on.png")
 const _off: Texture2D = preload("res://scenes/elements/switch/switch_off.png")
-const _on_off: Texture2D = preload("res://scenes/elements/switch/switch_on_off.png")
-const _off_on: Texture2D = preload("res://scenes/elements/switch/switch_off_on.png")
 
 var _is_activated: bool = false
 
@@ -11,11 +9,14 @@ func _ready() -> void:
 	type = Globals.Elements.SWITCH
 	super()
 
-func reset_energy():
+func _reset_energy():
 	if _is_activated:
-		_off_texture = self._off_on
+		_off_texture = self._on
 	else:
 		_off_texture = self._off
+
+func reset_energy():
+	_reset_energy()
 	super()
 
 func switch() -> void:
@@ -23,10 +24,12 @@ func switch() -> void:
 
 func _has_energy() -> bool:
 	if $Connectors/In.connected_has_energy():
-		_off_texture = self._on_off
+		_off_texture = self._off
 		if _is_activated:
 			$Connectors/Out.set_energy(true)
 			return true
+	else:
+		_reset_energy()
 	return false
 
 

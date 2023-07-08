@@ -87,7 +87,7 @@ func start_drawing(mouse_pos: Vector2) -> void:
 	move_first_point(mouse_pos)
 
 	var has_connection = false
-	for child in connectors_children:
+	for child in get_connectors_children():
 		if child.has_connection():
 			has_connection = true
 			break
@@ -216,7 +216,7 @@ func check_connect_to_wire(
 
 	var self_connected: Array = []
 
-	for self_child in connectors_children:
+	for self_child in get_connectors_children():
 		var self_child_connected = self_child.connected_element
 		var self_child_connected_area = self_child.connected_area
 		if self_child_connected && self_child_connected_area:
@@ -364,9 +364,9 @@ func _set_off() -> void:
 	$Line2D.default_color = Globals.COLORS.ENERGY_OFF
 
 func _has_energy() -> bool:
-	for child in connectors_children:
+	for child in get_connectors_children():
 		if child.connected_has_energy():
-			for connector in connectors_children:
+			for connector in get_connectors_children():
 				connector.set_energy(true)
 			return true
 	return false

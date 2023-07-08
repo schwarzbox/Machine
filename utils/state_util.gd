@@ -3,19 +3,20 @@ class_name ObjectState
 extends RefCounted
 
 class State:
-	var _machine: Node2D = null
+	var _main: Node2D = null
 	var _name: String = "State"
 	var _align_direction: Globals.Directions = Globals.Directions.NONE
 	var _is_shift_pressed: bool = true
+	var _is_command_pressed: bool = true
 
-	func _init(machine: Node2D):
-		_machine = machine
+	func _init(main: Node2D):
+		_main = main
 
 	func process_event(_event: InputEvent, _mouse_pos: Vector2) -> void:
 		_show_warning("process_event")
 
-	func process_set_selected_scene(_scene: PackedScene, _texture: Texture2D) -> void:
-		_show_warning("process_set_selected_scene")
+	func process_setup_selected_scene(_scene: PackedScene, _texture: Texture2D) -> void:
+		_show_warning("process_setup_selected_scene")
 
 	func process_remove_selected_scene() -> void:
 		_show_warning("process_remove_selected_scene")
@@ -24,9 +25,9 @@ class State:
 		_show_warning("draw")
 
 	func _warp_mouse(mouse_pos: Vector2):
-		var viewport = _machine.get_viewport()
+		var viewport = _main.get_viewport()
 		viewport.warp_mouse(
-			mouse_pos *  _machine.actual_zoom + viewport.canvas_transform.origin
+			mouse_pos *  _main.get_actual_zoom() + viewport.canvas_transform.origin
 		)
 
 	func _shift_input() -> void:
@@ -35,6 +36,12 @@ class State:
 		else:
 			_is_shift_pressed = false
 			_align_direction = Globals.Directions.NONE
+
+	func _command_input() -> void:
+		if Input.is_action_pressed("ui_command"):
+			_is_command_pressed = true
+		else:
+			_is_command_pressed = false
 
 	func _get_align_wire(
 		wire: Element, mouse_pos: Vector2, point_index: int
@@ -54,50 +61,57 @@ class State:
 		)
 
 	func _show_warning(txt: String) -> void:
-		push_warning("Wrong state {cls}: {txt}".format({cls=_name, txt=txt}))
+		push_warning("Wrong state {cls}: {txt}".format({cls = _name, txt = txt}))
 
 
 class Idle:
 	extends State
 
-	func _init(machine: Node2D):
-		super(machine)
+	func _init(main: Node2D):
+		super(main)
 		_name = "Idle"
 
-	func process_set_selected_scene(scene: PackedScene, texture: Texture2D) -> void:
-		# prevent put element in safe area
-		if _machine.has_safe_area_entered_element():
-			_machine.remove_selected_scene()
-			return
+	func process_setup_selected_scene(scene: PackedScene, texture: Texture2D) -> void:
+		_main.setup_selected_scene(scene, texture)
 
-		_machine.set_selected_scene(scene, texture)
-
-		_machine.active_state = _machine.create_state
+		_main.active_state = _main.create_state
 
 	func process_event(event: InputEvent, mouse_pos: Vector2) -> void:
+		# allow drag minimap
+		_main.set_minimap_disabled(false)
+
+		# prevent events when use minimap
+		if _main.is_minimap_entered():
+			return
+
 		if event is InputEventKey:
-			var elements = _machine.selected_elements.values()
+
+			# prevent put element in safe area
+			if _main.has_safe_area_entered_element():
+				return
+			var elements: Array = _main.selected_elements.values()
+			_copy_paste_with_keys(elements)
 			if elements.size() == 1:
 				_rotate_with_arrows(elements[0])
 
 		# fix popup tool behaviour after hide
-		var entered_element = _machine.get_mouse_entered_element()
+		var entered_element = _main.get_mouse_entered_element()
 		if (
 			entered_element
 			&& entered_element.is_mouse_intersect_with_shape(mouse_pos)
 		):
 			# prevent put element in safe area
 			if (
-				!entered_element.is_safe_area_entered()
-				&& _machine.has_safe_area_entered_element()
+				!_main.is_selected_element(entered_element)
+				&& _main.has_safe_area_entered_element()
 			):
 				return
 
-			_machine.emit_signal("cursor_shape_updated", Input.CURSOR_CAN_DROP)
+			_main.emit_signal("cursor_shape_updated", Input.CURSOR_CAN_DROP)
 
 			if entered_element.is_cloned:
 				# to correctly reconect wires after cloning
-				_machine.get_tree().call_group_flags(
+				_main.get_tree().call_group_flags(
 					SceneTree.GROUP_CALL_DEFAULT, "Elements", "set_is_cloned", false
 				)
 
@@ -116,23 +130,27 @@ class Idle:
 						_left_button_pressed(element_type, entered_element)
 
 				elif event.button_index == MOUSE_BUTTON_RIGHT:
-					_right_button_clicked(entered_element)
+					if event.pressed:
+						_right_button_clicked(entered_element)
 
 		else:
-			_machine.emit_signal("cursor_shape_updated", Input.CURSOR_ARROW)
+			_main.emit_signal("cursor_shape_updated", Input.CURSOR_ARROW)
 
 			if event is InputEventMouseButton && event.pressed:
 #				# prevent put element in safe area
-				if _machine.has_safe_area_entered_element():
+				if _main.has_safe_area_entered_element():
 					return
 
 				if event.button_index == MOUSE_BUTTON_LEFT:
-					_machine.emit_signal("cursor_shape_updated", Input.CURSOR_CROSS)
-					_machine.remove_selected_elements()
+					_main.emit_signal("cursor_shape_updated", Input.CURSOR_CROSS)
+					_main.clear_selected_elements()
 					# sort when no entered element
-					_machine.sort_objects_for_representation()
-					_machine.selection_start = mouse_pos
-					_machine.active_state = _machine.select_state
+					_main.sort_wires_for_representation()
+					_main.selection_start = mouse_pos
+					_main.active_state = _main.select_state
+
+				elif event.button_index == MOUSE_BUTTON_RIGHT:
+					_right_button_clicked()
 
 	func draw():
 		# to prevent warning after switch from select_state
@@ -144,182 +162,208 @@ class Idle:
 		elif Input.is_action_pressed("ui_right"):
 			element.rotate_cw()
 
+	func _copy_paste_with_keys(elements: Array) -> void:
+		if Input.is_action_pressed("ui_copy"):
+			_main.copy_elements(elements)
+		elif Input.is_action_pressed("ui_paste"):
+			_main.paste_elements()
+
 	func _left_button_pressed(element_type, entered_element: Element) -> void:
-		if element_type == Globals.Elements.WIRE:
-			_machine.move_child(
-				entered_element, _machine.get_child_count() - 1
-			)
-		else:
+		# prevent sorting
+		if !_main.has_safe_area_entered_element():
 			# sort before select enetered element
-			_machine.sort_objects_for_representation()
-			_machine.move_child(
-				entered_element, _machine.get_child_count() - 1
+			_main.sort_wires_for_representation()
+
+			_main.move_child(
+				entered_element, _main.get_child_count() - 1
 			)
+#			Don't sort wires?
 			entered_element.move_wires_on_top()
 
+			# select/deselect with command
+			_command_input()
+			if _is_command_pressed:
+				if _main.is_selected_element(entered_element):
+					_main.remove_selected_element(entered_element)
+				else:
+					_main.add_selected_element(entered_element)
+				return
+
 		# update previously selected elements
-		_machine.update_selected_elements_last_valid_position()
-		_machine.re_add_selected_element(entered_element)
+		_main.update_selected_elements_last_valid_position()
+		_main.re_add_selected_element(entered_element)
 
-		_machine.emit_signal("cursor_shape_updated", Input.CURSOR_DRAG)
+		_main.emit_signal("cursor_shape_updated", Input.CURSOR_DRAG)
 
-		if _machine.selected_elements.size() == 1:
+		if _main.selected_elements.size() == 1:
 			if element_type == Globals.Elements.WIRE:
-				_machine.active_state = _machine.drag_wire_state
+				_main.active_state = _main.drag_wire_state
 			else:
-				_machine.active_state = _machine.drag_element_state
+				_main.active_state = _main.drag_element_state
+#				entered_element.call_deferred("reset_scale", Vector2(1.1, 1.1))
 		else:
-			_machine.active_state = _machine.drag_selected_state
+			_main.active_state = _main.drag_selected_state
 
-	func _right_button_clicked(entered_element: Element) -> void:
-		_machine.emit_signal(
+	func _right_button_clicked(entered_element: Element = null) -> void:
+		_main.emit_signal(
 			"menu_poped",
 			entered_element,
-			_machine.get_viewport_rect().size.y,
-			_machine.selected_elements.size() > 1,
+			_main.get_viewport_rect().size.y,
+			_main.selected_elements.size() > 1,
 		)
-		_machine.emit_signal("cursor_shape_updated", Input.CURSOR_ARROW)
+		_main.emit_signal("cursor_shape_updated", Input.CURSOR_ARROW)
 
-		# update previously selected elements
-		_machine.update_selected_elements_last_valid_position()
-		_machine.re_add_selected_element(entered_element)
+		if entered_element:
+			# update previously selected elements
+			_main.update_selected_elements_last_valid_position()
+			_main.re_add_selected_element(entered_element)
 
 
 class Create:
 	extends State
 
-	func _init(machine: Node2D):
-		super(machine)
+	func _init(main: Node2D):
+		super(main)
 		_name = "Create"
 
-	func process_set_selected_scene(scene: PackedScene, texture: Texture2D) -> void:
-		_machine.set_selected_scene(scene, texture)
+	func process_setup_selected_scene(scene: PackedScene, texture: Texture2D) -> void:
+		# to switch one element to another in the create state
+		_main.setup_selected_scene(scene, texture)
 
 	func process_remove_selected_scene() -> void:
-		_machine.remove_selected_scene()
-		_machine.active_state = _machine.idle_state
+		_main.remove_selected_scene()
+		_main.active_state = _main.idle_state
 
 	func process_event(event: InputEvent, mouse_pos: Vector2) -> void:
+		# prevent drag minimap
+		_main.set_minimap_disabled(true)
+
 		if event is InputEventMouseButton && event.pressed:
 			if event.button_index == MOUSE_BUTTON_LEFT:
-				var instance = _machine.selected_scene.instantiate()
-				var entered_element = _machine.get_mouse_entered_element()
+				var instance = _main.get_selected_scene().instantiate()
 
 				if instance.type == Globals.Elements.WIRE:
-					# instance only when mouse hover checked the Connector
-					if entered_element:
-						var entered_connector = entered_element.get_entered_connector()
-						if entered_connector:
-							# prevent create wire when not allowed
-							if !entered_element.check_connect_to_wire(entered_connector):
-								return
+					# instance only when mouse hover a Connector
+					var main_active_connector = _main.get_active_connector()
+					if main_active_connector:
+						var entered_element = main_active_connector.owner
+						# prevent create wire when not allowed
+						if !entered_element.check_connect_to_wire(main_active_connector):
+							return
 
-						_machine.active_wire = instance
-						_machine.add_child_element(instance)
+						_main.set_active_wire(instance)
+						_main.add_child_element(instance)
 
 						instance.position = mouse_pos
-						_machine.active_state = _machine.draw_wire_state
+						_main.active_state = _main.draw_wire_state
 				else:
 					# prevent put element in safe area
-					if _machine.has_safe_area_entered_element():
+					if _main.has_safe_area_entered_element():
 						return
 
 					instance.position = mouse_pos
-					_machine.add_child_element(instance)
-
-					# sort after create element
-#					_machine.sort_objects_for_representation()
+					_main.add_child_element(instance)
 
 			elif event.button_index == MOUSE_BUTTON_RIGHT:
-				process_remove_selected_scene()
+				if event.pressed:
+					process_remove_selected_scene()
+					# prevent pop-up
+					_main.get_viewport().set_input_as_handled()
 
 class DrawWire:
 	extends State
 
-	func _init(machine: Node2D):
-		super(machine)
+	func _init(main: Node2D):
+		super(main)
 		_name = "DrawWire"
 
 	func process_event(event: InputEvent, mouse_pos: Vector2) -> void:
-		if is_instance_valid(_machine.active_wire):
+		# prevent drag minimap
+		_main.set_minimap_disabled(true)
+
+		var main_active_wire = _main.get_active_wire()
+		if is_instance_valid(main_active_wire):
 			_shift_input()
 
-			var has_points = _machine.active_wire.has_points()
+			var has_points = main_active_wire.has_points()
 			if !has_points:
-				_machine.active_wire.add_points(mouse_pos)
+				main_active_wire.add_points(mouse_pos)
 
 			if event is InputEventScreenDrag:
 				# straight lines
 				if _is_shift_pressed && has_points:
 					mouse_pos = _get_align_wire(
-						_machine.active_wire, mouse_pos, 1
+						main_active_wire, mouse_pos, 1
 					)
 					_warp_mouse(mouse_pos)
 
-				_machine.active_wire.start_drawing(mouse_pos)
+				main_active_wire.start_drawing(mouse_pos)
+
+				_main.set_is_update_minimap_icons(true)
 
 			elif event is InputEventMouseButton && !event.pressed:
-				_machine.active_wire.finish_drawing()
+				main_active_wire.finish_drawing()
 
 				# show icon after create wire
-				var connector: Connector =_machine.active_wire.get_entered_connector()
-				if connector:
-					_machine.show_sprite_icon(_machine.active_wire, connector)
+				var main_active_connector: Connector = _main.get_active_connector()
+				if main_active_connector:
+					_main.show_sprite_icon(main_active_wire, main_active_connector)
 
-				_machine.active_wire = null
+				_main.reset_active_wire()
 
-				# sort after create wire to hide path
-				_machine.sort_objects_for_representation()
-				_machine.active_state = _machine.create_state
+				_main.active_state = _main.create_state
 		else:
-			_machine.active_state = _machine.create_state
+			_main.active_state = _main.create_state
 
 class Select:
 	extends State
 
-	func _init(machine: Node2D):
-		super(machine)
+	func _init(main: Node2D):
+		super(main)
 		_name = "Select"
 
 	func process_event(event: InputEvent, mouse_pos: Vector2) -> void:
+		# prevent drag minimap
+		_main.set_minimap_disabled(true)
+
 		if event is InputEventScreenDrag:
-			_machine.selection_rectangle.extents = abs(
-				mouse_pos - _machine.selection_start
+			_main.selection_rectangle.extents = abs(
+				mouse_pos - _main.selection_start
 			) / 2
 
-			var space = _machine.get_world_2d().direct_space_state
+			var space = _main.get_world_2d().direct_space_state
 
 			var query = PhysicsShapeQueryParameters2D.new()
 			query.collision_mask = 1
 			query.collide_with_areas = true
 			query.collide_with_bodies = false
 
-			query.set_shape(_machine.selection_rectangle)
+			query.set_shape(_main.selection_rectangle)
 			query.transform = Transform2D(
-				0, (mouse_pos + _machine.selection_start) / 2
+				0, (mouse_pos + _main.selection_start) / 2
 			)
 
-			_machine.remove_selected_elements()
+			_main.clear_selected_elements()
 
-			_machine.set_selected_elements_from_areas(
+			_main.set_selected_elements_from_areas(
 				space.intersect_shape(query,
 				Globals.GAME.MAXIMUM_ELEMENTS_TO_SELECT)
 			)
-			_machine.queue_redraw()
+			_main.queue_redraw()
 
 		elif event is InputEventMouseButton && !event.pressed:
-			# _machine.queue_redraw call _machine._draw func
-			_machine.queue_redraw()
+			# _main.queue_redraw call _main._draw func
+			_main.queue_redraw()
 
-			_machine.emit_signal("cursor_shape_updated", Input.CURSOR_ARROW)
+			_main.emit_signal("cursor_shape_updated", Input.CURSOR_ARROW)
 
-			_machine.active_state = _machine.idle_state
+			_main.active_state = _main.idle_state
 #
 	func draw():
-		_machine.draw_rect(
+		_main.draw_rect(
 			Rect2(
-				_machine.selection_start,
-				_machine.get_global_mouse_position() - _machine.selection_start
+				_main.selection_start,
+				_main.get_global_mouse_position() - _main.selection_start
 			),
 			Color(.5, .5, .5),
 			false
@@ -328,22 +372,28 @@ class Select:
 class DragWire:
 	extends State
 
-	func _init(machine: Node2D):
-		super(machine)
+	func _init(main: Node2D):
+		super(main)
 		_name = "DragWire"
 
 	func process_event(event: InputEvent, mouse_pos: Vector2) -> void:
+		# prevent drag minimap
+		_main.set_minimap_disabled(true)
+
 		_shift_input()
 
-		var selected_elements = _machine.selected_elements.values()
+		var selected_elements = _main.selected_elements.values()
 
 		if event is InputEventScreenDrag:
-			var delta = event.relative / _machine.actual_zoom
+			var delta = event.relative / _main.get_actual_zoom()
 			_process_drag(selected_elements, delta, mouse_pos)
 
+			_main.set_is_update_minimap_icons(true)
+
 		elif event is InputEventMouseButton && !event.pressed:
+			pass
 			# prevent put element in safe area
-			if _machine.has_safe_area_entered_element():
+			if _main.has_safe_area_entered_element():
 				for element in selected_elements:
 					element.position = element.last_valid_position
 					_process_safe_areas(element)
@@ -351,13 +401,14 @@ class DragWire:
 			_process_drag_end(selected_elements)
 
 	func _process_drag(elements: Array, _delta: Vector2, mouse_pos: Vector2) -> void:
+		var main_active_connector = _main.get_active_connector()
 		for element in elements:
 			# straight lines
 			if _is_shift_pressed:
-				var entered_connector = element.get_entered_connector()
+
 				var point_index = 1
-				if entered_connector:
-					if entered_connector.name in ["In2", "Out2"]:
+				if main_active_connector:
+					if main_active_connector.name in ["In2", "Out2"]:
 						point_index = 0
 
 				mouse_pos = _get_align_wire(
@@ -374,14 +425,14 @@ class DragWire:
 		for element in elements:
 			element.sync_wire_nodes()
 
-		_machine.emit_signal("cursor_shape_updated", Input.CURSOR_CAN_DROP)
-		_machine.active_state = _machine.idle_state
+		_main.emit_signal("cursor_shape_updated", Input.CURSOR_CAN_DROP)
+		_main.active_state = _main.idle_state
 
 class DragElement:
 	extends DragWire
 
-	func _init(machine: Node2D):
-		super(machine)
+	func _init(main: Node2D):
+		super(main)
 		_name = "DragElement"
 
 	func _process_drag(elements: Array, delta: Vector2, _mouse_pos: Vector2) -> void:
@@ -391,15 +442,17 @@ class DragElement:
 	func _process_drag_end(elements: Array):
 		for element in elements:
 			element.clear_temporary_wires()
+			# TODO
+#			element.reset_scale()
 
-		_machine.emit_signal("cursor_shape_updated", Input.CURSOR_CAN_DROP)
-		_machine.active_state = _machine.idle_state
+		_main.emit_signal("cursor_shape_updated", Input.CURSOR_CAN_DROP)
+		_main.active_state = _main.idle_state
 
 class DragSelected:
 	extends DragWire
 
-	func _init(machine: Node2D):
-		super(machine)
+	func _init(main: Node2D):
+		super(main)
 		_name = "DragSelected"
 
 	func _process_drag(elements: Array, delta: Vector2, _mouse_pos: Vector2) -> void:
@@ -410,6 +463,6 @@ class DragSelected:
 		element.restore_connected_wires()
 
 	func _process_drag_end(_elements: Array):
-		_machine.emit_signal("cursor_shape_updated", Input.CURSOR_CAN_DROP)
+		_main.emit_signal("cursor_shape_updated", Input.CURSOR_CAN_DROP)
 
-		_machine.active_state = _machine.idle_state
+		_main.active_state = _main.idle_state

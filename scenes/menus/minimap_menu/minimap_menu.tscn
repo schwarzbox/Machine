@@ -1,0 +1,49 @@
+[gd_scene load_steps=5 format=3 uid="uid://c3jglfn2futvn"]
+
+[ext_resource type="Script" path="res://scenes/menus/minimap_menu/minimap_menu.gd" id="1_yttww"]
+[ext_resource type="PackedScene" uid="uid://bvmk3ar4aosee" path="res://scenes/menus/color_label/color_label.tscn" id="2_mdbjl"]
+[ext_resource type="Script" path="res://scenes/menus/minimap_menu/minimap.gd" id="3_w5mbn"]
+[ext_resource type="Script" path="res://scenes/menus/minimap_menu/canvas.gd" id="4_5bfer"]
+
+[node name="MinimapMenu" type="VBoxContainer"]
+custom_minimum_size = Vector2(196, 40)
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -512.0
+offset_top = -594.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_vertical = 3
+alignment = 2
+script = ExtResource("1_yttww")
+
+[node name="HideButton" type="Button" parent="."]
+custom_minimum_size = Vector2(2.08165e-12, 40)
+layout_mode = 2
+focus_mode = 0
+mouse_filter = 1
+text = "●"
+
+[node name="ColorLabel" parent="." instance=ExtResource("2_mdbjl")]
+layout_mode = 2
+text = "Minimap"
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+layout_mode = 2
+
+[node name="Minimap" type="SubViewport" parent="SubViewportContainer"]
+disable_3d = true
+handle_input_locally = false
+render_target_update_mode = 4
+script = ExtResource("3_w5mbn")
+
+[node name="Canvas" type="Node2D" parent="SubViewportContainer/Minimap"]
+script = ExtResource("4_5bfer")
+
+[node name="Camera2D" type="Camera2D" parent="SubViewportContainer/Minimap"]
+offset = Vector2(256, 256)
+
+[connection signal="pressed" from="HideButton" to="." method="_on_hide_button_pressed"]

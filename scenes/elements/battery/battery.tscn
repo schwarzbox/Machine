@@ -5,10 +5,10 @@
 [ext_resource type="Shader" path="res://scenes/base/element/element.gdshader" id="3_ubrij"]
 [ext_resource type="Script" path="res://scenes/elements/battery/battery.gd" id="4"]
 [ext_resource type="Texture2D" uid="uid://cr8kjefxskk42" path="res://scenes/base/element/dissolve_texture.tres" id="4_taxqp"]
-[ext_resource type="Texture2D" uid="uid://dbtd06ta3xxeq" path="res://scenes/elements/battery/battery.png" id="5_o5rxj"]
+[ext_resource type="Texture2D" uid="uid://c1oi8s6wt2pnb" path="res://scenes/elements/battery/battery_on.png" id="5_4j6l3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0onbc"]
-size = Vector2(160, 208)
+size = Vector2(160, 160)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a4uv3"]
 resource_local_to_scene = true
@@ -26,26 +26,26 @@ shader_parameter/is_dissolve = false
 shader_parameter/dissolveNoise = ExtResource("4_taxqp")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qx8et"]
-size = Vector2(160, 192)
+size = Vector2(160, 184)
 
 [node name="Battery" groups=["Energy"] instance=ExtResource("1")]
 script = ExtResource("4")
 type = 1
 
 [node name="CollisionShape2D" parent="FirstArea" index="0"]
-position = Vector2(2.08165e-12, -8)
+position = Vector2(0, 24)
 shape = SubResource("RectangleShape2D_0onbc")
 
 [node name="FirstSprite2D" parent="." index="1"]
 material = SubResource("ShaderMaterial_a4uv3")
-texture = ExtResource("5_o5rxj")
+texture = ExtResource("5_4j6l3")
 
 [node name="CollisionShape2D" parent="SafeArea" index="0"]
+position = Vector2(2.08165e-12, 12)
 shape = SubResource("RectangleShape2D_qx8et")
 
 [node name="Out" parent="Connectors" index="0" instance=ExtResource("2")]
-position = Vector2(2.08165e-12, -96)
+position = Vector2(2.08165e-12, -80)
 
 [node name="VisibleOnScreenNotifier2D" parent="." index="5"]
-position = Vector2(2.08165e-12, 2.08165e-12)
-rect = Rect2(-80, -96, 160, 192)
+rect = Rect2(-80, -104, 160, 208)

@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://i3np3a2r6kve" path="res://scenes/base/connector/in.tscn" id="7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5dsdq"]
-size = Vector2(256, 480)
+size = Vector2(160, 480)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4iw5c"]
 resource_local_to_scene = true
@@ -27,14 +27,14 @@ shader_parameter/is_dissolve = false
 shader_parameter/dissolveNoise = ExtResource("4_ostv8")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_u3uuo"]
-size = Vector2(224, 480)
+size = Vector2(208, 480)
 
 [node name="And" instance=ExtResource("1")]
 script = ExtResource("2")
 type = 10
 
 [node name="CollisionShape2D" parent="FirstArea" index="0"]
-position = Vector2(0, -1)
+position = Vector2(-8, 0)
 shape = SubResource("RectangleShape2D_5dsdq")
 
 [node name="FirstSprite2D" parent="." index="1"]
@@ -42,6 +42,7 @@ material = SubResource("ShaderMaterial_4iw5c")
 texture = ExtResource("5_6d1nh")
 
 [node name="CollisionShape2D" parent="SafeArea" index="0"]
+position = Vector2(-8, 0)
 shape = SubResource("RectangleShape2D_u3uuo")
 
 [node name="In" parent="Connectors" index="0" instance=ExtResource("7")]
@@ -51,7 +52,7 @@ position = Vector2(-112, -160)
 position = Vector2(-112, 160)
 
 [node name="Out" parent="Connectors" index="2" instance=ExtResource("6")]
-position = Vector2(112, 2.08165e-12)
+position = Vector2(96, 2.08165e-12)
 
 [node name="VisibleOnScreenNotifier2D" parent="." index="5"]
-rect = Rect2(-112, -240, 224, 480)
+rect = Rect2(-112, -240, 232, 480)

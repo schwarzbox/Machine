@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://givl2yrk2wso"]
+
+[ext_resource type="LabelSettings" uid="uid://bpb18bvv60lkb" path="res://scenes/menus/menu_label/menu_label_settings.tres" id="1_ji2mw"]
+
+[node name="MenuLabel" type="Label"]
+mouse_filter = 1
+text = "MenuLabel"
+label_settings = ExtResource("1_ji2mw")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ColorRect" type="ColorRect" parent="."]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.2, 0.2, 0.2, 1)
+metadata/_edit_lock_ = true

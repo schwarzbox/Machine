@@ -18,22 +18,26 @@ signal safe_area_exited
 var type_name: String = ""
 var sprite_size: Vector2 = Vector2()
 var half_sprite_size: Vector2 = Vector2()
+var minimap_element_size: Vector2 = Vector2()
+var minimap_half_element_size: Vector2 = Vector2()
+
 # energy loop
-var is_checked: bool = false
+var _is_checked: bool = false: get = is_checked, set = set_is_checked
+var _on_texture: Texture2D = null
+var _off_texture: Texture2D = null
 
 # var for correctly clone group of elements
 var _is_cloned: bool = false: get = is_cloned, set =  set_is_cloned
 var _is_first_area_mouse_entered: bool = false
 var _safe_area_entered_areas: Dictionary = {}
+
 var _temporary_wires: Array = []:
 	set(_value): return
 
-var _on_texture: Texture2D = null
-var _off_texture: Texture2D = null
-
 @onready var last_valid_position: Vector2 = position
-@onready var connectors_children: Array = $Connectors.get_children():
+@onready var _connectors_children: Array = $Connectors.get_children():
 	set(_value): return
+
 
 func _ready() -> void:
 	add_to_group("Elements")
@@ -45,6 +49,8 @@ func _ready() -> void:
 
 	sprite_size = $FirstSprite2D.texture.get_size()
 	half_sprite_size = sprite_size / 2
+	minimap_element_size = $FirstArea/CollisionShape2D.shape.size
+	minimap_half_element_size = minimap_element_size / 2
 
 	$FirstSprite2D.material.set_shader_parameter("texture_size", sprite_size)
 	$FirstSprite2D.material.set_shader_parameter(
@@ -58,7 +64,7 @@ func _ready() -> void:
 	_set_off_texture()
 	_set_off()
 
-	for connector in connectors_children:
+	for connector in get_connectors_children():
 		connector.connect(
 			"connector_mouse_entered", self._on_connector_mouse_entered
 		)
@@ -104,13 +110,18 @@ func is_mouse_entered() -> bool:
 func is_mouse_intersect_with_shape(mouse_pos: Vector2) -> bool:
 	return $FirstSprite2D.get_rect().has_point($FirstSprite2D.to_local(mouse_pos))
 
+
+func reset_scale(value: Vector2 = Vector2(1, 1)) -> void:
+	scale = value
+	move_connected_wires()
+
 func move_element(pos: Vector2) -> void:
 	position += pos
 	move_connected_wires()
 	remove_temporary_wires()
 
 func move_connected_wires() -> void:
-	for child in connectors_children:
+	for child in get_connectors_children():
 		var child_connected = child.connected_element
 		var child_connected_area = child.connected_area
 		if (
@@ -121,7 +132,7 @@ func move_connected_wires() -> void:
 			_update_connected_wire(child_connected)
 
 func restore_connected_wires() -> void:
-	for child in connectors_children:
+	for child in get_connectors_children():
 		var child_connected = child.connected_element
 		var child_connected_area = child.connected_area
 		if (
@@ -132,7 +143,7 @@ func restore_connected_wires() -> void:
 			child_connected.position = child_connected.last_valid_position
 
 func move_wires_on_top() -> void:
-	for child in connectors_children:
+	for child in get_connectors_children():
 		var child_connected = child.connected_element
 		var child_connected_area = child.connected_area
 		if (
@@ -170,22 +181,16 @@ func is_safe_area_entered() -> bool:
 func set_safe_area_entered(area: Area2D):
 	_safe_area_entered_areas[area] = area
 
-func remove_safe_area_entered(area: Area2D):
+func remove_safe_area_entered(area: Area2D) -> void:
 	_safe_area_entered_areas.erase(area)
 
 # connectors
 
 func get_connectors_children() -> Array:
-	return connectors_children
+	return _connectors_children
 
 func clear_connectors_children() -> void:
-	connectors_children.clear()
-
-func get_entered_connector() -> Connector:
-	for child in connectors_children:
-		if child.is_mouse_entered_connector():
-			return child
-	return null
+	_connectors_children.clear()
 
 # cloned
 
@@ -203,7 +208,7 @@ func rotate_cw() -> void:
 
 	self.rotation += PI / 2
 
-	for child in connectors_children:
+	for child in get_connectors_children():
 		child.remove_connections_with_elements()
 
 func rotate_ccw() -> void:
@@ -212,11 +217,11 @@ func rotate_ccw() -> void:
 
 	self.rotation -= PI / 2
 
-	for child in connectors_children:
+	for child in get_connectors_children():
 		child.remove_connections_with_elements()
 
 func unlink() -> void:
-	for child in connectors_children:
+	for child in get_connectors_children():
 		var child_connected = child.connected_element
 		var child_connected_area = child.connected_area
 		if (
@@ -243,16 +248,21 @@ func delete(is_animate: bool = true) -> void:
 		emit_signal("delete_processed", self)
 
 # energy loop
+func is_checked():
+	return _is_checked
+
+func set_is_checked(value: bool):
+	_is_checked = value
 
 func transfer_energy(instance: Element) -> void:
-	is_checked = true
+	set_is_checked(true)
 
 	# should called only once in one loop
 	var self_energy = _has_energy()
 	if self_energy:
 		call_deferred("_set_on")
 
-		for child in connectors_children:
+		for child in get_connectors_children():
 			var child_connected = child.connected_element
 			var child_connected_area = child.connected_area
 			if (
@@ -265,13 +275,13 @@ func transfer_energy(instance: Element) -> void:
 				&& child_connected != instance
 			):
 				# transfer only if child has energy
-				if !child_connected.is_checked && child.get_energy():
+				if !child_connected.is_checked() && child.get_energy():
 					child_connected.transfer_energy(self)
 	else:
 		call_deferred("_set_off")
 
 func reset_energy() -> void:
-	for child in connectors_children:
+	for child in get_connectors_children():
 		child.set_energy(false)
 	_set_off()
 
@@ -320,8 +330,8 @@ func _on_animation_player_animation_finished(anim_name: String) -> void:
 func _on_connector_mouse_entered(connector) -> void:
 	emit_signal("connector_mouse_entered", self, connector)
 
-func _on_connector_mouse_exited() -> void:
-	emit_signal("connector_mouse_exited")
+func _on_connector_mouse_exited(connector) -> void:
+	emit_signal("connector_mouse_exited", connector)
 
 func _on_connector_area_entered(connector: Connector, other: Connector) -> void:
 	emit_signal("connector_area_entered", connector, other)

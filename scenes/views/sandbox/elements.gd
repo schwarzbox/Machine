@@ -1,7 +1,5 @@
 extends Node2D
 
-# ElementMenu
-signal clone_pressed
 # Cursor
 signal cursor_shape_updated
 # PopupTool
@@ -14,15 +12,11 @@ signal sprite_position_updated
 signal sprite_showed
 signal sprite_texture_removed
 signal sprite_texture_saved
-
-var actual_zoom: float = 1
-
-var active_wire: Element = null
-var selected_scene: PackedScene = null
-
-var selected_elements: Dictionary = {}
-var selection_start = Vector2.ZERO
-var selection_rectangle = RectangleShape2D.new()
+# Minimap
+signal minimap_icons_updated
+signal minimap_frame_updated
+signal minimap_reseted
+signal minimap_disabled
 
 # states
 var state_util: ObjectState = load("res://utils/state_util.gd").new()
@@ -35,25 +29,53 @@ var drag_element_state: RefCounted = state_util.DragElement.new(self)
 var drag_selected_state: RefCounted = state_util.DragSelected.new(self)
 var active_state: RefCounted = idle_state
 
-var _wire_scene: PackedScene = load("res://scenes/elements/wire/wire.tscn")
-var _wire_icon: Texture2D= load("res://scenes/elements/wire/wire_cursor_on.png")
+var selected_elements: Dictionary = {}
+var selection_start = Vector2.ZERO
+var selection_rectangle = RectangleShape2D.new()
 
-var _sort_util: SortUtil = load("res://utils/sort_util.gd").new()
+var _selected_scene: PackedScene = null: get = get_selected_scene, set = set_selected_scene
+var _active_wire: Element = null: get = get_active_wire, set = set_active_wire
+var _active_connectors: Dictionary = {}
+
+var _wire_scene: PackedScene = Globals.ELEMENT_SCENES["Wire"][0]
+var _wire_icon: Texture2D= Globals.ELEMENT_SCENES["Wire"][2]
+
+# TODO
+# var _sort_util: SortUtil = load("res://utils/sort_util.gd").new()
+var _clone_util: CloneUtil = load("res://utils/clone_util.gd").new()
+
+# Camera
+var _actual_zoom: float = 1: get = get_actual_zoom
+var _actual_offset: Vector2 = Vector2()
+
+# Minimap
+var _minimap_util: MinimapUtil = load("res://utils/minimap_util.gd").new()
+var _is_minimap_entered: bool = false: get = is_minimap_entered
+
 
 func _ready() -> void:
 	prints(name, "ready")
 
+	# viewport changes size
+	get_tree().get_root().connect("size_changed", _on_viewport_size_changed)
+
 func _process(_delta: float) -> void:
 	for element in get_tree().get_nodes_in_group("Energy"):
-		if !element.is_checked:
+		if !element.is_checked():
 			element.transfer_energy(element)
 
-	for element in get_children():
-		if !element.is_checked:
-			element.reset_energy()
+	_minimap_util.reset_minimap_icons()
 
 	for element in get_children():
-		element.is_checked = false
+		if !element.is_checked():
+			element.reset_energy()
+
+		_minimap_util.set_minimap_icons(element)
+
+	_update_minimap()
+
+	get_tree().call_group("Elements", "set_is_checked", false)
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	var mouse_pos = get_global_mouse_position()
@@ -80,14 +102,16 @@ func add_child_element(element: Element) -> void:
 	# warning-ignore:return_value_discarded
 	element.connect("safe_area_exited", _on_element_safe_area_processed)
 	# warning-ignore:return_value_discarded
-	element.connect("connector_mouse_entered", _on_objects_connector_sprite_showed)
+	element.connect("connector_mouse_entered", _on_objects_connector_mouse_entered)
 	# warning-ignore:return_value_discarded
-	element.connect("connector_mouse_exited", _on_objects_connector_sprite_hided)
+	element.connect("connector_mouse_exited", _on_objects_connector_mouse_exited)
 	# warning-ignore:return_value_discarded
 	element.connect("connector_area_entered", _on_objects_connector_area_entered)
 	# warning-ignore:return_value_discarded
 	element.connect("connector_area_exited", _on_objects_connector_area_exited)
 	add_child(element)
+
+	set_is_update_minimap_icons(true)
 
 func show_sprite_icon(element: Element, connector: Connector):
 	var icon: Texture2D = _wire_icon if _is_wire_selected_scene() else null
@@ -112,9 +136,10 @@ func has_safe_area_entered_element() -> bool:
 			return true
 	return false
 
-func sort_objects_for_representation():
+func sort_wires_for_representation():
 	var children_top = get_children()
-	children_top.sort_custom(_sort_util._sort_by_rect_bottom_side)
+
+# TODO children_top.sort_custom(_sort_util._sort_by_rect_bottom_side)
 	for i in range(children_top.size()):
 		var child_top = children_top[i]
 		var index = i
@@ -124,24 +149,80 @@ func sort_objects_for_representation():
 
 # selected scene
 
-func set_selected_scene(scene: PackedScene, tx: Texture2D) -> void:
-	selected_scene = scene
-	remove_selected_elements()
+func get_selected_scene() -> PackedScene:
+	return _selected_scene
+
+func set_selected_scene(scene: PackedScene) -> void:
+	_selected_scene = scene
+
+func setup_selected_scene(scene: PackedScene, texture: Texture2D) -> void:
+	# to hide wires over other elements
+	sort_wires_for_representation()
+
+	set_selected_scene(scene)
+	clear_selected_elements()
 	emit_signal(
 		"sprite_texture_saved",
-		tx,
+		texture,
 		# save polygon data to check safe area
 		scene.instantiate().get_node(^"SafeArea/CollisionShape2D").shape.size,
-		# is_element to use BW cursors
+		# is_element (to use BW cursors)
+		# becomes semi-transparent
 		false if _is_wire_selected_scene() else true
 	)
 
+func reset_selected_scene() -> void:
+	_selected_scene = null
+
 func remove_selected_scene() -> void:
+	# to hide wires over other elements
+	sort_wires_for_representation()
+
 	emit_signal("scene_deselected")
-	selected_scene = null
-	active_wire = null
+	reset_selected_scene()
+	reset_active_wire()
 	emit_signal("sprite_hided")
 	emit_signal("sprite_texture_removed")
+
+# camera
+
+func get_actual_zoom() -> float:
+	return _actual_zoom
+
+# active wire
+
+func get_active_wire() -> Element:
+	return _active_wire
+
+func set_active_wire(value: Element) -> void:
+	_active_wire = value
+
+func reset_active_wire() -> void:
+	_active_wire = null
+
+# Minimap
+
+func is_minimap_entered() -> bool:
+	return _is_minimap_entered
+
+func set_minimap_disabled(value: bool) -> void:
+	emit_signal("minimap_disabled", value)
+
+func set_is_update_minimap_icons(value: bool) -> void:
+	_minimap_util.set_is_update_minimap_icons(value)
+
+# active connectors
+
+func get_active_connector() -> Connector:
+	if !_active_connectors.is_empty():
+		return _active_connectors.values()[0]
+	return null
+
+func _add_active_connector(connector: Connector) -> void:
+	_active_connectors[connector.get_instance_id()] = connector
+
+func _remove_active_connector(connector: Connector):
+	_active_connectors.erase(connector.get_instance_id())
 
 # selected elements
 
@@ -151,9 +232,9 @@ func set_selected_elements_from_areas(selected_areas: Array) -> void:
 		# to protect from wrong placement
 		element.last_valid_position = element.position
 		if !selected_elements.has(element):
-			_add_selected_element(element)
+			add_selected_element(element)
 
-func remove_selected_elements() -> void:
+func clear_selected_elements() -> void:
 	get_tree().call_group_flags(
 		SceneTree.GROUP_CALL_DEFAULT, "Elements", "outline", false
 	)
@@ -162,7 +243,7 @@ func remove_selected_elements() -> void:
 		SceneTree.GROUP_CALL_DEFAULT, "Elements", "set_is_cloned", false
 	)
 
-	selected_elements = {}
+	selected_elements.clear()
 
 func update_selected_elements_last_valid_position():
 	for element in selected_elements.values():
@@ -171,21 +252,34 @@ func update_selected_elements_last_valid_position():
 func re_add_selected_element(element: Element) -> void:
 	element.last_valid_position = element.position
 	if !is_selected_element(element):
-		remove_selected_elements()
-		_add_selected_element(element)
+		clear_selected_elements()
+		add_selected_element(element)
 
 func is_selected_element(element: Element) -> bool:
 	return selected_elements.has(element.get_instance_id())
 
-func _add_selected_element(element: Element) -> void:
+func add_selected_element(element: Element) -> void:
 	var element_id = element.get_instance_id()
 	# use element_id as key
 	selected_elements[element_id] = element
 	element.call_deferred("outline", true)
 
-func _remove_selected_element(element: Element) -> void:
+func remove_selected_element(element: Element) -> void:
 	# warning-ignore:return_value_discarded
 	selected_elements.erase(element.get_instance_id())
+	element.call_deferred("outline", false)
+
+# copy/paste
+func copy_elements(elements: Array):
+	_clone_util.set_last_saved_elements(elements
+)
+func paste_elements():
+	clear_selected_elements()
+	_clone_util.duplicate(
+		self,
+		_clone_util.get_last_saved_elements(),
+		_clone_util.get_delta(get_global_mouse_position()),
+	)
 
 # states
 
@@ -199,25 +293,65 @@ func _is_drag_selected_state() -> bool:
 	return (active_state == drag_selected_state)
 
 func _is_wire_selected_scene() -> bool:
-	return (selected_scene == _wire_scene)
+	return (_selected_scene == _wire_scene)
+
+func _update_minimap() -> void:
+	var is_update_icons = _minimap_util.is_update_minimap_icons()
+	var is_update_frame = _minimap_util.is_update_minimap_frame()
+
+	if is_update_icons:
+		emit_signal("minimap_icons_updated", _minimap_util.get_minimap_icons())
+
+	if is_update_icons || is_update_frame:
+		# subviewport size
+		var default_minimap_size: Vector2 = Vector2(get_viewport().size) / Globals.MINIMAP.SCALE
+		var minimap_frame: Dictionary = _minimap_util.get_minimap_frame(
+			default_minimap_size, _actual_zoom, _actual_offset
+		)
+
+		if minimap_frame.is_empty():
+			emit_signal("minimap_reseted")
+			return
+
+		emit_signal(
+			"minimap_frame_updated",
+			default_minimap_size,
+			minimap_frame.camera_zoom,
+			minimap_frame.camera_offset,
+			minimap_frame.frame,
+			minimap_frame.marker,
+			minimap_frame.rect
+		)
+
+func _on_viewport_size_changed():
+	_minimap_util.set_is_update_minimap_frame(true)
 
 func _on_file_menu_file_loaded() -> void:
-	sort_objects_for_representation()
+	sort_wires_for_representation()
 
 func _on_camera_2d_zoom_changed(value: float) -> void:
-	actual_zoom = value
+	_actual_zoom = value
+	_minimap_util.set_is_update_minimap_frame(true)
+
+func _on_camera_2d_offset_changed(offset: Vector2) -> void:
+	_actual_offset = offset
+	_minimap_util.set_is_update_minimap_frame(true)
+
+func _on_minimap_menu_mouse_entered() -> void:
+	_is_minimap_entered = true
+
+func _on_minimap_menu_mouse_exited() -> void:
+	_is_minimap_entered = false
 
 func _on_element_menu_button_pressed(scene: PackedScene, icon: Texture2D, pressed: bool) -> void:
+	if has_safe_area_entered_element():
+		emit_signal("scene_deselected")
+		return
+
 	if pressed:
-		active_state.process_set_selected_scene(scene, icon)
+		active_state.process_setup_selected_scene(scene, icon)
 	else:
 		active_state.process_remove_selected_scene()
-
-func _on_element_menu_element_added(element: Element) -> void:
-	add_child_element(element)
-	# to protect from wrong placement
-	element.last_valid_position = element.position
-	_add_selected_element(element)
 
 func _on_file_menu_elements_deleted() -> void:
 	for element in get_children():
@@ -235,30 +369,15 @@ func _on_popup_tool_rotate_ccw_pressed() -> void:
 		element.call_deferred("rotate_ccw")
 
 func _on_popup_tool_clone_pressed() -> void:
-	var elements = selected_elements.values()
-	remove_selected_elements()
+	var elements: Array = selected_elements.values()
+	clear_selected_elements()
+	_clone_util.duplicate(self, elements, Vector2(64, 64))
 
-	var clones = []
-	for element in elements:
-		emit_signal("clone_pressed", element)
-		var clone = get_child(get_child_count()-1)
+func _on_popup_tool_copy_pressed() -> void:
+	copy_elements(selected_elements.values())
 
-		clone.set_is_cloned(true)
-
-		clone.position = element.position + Vector2(64, 64)
-		clone.rotation = element.rotation
-		if clone.type == Globals.Elements.WIRE:
-			clone.set_points(element.get_points())
-		clones.append(clone)
-
-	# in separate cycle to save order
-	for clone in clones:
-		if clone.type == Globals.Elements.WIRE:
-			clone.sync_wire_nodes()
-			clone.call_deferred("show_sprites")
-			clone.call_deferred("enable_first_connectors")
-		else:
-			clone.move_wires_on_top()
+func _on_popup_tool_paste_pressed() -> void:
+	paste_elements()
 
 func _on_popup_tool_unlink_pressed() -> void:
 	for element in selected_elements.values():
@@ -269,9 +388,12 @@ func _on_popup_tool_delete_pressed() -> void:
 		element.call_deferred("delete", true)
 
 func _on_element_delete_processed(element: Element) -> void:
-	_remove_selected_element(element)
+	remove_selected_element(element)
 
-	for child in element.connectors_children:
+	for connector in element.get_connectors_children():
+		_remove_active_connector(connector)
+
+	for child in element.get_connectors_children():
 		child.remove_connections_with_self()
 
 	element.queue_free()
@@ -280,6 +402,8 @@ func _on_element_delete_processed(element: Element) -> void:
 	if is_ancestor_of(element):
 		element.outline(false)
 		remove_child(element)
+
+	set_is_update_minimap_icons(true)
 
 func _on_element_child_moved_on_top(element: Element) -> void:
 	move_child(element, get_child_count() - 1)
@@ -298,21 +422,24 @@ func _on_element_safe_area_processed(
 		element.set_safe_area_entered(area)
 		element.safe_area_alarm(true)
 	else:
-		# warning-ignore:return_value_discarded
 		element.remove_safe_area_entered(area)
 		if element.is_safe_area_entered():
 			return
 		element.safe_area_alarm(false)
 
-func _on_objects_connector_sprite_showed(
+func _on_objects_connector_mouse_entered(
 	element: Element, connector: Area2D
 ) -> void:
+
+	_add_active_connector(connector)
 
 	# prevent show when draw
 	if _is_create_state():
 		show_sprite_icon(element, connector)
 
-func _on_objects_connector_sprite_hided() -> void:
+func _on_objects_connector_mouse_exited(connector: Area2D) -> void:
+	_remove_active_connector(connector)
+
 	emit_signal("sprite_showed")
 
 func _on_objects_connector_area_entered(
@@ -335,8 +462,9 @@ func _on_objects_connector_area_entered(
 		connector.owner.type == Globals.Elements.WIRE
 		|| other.owner.type == Globals.Elements.WIRE
 	):
-		# disable connection in selection
-		if _is_drag_selected_state():
+
+		# disable connection for drag selection and drag element
+		if _is_drag_selected_state() || _is_drag_element_state():
 			return
 
 		if !Connector.allowed_connection_to_object(connector, other):
@@ -393,6 +521,5 @@ func _on_objects_connector_area_exited(
 	# disable reset in drag element mode
 	if _is_drag_element_state():
 		return
-
-	connector._reset_connection()
-	other._reset_connection()
+	connector.remove_connections_with_elements()
+	other.remove_connections_with_elements()

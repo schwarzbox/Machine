@@ -6,9 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://i3np3a2r6kve" path="res://scenes/base/connector/in.tscn" id="4"]
 [ext_resource type="Texture2D" uid="uid://cr8kjefxskk42" path="res://scenes/base/element/dissolve_texture.tres" id="4_pqspu"]
 [ext_resource type="PackedScene" uid="uid://dd47odg8af7i3" path="res://scenes/base/connector/out.tscn" id="5"]
+[ext_resource type="Texture2D" uid="uid://d0eoi0nw4qb6a" path="res://scenes/elements/inverter/inverter_off.png" id="5_804aq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kpa4n"]
-size = Vector2(256, 320)
+size = Vector2(160, 320)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_52ydh"]
 resource_local_to_scene = true
@@ -25,24 +26,23 @@ shader_parameter/texture_alpha = 1.0
 shader_parameter/is_dissolve = false
 shader_parameter/dissolveNoise = ExtResource("4_pqspu")
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_6nhky"]
-load_path = "res://.godot/imported/inverter_off.png-76c6ef3c8ffdd933c02410ae5227dc86.ctex"
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1bksa"]
-size = Vector2(224, 320)
+size = Vector2(208, 320)
 
 [node name="Inverter" instance=ExtResource("3")]
 script = ExtResource("1")
 type = 3
 
 [node name="CollisionShape2D" parent="FirstArea" index="0"]
+position = Vector2(-8, 2.08165e-12)
 shape = SubResource("RectangleShape2D_kpa4n")
 
 [node name="FirstSprite2D" parent="." index="1"]
 material = SubResource("ShaderMaterial_52ydh")
-texture = SubResource("CompressedTexture2D_6nhky")
+texture = ExtResource("5_804aq")
 
 [node name="CollisionShape2D" parent="SafeArea" index="0"]
+position = Vector2(-8, 2.08165e-12)
 shape = SubResource("RectangleShape2D_1bksa")
 
 [node name="In" parent="Connectors" index="0" instance=ExtResource("4")]
@@ -52,7 +52,7 @@ position = Vector2(-112, -80)
 position = Vector2(-112, 80)
 
 [node name="Out" parent="Connectors" index="2" instance=ExtResource("5")]
-position = Vector2(112, -80)
+position = Vector2(96, -80)
 
 [node name="VisibleOnScreenNotifier2D" parent="." index="5"]
-rect = Rect2(-112, -160, 224, 320)
+rect = Rect2(-112, -160, 232, 320)

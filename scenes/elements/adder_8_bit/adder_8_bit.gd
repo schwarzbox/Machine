@@ -5,7 +5,7 @@ const _off: Texture2D = preload("res://scenes/elements/adder_8_bit/adder_8_bit_o
 const _on_off: Texture2D = preload("res://scenes/elements/adder_8_bit/adder_8_bit_on_off.png")
 const _off_on: Texture2D = preload("res://scenes/elements/adder_8_bit/adder_8_bit_off_on.png")
 
-const _relay_util_class: Resource = preload("res://utils/relay_delay_util.gd")
+const _relay_util_class: RefCounted = preload("res://utils/relay_delay_util.gd")
 var _relay_utilC: RelayDelayUtil = _relay_util_class.new()
 var _relay_utils: Array = []
 

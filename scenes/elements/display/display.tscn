@@ -1,11 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://c3kw2ie7pcnpp"]
+[gd_scene load_steps=10 format=3 uid="uid://c3kw2ie7pcnpp"]
 
 [ext_resource type="Script" path="res://scenes/elements/display/display.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://4eml6yxfjp8o" path="res://scenes/base/element/element.tscn" id="2"]
 [ext_resource type="Shader" path="res://scenes/base/element/element.gdshader" id="3_brqcr"]
 [ext_resource type="PackedScene" uid="uid://i3np3a2r6kve" path="res://scenes/base/connector/in.tscn" id="4"]
 [ext_resource type="Texture2D" uid="uid://cr8kjefxskk42" path="res://scenes/base/element/dissolve_texture.tres" id="4_fkned"]
-[ext_resource type="PackedScene" uid="uid://dd47odg8af7i3" path="res://scenes/base/connector/out.tscn" id="6_me4kx"]
+[ext_resource type="Texture2D" uid="uid://bkyuo062pf22t" path="res://scenes/elements/display/display_off.png" id="5_grlfv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1p3h5"]
 size = Vector2(248, 248)
@@ -25,11 +25,8 @@ shader_parameter/texture_alpha = 1.0
 shader_parameter/is_dissolve = false
 shader_parameter/dissolveNoise = ExtResource("4_fkned")
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_8lyby"]
-load_path = "res://.godot/imported/display_off.png-c11e9d5a7a50d5c6757af64774d576a4.ctex"
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bf6bn"]
-size = Vector2(256, 256)
+size = Vector2(248, 248)
 
 [node name="Display" instance=ExtResource("2")]
 script = ExtResource("1")
@@ -40,22 +37,22 @@ shape = SubResource("RectangleShape2D_1p3h5")
 
 [node name="FirstSprite2D" parent="." index="1"]
 material = SubResource("ShaderMaterial_o4fyy")
-texture = SubResource("CompressedTexture2D_8lyby")
+texture = ExtResource("5_grlfv")
 
 [node name="CollisionShape2D" parent="SafeArea" index="0"]
 shape = SubResource("RectangleShape2D_bf6bn")
 
 [node name="In" parent="Connectors" index="0" instance=ExtResource("4")]
-position = Vector2(-112, 2.08165e-12)
+position = Vector2(2.08165e-12, -104)
 
 [node name="In2" parent="Connectors" index="1" instance=ExtResource("4")]
-position = Vector2(2.08165e-12, -112)
+position = Vector2(-104, 2.08165e-12)
 
-[node name="Out" parent="Connectors" index="2" instance=ExtResource("6_me4kx")]
-position = Vector2(112, 2.08165e-12)
+[node name="In3" parent="Connectors" index="2" instance=ExtResource("4")]
+position = Vector2(2.08165e-12, 104)
 
-[node name="Out2" parent="Connectors" index="3" instance=ExtResource("6_me4kx")]
-position = Vector2(2.08165e-12, 112)
+[node name="In4" parent="Connectors" index="3" instance=ExtResource("4")]
+position = Vector2(104, 2.08165e-12)
 
 [node name="VisibleOnScreenNotifier2D" parent="." index="5"]
-rect = Rect2(-128, -128, 256, 256)
+rect = Rect2(-124, -124, 248, 248)

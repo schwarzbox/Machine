@@ -9,7 +9,7 @@
 [ext_resource type="Script" path="res://scenes/elements/adder_8_bit/adder_8_bit.gd" id="7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l3uap"]
-size = Vector2(416, 1538)
+size = Vector2(320, 1440)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_m46s6"]
 resource_local_to_scene = true

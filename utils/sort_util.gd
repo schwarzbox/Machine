@@ -1,6 +1,6 @@
 class_name SortUtil
 
-extends Resource
+extends RefCounted
 
 static func _sort_by_position(a: Element, b: Element):
 	if a.position > b.position:

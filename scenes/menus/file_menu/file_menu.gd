@@ -25,21 +25,28 @@ func _ready() -> void:
 			"font_size", Globals.FONTS.DEFAULT_FONT_SIZE
 		)
 	# set ext filter
-	$FileDialog.add_filter("*.machine")
+	$FileDialog.add_filter("*.{ext}".format({ext=Globals.GAME.FILE_EXTENSION}))
 
 	_load_last_file()
 
 	$FileDialog.current_dir = _file_path.get_base_dir()
 
+	$SaveDialog.dialog_text = "Do you want to save changes?"
+	$SaveDialog.reset_size()
+
+	$NotificationTimer.wait_time = Globals.GAME.NOTIFICATION_DELAY
+
 func _get_untitled_path(file_name: String) -> String:
 	var list_dir = _get_list_dir($FileDialog.current_dir)
 
 	var count = 1
-	var new_name = file_name
+	var new_name = "{base_name}.{ext}".format(
+		{base_name=file_name, ext=Globals.GAME.FILE_EXTENSION}
+	)
 	while new_name in list_dir:
 		var base_name = file_name.get_basename()
 		new_name = "{base_name}-{count}.{ext}".format(
-			{file_name=base_name, count=count, ext=Globals.GAME.FILE_EXTENSION}
+			{base_name=file_name, count=count, ext=Globals.GAME.FILE_EXTENSION}
 		)
 		count += 1
 
@@ -62,13 +69,24 @@ func _save_last_file_path() -> void:
 		_file_path
 	)
 
-# funcref
+func _notify(txt: String) -> void:
+	$Notification/MenuLabel.text = " {txt}: {file_name} ".format(
+		{txt=txt, file_name=_file_path.get_file()}
+	)
+	$Notification.reset_size()
+	$Notification.popup()
+
+	$NotificationTimer.start()
+	await $NotificationTimer.timeout
+	$Notification.hide()
+
 func _new() -> void:
 	emit_signal("elements_deleted")
 
 	_set_file_path(_get_untitled_path(_default_file_name))
 	emit_signal("menu_hided")
 
+	_notify("Created")
 	_save_last_file_path()
 
 func _save() -> void:
@@ -76,7 +94,7 @@ func _save() -> void:
 		_file_path,
 		get_tree().get_nodes_in_group("Elements")
 	)
-
+	_notify("Saved")
 	_save_last_file_path()
 
 func _load() -> void:
@@ -92,6 +110,8 @@ func _load() -> void:
 			element.call_deferred("enable_first_connectors")
 
 	emit_signal("file_loaded")
+
+	_notify("Loaded")
 	_save_last_file_path()
 
 func _open_dialog() -> void:
@@ -236,7 +256,9 @@ func _on_mouse_entered() -> void:
 func _on_mouse_exited() -> void:
 	emit_signal("sprite_showed")
 
+func _on_notification_about_to_popup() -> void:
+	var pos = (get_viewport().size / 2) - 	$Notification.size / 2
+	$Notification.position = Vector2(pos.x, 0)
 
-
-
-
+func _on_notification_close_requested() -> void:
+	$NotificationTimer.stop()

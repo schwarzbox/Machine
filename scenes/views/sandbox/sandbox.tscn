@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b81dqlbi4n7no"]
+[gd_scene load_steps=11 format=3 uid="uid://b81dqlbi4n7no"]
 
 [ext_resource type="PackedScene" uid="uid://dgmx3kbp2v0xc" path="res://scenes/base/view/view.tscn" id="1_q1d62"]
 [ext_resource type="Script" path="res://scenes/views/sandbox/sandbox.gd" id="2_n785n"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cjyhqxpr4pbmf" path="res://scenes/menus/level_menu/level_menu.tscn" id="5_je47x"]
 [ext_resource type="PackedScene" uid="uid://pvd2iu5xx0tn" path="res://scenes/base/camera/camera_2d.tscn" id="6_7tsva"]
 [ext_resource type="PackedScene" uid="uid://bpsu2pj51hgan" path="res://scenes/menus/file_menu/file_menu.tscn" id="6_ly7c7"]
+[ext_resource type="PackedScene" uid="uid://c3jglfn2futvn" path="res://scenes/menus/minimap_menu/minimap_menu.tscn" id="7_annhv"]
 [ext_resource type="PackedScene" uid="uid://jn1vihlbnvi1" path="res://scenes/base/cursor/cursor.tscn" id="7_q3ctd"]
 [ext_resource type="Script" path="res://scenes/views/sandbox/elements.gd" id="8_2svtm"]
 
@@ -27,6 +28,8 @@ text = "Sandbox"
 [node name="FileMenu" parent="CanvasLayer/LevelMenu/Info" index="1" instance=ExtResource("6_ly7c7")]
 layout_mode = 2
 
+[node name="MinimapMenu" parent="CanvasLayer" index="3" instance=ExtResource("7_annhv")]
+
 [node name="Elements" type="Node2D" parent="World" index="0"]
 script = ExtResource("8_2svtm")
 
@@ -36,11 +39,12 @@ offset = Vector2(900, 700)
 [node name="Cursor" parent="." index="3" instance=ExtResource("7_q3ctd")]
 
 [connection signal="button_pressed" from="CanvasLayer/ElementMenu" to="World/Elements" method="_on_element_menu_button_pressed"]
-[connection signal="element_added" from="CanvasLayer/ElementMenu" to="World/Elements" method="_on_element_menu_element_added"]
 [connection signal="sprite_hided" from="CanvasLayer/ElementMenu" to="Cursor" method="_on_element_menu_sprite_hided"]
 [connection signal="sprite_showed" from="CanvasLayer/ElementMenu" to="Cursor" method="_on_element_menu_sprite_showed"]
 [connection signal="clone_pressed" from="CanvasLayer/PopupTool" to="World/Elements" method="_on_popup_tool_clone_pressed"]
+[connection signal="copy_pressed" from="CanvasLayer/PopupTool" to="World/Elements" method="_on_popup_tool_copy_pressed"]
 [connection signal="delete_pressed" from="CanvasLayer/PopupTool" to="World/Elements" method="_on_popup_tool_delete_pressed"]
+[connection signal="paste_pressed" from="CanvasLayer/PopupTool" to="World/Elements" method="_on_popup_tool_paste_pressed"]
 [connection signal="rotate_ccw_pressed" from="CanvasLayer/PopupTool" to="World/Elements" method="_on_popup_tool_rotate_ccw_pressed"]
 [connection signal="rotate_cw_pressed" from="CanvasLayer/PopupTool" to="World/Elements" method="_on_popup_tool_rotate_cw_pressed"]
 [connection signal="unlink_pressed" from="CanvasLayer/PopupTool" to="World/Elements" method="_on_popup_tool_unlink_pressed"]
@@ -55,15 +59,24 @@ offset = Vector2(900, 700)
 [connection signal="sprite_hided" from="CanvasLayer/LevelMenu/Info/FileMenu" to="Cursor" method="_on_file_menu_sprite_hided"]
 [connection signal="sprite_showed" from="CanvasLayer/LevelMenu/Info/FileMenu" to="Cursor" method="_on_file_menu_sprite_showed"]
 [connection signal="pressed" from="CanvasLayer/LevelMenu/Info/Back" to="." method="_on_back_pressed"]
-[connection signal="clone_pressed" from="World/Elements" to="CanvasLayer/ElementMenu" method="_on_elements_clone_pressed"]
+[connection signal="mouse_entered" from="CanvasLayer/MinimapMenu" to="World/Elements" method="_on_minimap_menu_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasLayer/MinimapMenu" to="World/Elements" method="_on_minimap_menu_mouse_exited"]
+[connection signal="minimap_frame_moved" from="CanvasLayer/MinimapMenu/SubViewportContainer/Minimap" to="Camera2D" method="_on_minimap_minimap_frame_moved"]
 [connection signal="cursor_shape_updated" from="World/Elements" to="Cursor" method="_on_elements_cursor_shape_updated"]
 [connection signal="menu_poped" from="World/Elements" to="CanvasLayer/PopupTool" method="_on_elements_menu_poped"]
+[connection signal="minimap_disabled" from="World/Elements" to="CanvasLayer/MinimapMenu/SubViewportContainer/Minimap" method="_on_elements_minimap_disabled"]
+[connection signal="minimap_frame_updated" from="World/Elements" to="CanvasLayer/MinimapMenu/SubViewportContainer/Minimap" method="_on_elements_minimap_frame_updated"]
+[connection signal="minimap_icons_updated" from="World/Elements" to="CanvasLayer/MinimapMenu/SubViewportContainer/Minimap" method="_on_elements_minimap_icons_updated"]
+[connection signal="minimap_reseted" from="World/Elements" to="CanvasLayer/MinimapMenu/SubViewportContainer/Minimap" method="_on_elements_minimap_reseted"]
 [connection signal="scene_deselected" from="World/Elements" to="CanvasLayer/ElementMenu" method="_on_elements_scene_deselected"]
 [connection signal="sprite_hided" from="World/Elements" to="Cursor" method="_on_elements_sprite_hided"]
 [connection signal="sprite_position_updated" from="World/Elements" to="Cursor" method="_on_elements_sprite_position_updated"]
 [connection signal="sprite_showed" from="World/Elements" to="Cursor" method="_on_elements_sprite_showed"]
 [connection signal="sprite_texture_removed" from="World/Elements" to="Cursor" method="_on_elements_sprite_texture_removed"]
 [connection signal="sprite_texture_saved" from="World/Elements" to="Cursor" method="_on_elements_sprite_texture_saved"]
+[connection signal="cursor_shape_updated" from="Camera2D" to="Cursor" method="_on_camera_2d_cursor_shape_updated"]
+[connection signal="offset_changed" from="Camera2D" to="World/Elements" method="_on_camera_2d_offset_changed"]
 [connection signal="zoom_changed" from="Camera2D" to="World/Elements" method="_on_camera_2d_zoom_changed"]
 
 [editable path="CanvasLayer/LevelMenu"]
+[editable path="CanvasLayer/MinimapMenu"]

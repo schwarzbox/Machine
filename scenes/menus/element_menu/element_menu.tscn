@@ -21,11 +21,13 @@
 [ext_resource type="Texture2D" uid="uid://bxnli8nrh62se" path="res://scenes/menus/element_menu/half_adder_icon.png" id="17_74vjs"]
 [ext_resource type="Texture2D" uid="uid://brf6x8r8qyoai" path="res://scenes/menus/element_menu/full_adder_icon.png" id="18_ipv0k"]
 [ext_resource type="Texture2D" uid="uid://d0gask7ysfmta" path="res://scenes/menus/element_menu/selector_icon.png" id="19_qf14h"]
+[ext_resource type="Texture2D" uid="uid://ceneedx4qujjg" path="res://scenes/menus/element_menu/decoder_icon.png" id="22_54621"]
 [ext_resource type="Texture2D" uid="uid://b8ma4k38sjwwr" path="res://scenes/menus/element_menu/trigger_reset_icon.png" id="22_me1ba"]
 [ext_resource type="Texture2D" uid="uid://5u0oancxgsf7" path="res://scenes/menus/element_menu/trigger_level_icon.png" id="23_ct1sc"]
 [ext_resource type="Texture2D" uid="uid://pmd2bgfwgawa" path="res://scenes/menus/element_menu/trigger_level_reset_icon.png" id="24_ajilk"]
 [ext_resource type="Texture2D" uid="uid://b1l3lej76ihiv" path="res://scenes/menus/element_menu/trigger_front_icon.png" id="25_jmlpo"]
 [ext_resource type="Texture2D" uid="uid://bxd06wenk7hsw" path="res://scenes/menus/element_menu/ram_8_bit_icon.png" id="26_q5nro"]
+[ext_resource type="Texture2D" uid="uid://buuumrkb7ocg8" path="res://scenes/menus/element_menu/ram_256_bit_icon.png" id="28_ksalm"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_jswpn"]
 command_or_control_autoremap = true
@@ -55,18 +57,11 @@ keycode = 68
 [sub_resource type="Shortcut" id="8"]
 events = [SubResource("InputEventKey_1ox14")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_4xt7x"]
-command_or_control_autoremap = true
-keycode = 66
-
-[sub_resource type="Shortcut" id="Shortcut_otl85"]
-events = [SubResource("InputEventKey_4xt7x")]
-
 [node name="ElementMenu" type="VBoxContainer"]
 custom_minimum_size = Vector2(196, 40)
 offset_right = 196.0
 offset_bottom = 221.0
-size_flags_horizontal = 0
+size_flags_vertical = 3
 mouse_filter = 0
 script = ExtResource("1_jgni7")
 metadata/_edit_use_anchors_ = true
@@ -170,7 +165,6 @@ size_flags_stretch_ratio = 0.5
 tooltip_text = "Switch"
 mouse_filter = 1
 toggle_mode = true
-shortcut = SubResource("Shortcut_otl85")
 texture_normal = ExtResource("6_myrku")
 ignore_texture_size = true
 stretch_mode = 5
@@ -192,7 +186,6 @@ size_flags_stretch_ratio = 0.5
 tooltip_text = "Button"
 mouse_filter = 1
 toggle_mode = true
-shortcut = SubResource("Shortcut_otl85")
 texture_normal = ExtResource("8_on0h3")
 ignore_texture_size = true
 stretch_mode = 5
@@ -417,6 +410,7 @@ color = Color(0.333333, 0.333333, 0.333333, 1)
 metadata/_edit_lock_ = true
 
 [node name="Half Adder" type="TextureButton" parent="GridContainer"]
+visible = false
 clip_contents = true
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
@@ -479,19 +473,40 @@ mouse_filter = 2
 color = Color(0.333333, 0.333333, 0.333333, 1)
 metadata/_edit_lock_ = true
 
-[node name="Reset-Set Flip-Flop" type="TextureButton" parent="GridContainer"]
+[node name="Decoder" type="TextureButton" parent="GridContainer"]
 clip_contents = true
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_stretch_ratio = 0.5
-tooltip_text = "Reset-Set Flip-Flop"
+tooltip_text = "Decoder"
+mouse_filter = 1
+toggle_mode = true
+texture_normal = ExtResource("22_54621")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Decoder"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
+[node name="Reset Set Flip Flop" type="TextureButton" parent="GridContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+size_flags_stretch_ratio = 0.5
+tooltip_text = "Reset Set Flip Flop"
 mouse_filter = 1
 toggle_mode = true
 texture_normal = ExtResource("22_me1ba")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="ColorRect" type="ColorRect" parent="GridContainer/Reset-Set Flip-Flop"]
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Reset Set Flip Flop"]
 show_behind_parent = true
 layout_mode = 0
 anchor_right = 1.0
@@ -500,19 +515,19 @@ mouse_filter = 2
 color = Color(0.333333, 0.333333, 0.333333, 1)
 metadata/_edit_lock_ = true
 
-[node name="Level Flip-Flop" type="TextureButton" parent="GridContainer"]
+[node name="Level Flip Flop" type="TextureButton" parent="GridContainer"]
 clip_contents = true
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_stretch_ratio = 0.5
-tooltip_text = "Level Flip-Flop"
+tooltip_text = "Level Flip Flop"
 mouse_filter = 1
 toggle_mode = true
 texture_normal = ExtResource("23_ct1sc")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="ColorRect" type="ColorRect" parent="GridContainer/Level Flip-Flop"]
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Level Flip Flop"]
 show_behind_parent = true
 layout_mode = 0
 anchor_right = 1.0
@@ -521,19 +536,19 @@ mouse_filter = 2
 color = Color(0.333333, 0.333333, 0.333333, 1)
 metadata/_edit_lock_ = true
 
-[node name="Level Flip-Flop with Reset" type="TextureButton" parent="GridContainer"]
+[node name="Level Flip Flop with Reset" type="TextureButton" parent="GridContainer"]
 clip_contents = true
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_stretch_ratio = 0.5
-tooltip_text = "Level Flip-Flop with Reset"
+tooltip_text = "Level Flip Flop with Reset"
 mouse_filter = 1
 toggle_mode = true
 texture_normal = ExtResource("24_ajilk")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="ColorRect" type="ColorRect" parent="GridContainer/Level Flip-Flop with Reset"]
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Level Flip Flop with Reset"]
 show_behind_parent = true
 layout_mode = 0
 anchor_right = 1.0
@@ -542,19 +557,19 @@ mouse_filter = 2
 color = Color(0.333333, 0.333333, 0.333333, 1)
 metadata/_edit_lock_ = true
 
-[node name="Edge Flip-Flop" type="TextureButton" parent="GridContainer"]
+[node name="Edge Flip Flop" type="TextureButton" parent="GridContainer"]
 clip_contents = true
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_stretch_ratio = 0.5
-tooltip_text = "Edge Flip-Flop"
+tooltip_text = "Edge Flip Flop"
 mouse_filter = 1
 toggle_mode = true
 texture_normal = ExtResource("25_jmlpo")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="ColorRect" type="ColorRect" parent="GridContainer/Edge Flip-Flop"]
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Edge Flip Flop"]
 show_behind_parent = true
 layout_mode = 0
 anchor_right = 1.0
@@ -584,11 +599,33 @@ mouse_filter = 2
 color = Color(0.333333, 0.333333, 0.333333, 1)
 metadata/_edit_lock_ = true
 
+[node name="Ram 256 Bit" type="TextureButton" parent="GridContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+size_flags_stretch_ratio = 0.5
+tooltip_text = "Ram 256 Bit"
+mouse_filter = 1
+toggle_mode = true
+texture_normal = ExtResource("28_ksalm")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer/Ram 256 Bit"]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.333333, 0.333333, 0.333333, 1)
+metadata/_edit_lock_ = true
+
 [node name="HideButton" type="Button" parent="."]
+custom_minimum_size = Vector2(2.08165e-12, 40)
 layout_mode = 2
 focus_mode = 0
 mouse_filter = 1
-text = "^"
+text = "●"
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

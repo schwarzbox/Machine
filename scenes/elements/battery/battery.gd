@@ -1,7 +1,7 @@
 extends Element
 
-const _off: Texture2D = preload("res://scenes/elements/battery/battery.png")
-const _on: Texture2D = preload("res://scenes/elements/battery/battery.png")
+const _off: Texture2D = preload("res://scenes/elements/battery/battery_on.png")
+const _on: Texture2D = preload("res://scenes/elements/battery/battery_on.png")
 
 func _ready() -> void:
 	type = Globals.Elements.BATTERY

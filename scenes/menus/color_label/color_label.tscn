@@ -1,13 +1,16 @@
 [gd_scene load_steps=2 format=3 uid="uid://bvmk3ar4aosee"]
 
-[ext_resource type="LabelSettings" uid="uid://ch5hognxu5tih" path="res://scenes/menus/color_label/label_settings.tres" id="1_0s6ou"]
+[ext_resource type="LabelSettings" uid="uid://ch5hognxu5tih" path="res://scenes/menus/color_label/color_label_settings.tres" id="1_6w6jf"]
 
 [node name="ColorLabel" type="Label"]
 custom_minimum_size = Vector2(196, 20)
+offset_right = 196.0
+offset_bottom = 43.0
 mouse_filter = 1
 text = "ColorLabel"
-label_settings = ExtResource("1_0s6ou")
+label_settings = ExtResource("1_6w6jf")
 horizontal_alignment = 1
+vertical_alignment = 1
 uppercase = true
 
 [node name="ColorRect" type="ColorRect" parent="."]

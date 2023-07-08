@@ -5,9 +5,10 @@
 [ext_resource type="PackedScene" uid="uid://i3np3a2r6kve" path="res://scenes/base/connector/in.tscn" id="3"]
 [ext_resource type="Shader" path="res://scenes/base/element/element.gdshader" id="3_q8xqr"]
 [ext_resource type="Texture2D" uid="uid://cr8kjefxskk42" path="res://scenes/base/element/dissolve_texture.tres" id="4_mt5pg"]
+[ext_resource type="Texture2D" uid="uid://dryuysuvgx1k4" path="res://scenes/elements/lamp/lamp_off.png" id="5_si1p5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rjt60"]
-size = Vector2(160, 206)
+size = Vector2(160, 160)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_060n8"]
 resource_local_to_scene = true
@@ -24,29 +25,28 @@ shader_parameter/texture_alpha = 1.0
 shader_parameter/is_dissolve = false
 shader_parameter/dissolveNoise = ExtResource("4_mt5pg")
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_3o46e"]
-load_path = "res://.godot/imported/lamp_off.png-4170925f85ad573a45b87a3de54c24be.ctex"
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kfruk"]
-size = Vector2(160, 192)
+size = Vector2(160, 184)
 
 [node name="Lamp" instance=ExtResource("1")]
 script = ExtResource("2")
 type = 4
 
 [node name="CollisionShape2D" parent="FirstArea" index="0"]
-position = Vector2(2.08165e-12, 6)
+position = Vector2(2.08165e-12, -24)
 shape = SubResource("RectangleShape2D_rjt60")
 
 [node name="FirstSprite2D" parent="." index="1"]
 material = SubResource("ShaderMaterial_060n8")
-texture = SubResource("CompressedTexture2D_3o46e")
+texture = ExtResource("5_si1p5")
 
 [node name="CollisionShape2D" parent="SafeArea" index="0"]
+position = Vector2(2.08165e-12, -12)
 shape = SubResource("RectangleShape2D_kfruk")
 
 [node name="In" parent="Connectors" index="0" instance=ExtResource("3")]
-position = Vector2(2.08165e-12, 96)
+position = Vector2(2.08165e-12, 80)
 
 [node name="VisibleOnScreenNotifier2D" parent="." index="5"]
-rect = Rect2(-80, -96, 160, 192)
+position = Vector2(2.08165e-12, 2.08165e-12)
+rect = Rect2(-80, -104, 160, 208)

@@ -2,8 +2,6 @@ extends Element
 
 const _on: Texture2D = preload("res://scenes/elements/inverter/inverter_on.png")
 const _off: Texture2D = preload("res://scenes/elements/inverter/inverter_off.png")
-const _on_off: Texture2D = preload("res://scenes/elements/inverter/inverter_on_off.png")
-const _off_on: Texture2D = preload("res://scenes/elements/inverter/inverter_off_on.png")
 
 var _relay_util: RelayDelayUtil = preload("res://utils/relay_delay_util.gd").new()
 
@@ -26,10 +24,10 @@ func _has_energy() -> bool:
 		return false
 	elif in1:
 		$Connectors/Out.set_energy(true)
-		_on_texture = self._off_on
+		_on_texture = self._off
 		return true
 	elif in2:
-		_off_texture = self._on_off
+		_off_texture = self._on
 		return false
 	else:
 		_off_texture = self._off

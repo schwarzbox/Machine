@@ -1,6 +1,6 @@
 class_name RelayDelayUtil
 
-extends Resource
+extends RefCounted
 
 var _time: int = 0
 var _is_switched: bool = false

@@ -1,36 +1,50 @@
 extends View
-# pr memmory
+# new scheme with commands
+# update readme and image
+# v0.15
+# scheme display numbers (how to construct pixel monitor)?
+
+# allow to connect to connected wire
+# check how wire created automatically
+# add wire after drop (connect wires without jump)?
+
+# F
+# cmd z cmd shift z undo? save diff state?
+# notes tool (pop-up menu, main menu)
+
+# E
+# decoder 2 - 4?
+# trigger preset
 
 # R
-# move _elements_scenes in globals
-# sort for reprsentation really heavy
-# check wire get set (add_points, has_points)
+# optimize drag after 1000 elements
+# check all get set (# check wire get set (add_points, has_points))
+# move mouse cursors managment in sep method (and check events)
 # remove .owner references for connectors
+# remove help_label?
+# remove adder 8 bit
 
 # Q
-# rotate with arrows near element? remove key rotation?
+# how to save programms?
+# sound output?
 # how to move groups unlinked or linked? (maybe only if with wire?)
 
 # B
+# bug with stop calculation?
 # previous freed when disconent?
 
-# F
-# show minimap?
-# notes tool (pop-up menu, main menu)
-# copy among files
-# highlight correct connector
-
-
-# QUESTIONS
-# select wire first or select element first?
-
 # TUTORIAL/CAMPAIGN
-# learn how to construct main all elements
+# learn how to construct all elements
 # ocsialtor
-# light bulbs
+# light up bulbs
 # counter freq (Hrz) = 256 / 10
+# blink lamps
+# blink lamps diff modes
+# show numbers with displays
 
 # IDEAS
+# reset_scale to animate creation
+# wire in the minimap
 # BG pattern color?
 # style for first menu
 # create first screen image in mother board style
@@ -39,33 +53,30 @@ extends View
 # animate relay with tween or animation node?
 # animate magnet field
 # info about element more (in pop-up or on demand)
-# remove help_label?
 
 # read about resourses
 # graph nodes?
 
-# ELEMENTS
-# Trigger Front with Pre and Clr
-# JK trigger
-# T Trigger
 
 # IMPOSSIBLE BACKLOG
-# connect wires without jump
+# ram blink energy elements
 # hertz blink
 # _on_file_dialog_window_input (reset)
 
 # HACKS
-# GIF https://www.veed.io
 # check FPS
 # application/run/max_fps
 # physics/common/physics_ticks_per_second
 
 # force move mouse
 # self.get_viewport().warp_mouse(instance.position)
-#var viewport = _machine.get_viewport()
+#var viewport = _main.get_viewport()
 #viewport.warp_mouse(
-#	mouse_pos *  _machine.actual_zoom + viewport.canvas_transform.origin
+#	mouse_pos *  _main.actual_zoom + viewport.canvas_transform.origin
 #)
+
+# Button is being triggered by spacebar after clicked once.
+#Project Settings -> Input Map and remove the space bar from ui_accept.
 
 # convert to CanvasLayer position
 # self.get_global_transform_with_canvas().get_origin()

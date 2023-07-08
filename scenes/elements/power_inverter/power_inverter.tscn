@@ -5,10 +5,11 @@
 [ext_resource type="Script" path="res://scenes/elements/power_inverter/power_inverter.gd" id="4"]
 [ext_resource type="Texture2D" uid="uid://cr8kjefxskk42" path="res://scenes/base/element/dissolve_texture.tres" id="4_sh2f1"]
 [ext_resource type="PackedScene" uid="uid://dd47odg8af7i3" path="res://scenes/base/connector/out.tscn" id="5"]
+[ext_resource type="Texture2D" uid="uid://bv4hi7u554av8" path="res://scenes/elements/power_inverter/power_inverter_off.png" id="5_pj6dl"]
 [ext_resource type="PackedScene" uid="uid://i3np3a2r6kve" path="res://scenes/base/connector/in.tscn" id="6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jm665"]
-size = Vector2(256, 320)
+size = Vector2(160, 320)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_388mb"]
 resource_local_to_scene = true
@@ -25,31 +26,30 @@ shader_parameter/texture_alpha = 1.0
 shader_parameter/is_dissolve = false
 shader_parameter/dissolveNoise = ExtResource("4_sh2f1")
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_cm886"]
-load_path = "res://.godot/imported/power_inverter_off.png-ab088855120f774b071ddf18ba481a32.ctex"
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6o15e"]
-size = Vector2(224, 320)
+size = Vector2(208, 320)
 
 [node name="PowerInverter" groups=["Energy"] instance=ExtResource("1")]
 script = ExtResource("4")
 type = 5
 
 [node name="CollisionShape2D" parent="FirstArea" index="0"]
+position = Vector2(-8, 2.08165e-12)
 shape = SubResource("RectangleShape2D_jm665")
 
 [node name="FirstSprite2D" parent="." index="1"]
 material = SubResource("ShaderMaterial_388mb")
-texture = SubResource("CompressedTexture2D_cm886")
+texture = ExtResource("5_pj6dl")
 
 [node name="CollisionShape2D" parent="SafeArea" index="0"]
+position = Vector2(-8, 2.08165e-12)
 shape = SubResource("RectangleShape2D_6o15e")
 
 [node name="In" parent="Connectors" index="0" instance=ExtResource("6")]
 position = Vector2(-112, 80)
 
 [node name="Out" parent="Connectors" index="1" instance=ExtResource("5")]
-position = Vector2(112, -80)
+position = Vector2(96, -80)
 
 [node name="VisibleOnScreenNotifier2D" parent="." index="5"]
-rect = Rect2(-112, -160, 224, 320)
+rect = Rect2(-112, -160, 232, 320)

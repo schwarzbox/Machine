@@ -48,7 +48,7 @@ func remove_connections_with_self() -> void:
 	var self_connected: Element = connected_element
 	var self_connected_area: Connector = connected_area
 	if self_connected && self_connected_area:
-		for connected_child in self_connected.connectors_children:
+		for connected_child in self_connected.get_connectors_children():
 			if connected_child.connected_area == self:
 				connected_child.connected_area = null
 			if connected_child.connected_element == owner:
@@ -90,7 +90,7 @@ func _on_mouse_entered() -> void:
 
 func _on_mouse_exited() -> void:
 	_is_mouse_entered = false
-	emit_signal("connector_mouse_exited")
+	emit_signal("connector_mouse_exited", self)
 
 static func setup_connection(
 	self_connector: Connector,
@@ -108,14 +108,14 @@ static func allowed_connection_to_wire(
 	self_connector: Connector, other_connector: Connector
 ) -> bool:
 	var self_connected: Array = []
-	for self_child in self_connector.owner.connectors_children:
+	for self_child in self_connector.owner.get_connectors_children():
 		self_connected.append(self_child.connected_element)
 
 	if !self_connector.owner.check_connect_to_wire(self_connector, false):
 		return false
 
 	var other_connected: Array = []
-	for other_child in other_connector.owner.connectors_children:
+	for other_child in other_connector.owner.get_connectors_children():
 		other_connected.append(other_child.connected_element)
 
 	if !other_connector.owner.check_connect_to_wire(other_connector, false):

@@ -6,9 +6,10 @@
 [ext_resource type="Script" path="res://scenes/elements/not_or/not_or.gd" id="4"]
 [ext_resource type="Texture2D" uid="uid://cr8kjefxskk42" path="res://scenes/base/element/dissolve_texture.tres" id="4_eglo2"]
 [ext_resource type="PackedScene" uid="uid://dd47odg8af7i3" path="res://scenes/base/connector/out.tscn" id="5"]
+[ext_resource type="Texture2D" uid="uid://7c16kjbf5dfq" path="res://scenes/elements/not_or/not_or_off.png" id="5_2cvat"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ls8p1"]
-size = Vector2(256, 480)
+size = Vector2(160, 480)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_k1ly0"]
 resource_local_to_scene = true
@@ -25,24 +26,23 @@ shader_parameter/texture_alpha = 1.0
 shader_parameter/is_dissolve = false
 shader_parameter/dissolveNoise = ExtResource("4_eglo2")
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_pmjtc"]
-load_path = "res://.godot/imported/not_or_off.png-02a3407f95f3b96733501470e3ce1622.ctex"
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o3a1g"]
-size = Vector2(224, 480)
+size = Vector2(208, 480)
 
 [node name="NotOr" groups=["Energy"] instance=ExtResource("1")]
 script = ExtResource("4")
 type = 13
 
 [node name="CollisionShape2D" parent="FirstArea" index="0"]
+position = Vector2(-8, 2.08165e-12)
 shape = SubResource("RectangleShape2D_ls8p1")
 
 [node name="FirstSprite2D" parent="." index="1"]
 material = SubResource("ShaderMaterial_k1ly0")
-texture = SubResource("CompressedTexture2D_pmjtc")
+texture = ExtResource("5_2cvat")
 
 [node name="CollisionShape2D" parent="SafeArea" index="0"]
+position = Vector2(-8, 2.08165e-12)
 shape = SubResource("RectangleShape2D_o3a1g")
 
 [node name="In" parent="Connectors" index="0" instance=ExtResource("3")]
@@ -52,7 +52,7 @@ position = Vector2(-112, -160)
 position = Vector2(-112, 160)
 
 [node name="Out" parent="Connectors" index="2" instance=ExtResource("5")]
-position = Vector2(112, 2.08165e-12)
+position = Vector2(96, 2.08165e-12)
 
 [node name="VisibleOnScreenNotifier2D" parent="." index="5"]
-rect = Rect2(-112, -240, 224, 480)
+rect = Rect2(-112, -240, 232, 480)

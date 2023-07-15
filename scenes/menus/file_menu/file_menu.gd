@@ -1,5 +1,7 @@
 extends HBoxContainer
 
+# Sandbox
+signal file_saved
 # Elements
 signal element_added
 signal elements_deleted
@@ -7,11 +9,11 @@ signal elements_deleted
 signal file_loaded
 # LevelMenu
 signal file_name_changed
-# LevelMenu
 signal menu_hided
 # Cursor
 signal sprite_hided
 signal sprite_showed
+
 
 const _default_file_name: String = Globals.GAME.DEFAULT_FILE_NAME
 
@@ -61,6 +63,7 @@ func _load_last_file() -> void:
 		_set_file_path(file_path)
 		_load()
 	else:
+		# start with current default file
 		_set_file_path(_get_untitled_path(_default_file_name))
 
 func _save_last_file_path() -> void:
@@ -96,6 +99,7 @@ func _save() -> void:
 	)
 	_notify("Saved")
 	_save_last_file_path()
+	emit_signal("file_saved")
 
 func _load() -> void:
 	emit_signal("elements_deleted")
@@ -142,7 +146,7 @@ func _get_list_dir(path) -> Array:
 			file_name = dir.get_next()
 	return list
 
-func _has_unsaved_changes() -> bool:
+func has_unsaved_changes() -> bool:
 	var elements = get_tree().get_nodes_in_group("Elements")
 	var saved_elements = _file_util.load_elements_from(_file_path)
 
@@ -161,7 +165,6 @@ func _has_unsaved_changes() -> bool:
 				if element.type == Globals.Elements.WIRE:
 					var points = element.get_points()
 					var saved_points = saved_element.get_points()
-
 					if (
 						points[0] != saved_points[0]
 						|| points[1] != saved_points[1]
@@ -170,7 +173,7 @@ func _has_unsaved_changes() -> bool:
 	return false
 
 func _on_new_pressed() -> void:
-	if _has_unsaved_changes():
+	if has_unsaved_changes():
 		# show pop-up
 		$SaveDialog.popup()
 		_after_save = _new
@@ -178,7 +181,7 @@ func _on_new_pressed() -> void:
 		_new()
 
 func _on_open_pressed() -> void:
-	if _has_unsaved_changes():
+	if has_unsaved_changes():
 		$SaveDialog.popup()
 		_after_save = _open_dialog
 	else:
@@ -192,7 +195,11 @@ func _on_save_pressed() -> void:
 	emit_signal("menu_hided")
 
 func _on_load_pressed() -> void:
-	_load()
+	if has_unsaved_changes():
+		$SaveDialog.popup()
+		_after_save = _load
+	else:
+		_load()
 	emit_signal("menu_hided")
 
 func _dialog_closed() -> void:
@@ -262,3 +269,9 @@ func _on_notification_about_to_popup() -> void:
 
 func _on_notification_close_requested() -> void:
 	$NotificationTimer.stop()
+
+func _on_sandbox_about_to_save() -> void:
+	$SaveDialog.popup()
+	_after_save = _save
+
+	emit_signal("menu_hided")

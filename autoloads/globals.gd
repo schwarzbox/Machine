@@ -79,7 +79,7 @@ const MINIMAP: Dictionary = {
 }
 
 const CAMERA: Dictionary = {
-	ZOOM_MIN = 0.15,
+	ZOOM_MIN = 0.2,
 	ZOOM_MAX = 1.0,
 	PAN_SPEED = 8.0,
 	DRAG_SPEED = 1.5

@@ -3,13 +3,14 @@ class_name CloneUtil
 extends RefCounted
 
 var _last_saved_elements: Array = []: get = get_last_saved_elements, set = set_last_saved_elements
-var _last_mouse_position: Vector2 = Vector2()
 
 func get_last_saved_elements() -> Array:
 	return _last_saved_elements
 
 func set_last_saved_elements(elements: Array) -> void:
-	_last_saved_elements = elements
+	_last_saved_elements.clear()
+	for element in elements:
+		_last_saved_elements.append(_serialize(element))
 
 func get_delta(pos: Vector2) -> Vector2:
 	var delta = Vector2()
@@ -34,7 +35,7 @@ func duplicate(main: Node2D, elements: Array, delta: Vector2) -> void:
 		clone.rotation = element.rotation
 
 		if clone.type == Globals.Elements.WIRE:
-			clone.set_points(element.get_points())
+			clone.set_points(element.points.duplicate())
 		clones.append(clone)
 
 		clone.set_is_cloned(true)
@@ -45,3 +46,14 @@ func duplicate(main: Node2D, elements: Array, delta: Vector2) -> void:
 			clone.sync_wire_nodes()
 			clone.call_deferred("show_sprites")
 			clone.call_deferred("enable_first_connectors")
+
+func _serialize(element: Element) -> Dictionary:
+	var data: Dictionary = {
+		"type_name": element.type_name,
+		"position": element.position,
+		"rotation": element.rotation,
+		"points": []
+	}
+	if element.type == Globals.Elements.WIRE:
+		data["points"] = element.get_points()
+	return data

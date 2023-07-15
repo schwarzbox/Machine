@@ -86,12 +86,6 @@ func _unhandled_input(event: InputEvent) -> void:
 func _draw():
 	active_state.draw()
 
-#func _notification(what):
-#	if what == NOTIFICATION_WM_MOUSE_ENTER:
-#		print(what)
-#	elif what == NOTIFICATION_WM_MOUSE_EXIT:
-#		print(what)
-
 func add_child_element(element: Element) -> void:
 	# warning-ignore:return_value_discarded
 	element.connect("delete_processed", _on_element_delete_processed)
@@ -271,15 +265,18 @@ func remove_selected_element(element: Element) -> void:
 
 # copy/paste
 func copy_elements(elements: Array):
-	_clone_util.set_last_saved_elements(elements
-)
-func paste_elements():
+	_clone_util.set_last_saved_elements(elements)
+
+func paste_elements(delta: Vector2):
 	clear_selected_elements()
 	_clone_util.duplicate(
 		self,
 		_clone_util.get_last_saved_elements(),
-		_clone_util.get_delta(get_global_mouse_position()),
+		delta
 	)
+
+func has_last_saved_elements() -> bool:
+	return bool(_clone_util.get_last_saved_elements().size() > 0)
 
 # states
 
@@ -369,15 +366,14 @@ func _on_popup_tool_rotate_ccw_pressed() -> void:
 		element.call_deferred("rotate_ccw")
 
 func _on_popup_tool_clone_pressed() -> void:
-	var elements: Array = selected_elements.values()
-	clear_selected_elements()
-	_clone_util.duplicate(self, elements, Vector2(64, 64))
+	copy_elements(selected_elements.values())
+	paste_elements(Vector2(64, 64))
 
 func _on_popup_tool_copy_pressed() -> void:
 	copy_elements(selected_elements.values())
 
 func _on_popup_tool_paste_pressed() -> void:
-	paste_elements()
+	paste_elements(_clone_util.get_delta(get_global_mouse_position()))
 
 func _on_popup_tool_unlink_pressed() -> void:
 	for element in selected_elements.values():

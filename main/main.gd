@@ -1,8 +1,17 @@
 extends View
-# new scheme with commands
+# move groups linked
 # update readme and image
 # v0.15
+
+# Add pause mode in wfg (stack machine)
+
+# add calculator example
 # scheme display numbers (how to construct pixel monitor)?
+
+# add dynamic/bipper
+
+# optimize drag after 1000 elements
+
 
 # allow to connect to connected wire
 # check how wire created automatically
@@ -13,11 +22,10 @@ extends View
 # notes tool (pop-up menu, main menu)
 
 # E
-# decoder 2 - 4?
 # trigger preset
+# decoder 2 - 4?
 
 # R
-# optimize drag after 1000 elements
 # check all get set (# check wire get set (add_points, has_points))
 # move mouse cursors managment in sep method (and check events)
 # remove .owner references for connectors
@@ -26,8 +34,6 @@ extends View
 
 # Q
 # how to save programms?
-# sound output?
-# how to move groups unlinked or linked? (maybe only if with wire?)
 
 # B
 # bug with stop calculation?
@@ -40,9 +46,11 @@ extends View
 # counter freq (Hrz) = 256 / 10
 # blink lamps
 # blink lamps diff modes
+# calculator
 # show numbers with displays
 
 # IDEAS
+# icons to save load new messages
 # reset_scale to animate creation
 # wire in the minimap
 # BG pattern color?
@@ -59,7 +67,7 @@ extends View
 
 
 # IMPOSSIBLE BACKLOG
-# ram blink energy elements
+# ram blink energy elements 000
 # hertz blink
 # _on_file_dialog_window_input (reset)
 
@@ -68,6 +76,7 @@ extends View
 # application/run/max_fps
 # physics/common/physics_ticks_per_second
 
+# static
 # force move mouse
 # self.get_viewport().warp_mouse(instance.position)
 #var viewport = _main.get_viewport()

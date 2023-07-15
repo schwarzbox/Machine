@@ -2,6 +2,7 @@ class_name Element
 
 extends Node2D
 
+# Connectors
 signal connector_area_entered
 signal connector_area_exited
 signal connector_mouse_entered

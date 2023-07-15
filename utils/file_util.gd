@@ -44,6 +44,7 @@ func _serialize(element: Element) -> Dictionary:
 		"rotation": element.rotation,
 		"points": []
 	}
+
 	if element.type == Globals.Elements.WIRE:
 		data["points"] = element.get_points()
 	return data

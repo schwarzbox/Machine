@@ -23,8 +23,10 @@ enum PopupIds {
 	DELETE
 }
 
+var _defaul_width: int = 320
 var _element: Element = null
 var _is_group: bool = false
+var _is_paste: bool = true
 
 func _ready() -> void:
 	add_theme_font_size_override(
@@ -33,6 +35,11 @@ func _ready() -> void:
 	add_theme_font_size_override(
 		"font_separator_size", Globals.FONTS.DEFAULT_FONT_SIZE
 	)
+
+func _reset() -> void:
+	_element = null
+	_is_group = false
+	_is_paste = true
 
 func _on_id_pressed(id: int) -> void:
 
@@ -52,8 +59,7 @@ func _on_id_pressed(id: int) -> void:
 		PopupIds.DELETE:
 			emit_signal("delete_pressed")
 
-	_is_group = false
-	_element = null
+	_reset()
 
 func _on_about_to_popup() -> void:
 	add_separator("Empty", PopupIds.HEADER)
@@ -84,21 +90,30 @@ func _on_about_to_popup() -> void:
 	else:
 		add_item("Paste", PopupIds.PASTE, (KEY_MASK_CMD_OR_CTRL | KEY_V))
 
+	set_item_disabled(get_item_index(PopupIds.PASTE), !_is_paste)
+
+
 func _on_elements_menu_poped(
-	element: Element, viewport_height: int, is_group: bool = false
+	element: Element,
+	viewport_size: Vector2,
+	is_group: bool = false,
+	is_paste: bool = true
 ) -> void:
 
-	_is_group = is_group
 	_element = element
+	_is_group = is_group
+	_is_paste = is_paste
 
 	clear()
 
-	size = min_size
+	size.x = _defaul_width
+	size.y = min_size.y
 	popup(Rect2(0, 0, size.x, size.y))
 	position = get_mouse_position()
 	# add offset if out of the screen
-	if (position.y + size.y) > viewport_height:
+	if (position.x + size.x) > viewport_size.x:
+		position.x =  position.x - size.x
+	if (position.y + size.y) > viewport_size.y:
 		position.y =  position.y - size.y
 
-	_is_group = false
-	_element = null
+	_reset()

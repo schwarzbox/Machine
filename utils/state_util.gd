@@ -208,8 +208,9 @@ class Idle:
 		_main.emit_signal(
 			"menu_poped",
 			entered_element,
-			_main.get_viewport_rect().size.y,
+			_main.get_viewport_rect().size,
 			_main.selected_elements.size() > 1,
+			_main.has_last_saved_elements()
 		)
 		_main.emit_signal("cursor_shape_updated", Input.CURSOR_ARROW)
 

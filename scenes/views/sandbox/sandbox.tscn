@@ -38,6 +38,7 @@ offset = Vector2(900, 700)
 
 [node name="Cursor" parent="." index="3" instance=ExtResource("7_q3ctd")]
 
+[connection signal="about_to_save" from="." to="CanvasLayer/LevelMenu/Info/FileMenu" method="_on_sandbox_about_to_save"]
 [connection signal="button_pressed" from="CanvasLayer/ElementMenu" to="World/Elements" method="_on_element_menu_button_pressed"]
 [connection signal="sprite_hided" from="CanvasLayer/ElementMenu" to="Cursor" method="_on_element_menu_sprite_hided"]
 [connection signal="sprite_showed" from="CanvasLayer/ElementMenu" to="Cursor" method="_on_element_menu_sprite_showed"]

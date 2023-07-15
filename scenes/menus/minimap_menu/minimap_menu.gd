@@ -3,6 +3,12 @@ extends VBoxContainer
 func _ready() -> void:
 	_hide_menu()
 
+	for node in [$HideButton]:
+		node.add_theme_font_size_override(
+			"font_size", Globals.FONTS.DEFAULT_FONT_SIZE
+		)
+
+
 func _show_menu():
 	$SubViewportContainer.show()
 	_update_rect_size()
